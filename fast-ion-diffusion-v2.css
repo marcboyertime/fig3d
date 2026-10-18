@@ -47,6 +47,8 @@ html.layout-v2 #stage .scene-help{position:absolute;left:18px;top:14px;z-index:3
 html.layout-v2 #stage .scene-key{left:16px;right:auto;bottom:58px;transform:none;margin:0;width:auto}
 /* Steps */
 html.fi-opening .v2-step[data-sec=sites] .v2-ctl,html.fi-opening .v2-dock .v2-ctl{opacity:.55;transition:opacity .22s ease}
+/* A readout's second line keeps room for two lines, so a longer place name or note never moves what is under it */
+html.layout-v2 .readout span{min-height:3.2em}
 /* "More on this step" holds the question's other controls, its readout and plots, and its Go deeper */
 .v2-pane .control-block:first-child,.v2-pane .plot-block:first-child{margin-top:0}
 .v2-pane .depth-reading{margin-top:22px}

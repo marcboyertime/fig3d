@@ -34,6 +34,8 @@ const WANT={square:{view:'surfaces',face:F100},triangle:{view:'surfaces',face:F1
 const CN={8:'face',9:'face',7:'edge',5:'corner',12:'inside'};
 
 if(layoutV2()){
+ // The cover names its paper as every other companion's does (18 October 2026: the covers share one pattern)
+ {const t=$('.heading h1'),e=document.createElement('p');e.className='v2-eyebrow';e.textContent='Paper companion · Kang et al. · Nature Communications 2024';t?.before(e);}
  const ex=$('#explorer'),stage=$('#scene-stage'),d=ex.dataset;
  const panelOf=()=>d.view==='surfaces'||d.view==='binding'?(d.npFace?.startsWith('100')?'ad':'cf'):d.view==='size'?'row':d.npCn==='8'?'ad':d.npCn==='9'?'cf':'atoms';
  const stepOf=()=>d.view==='surfaces'?(d.npFace?.startsWith('100')?'square':'triangle'):d.view==='neighbors'?CN[d.npCn]||'face':d.view==='size'?'size':d.npFace?.startsWith('100')?'sites':'hollows';

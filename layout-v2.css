@@ -8,7 +8,7 @@
    its control; the chapter lives in the rail, the source and the limits behind "More on this step", a control's note
    appears while the control is used, the stage's key folds behind "Key" and its labels are titles only. */
 html.layout-v2{
- --v2-mast:56px;--v2-top:72px;--v2-head:48px;--v2-stage:clamp(480px,calc(100svh - 144px),900px);--v2-stage-m:330px;--v2-read:480px;
+ --v2-mast:56px;--v2-top:64px;--v2-head:44px;--v2-stage:clamp(480px,calc(100svh - 132px),900px);--v2-stage-m:330px;--v2-read:480px;
  --v2-bg:#0f111b;--v2-soft:#1e2437;--v2-line:#2a3149;--v2-line2:#343c58;--v2-ink:#eef1f8;--v2-ink2:#cdd3e1;--v2-muted:#a7afc4;
  --v2-faint:#a7afc4;--v2-accent:#8fa8ff;--v2-accent-ink:#0b1020;--v2-glass:rgba(13,16,27,.62);--v2-glass-line:rgba(255,255,255,.09);
  --v2-text:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;--v2-display:Sora,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
@@ -41,9 +41,11 @@ html.layout-v2 .v2-kicker{display:block;margin:0;font:500 14px/20px var(--v2-tex
 
 /* The workspace: figure and steps left, the model right, both pinned under the masthead */
 html.layout-v2 #explorer.figure-pair{margin-top:24px;column-gap:46px;grid-template-areas:'paper-head model-head' 'paper stage' 'steps stage';grid-template-rows:auto auto 1fr}
-html.layout-v2 .figure-pair .pair-head{position:sticky;top:var(--v2-mast);z-index:8;background:var(--v2-bg);min-height:40px;margin:0;padding:calc(var(--v2-top) - var(--v2-mast)) 0 8px;box-sizing:content-box}
+/* 18 October 2026: the head under the masthead is 52 px (was 64), so the words below the figure sit higher */
+html.layout-v2 .figure-pair .pair-head{position:sticky;top:var(--v2-mast);z-index:8;background:var(--v2-bg);min-height:calc(var(--v2-head) - 8px);margin:0;padding:calc(var(--v2-top) - var(--v2-mast)) 0 8px;box-sizing:content-box}
 html.layout-v2 .figure-pair .pair-title{font:500 13px/16px var(--v2-text);letter-spacing:0;text-transform:none;color:var(--v2-muted)}
 html.layout-v2 .figure-pair .model-head{visibility:hidden}
+html.layout-v2 .figure-pair .pair-head .v2-figpick button{min-height:28px}
 html.layout-v2 .figure-pair .paper-column{top:calc(var(--v2-top) + var(--v2-head));z-index:7;background:var(--v2-bg);align-self:start;padding-bottom:4px}
 html.layout-v2 .figure-pair .paper-column::after{content:'';position:absolute;left:0;right:0;top:100%;height:24px;background:linear-gradient(var(--v2-bg),rgba(15,17,27,0));pointer-events:none}
 html.layout-v2 .figure-pair .paper-details{position:relative;margin-top:12px}
@@ -64,9 +66,20 @@ html.layout-v2 .v2-steps{display:block;grid-area:steps;min-width:0;padding-botto
 html.layout-v2 .v2-stagechip:not([hidden]){display:flex}
 /* Steps take their own height with one steady gap between them (18 October: a step as tall as the reading area left up to
    250 px of blank once the quiet pass shortened the steps). The floor, a third of the reading area, keeps a step that a jump
-   brings to the top of the reading area the one at the reading line. */
-.v2-step{min-height:calc(var(--v2-read) * .34);box-sizing:border-box;padding:40px 0 40px}
+   brings to the top of the reading area the one at the reading line. The gap sits more under a step than over it, so each
+   step's hairline (below) reads as the top of that step. */
+.v2-step{min-height:calc(var(--v2-read) * .34);box-sizing:border-box;padding:32px 0 44px}
 .v2-step .v2-label{display:none}
+/* Segmentation (18 October 2026: "the big gaps between text sections can make it a bit hard to follow; add some sort of
+   segmentation, beautiful and non-noisy, other than empty space"): a hairline over each step; the first step of a chapter
+   names its chapter under it, quietly; the step being read marks its hairline with a short stroke of the accent, as the
+   chapter rail marks its chapter. */
+html.layout-v2 .v2-step{position:relative;border-top:1px solid var(--v2-line)}
+html.layout-v2 .v2-step::before{content:'';position:absolute;left:0;top:-1px;width:32px;height:2px;border-radius:1px;background:var(--v2-accent);opacity:0;transition:opacity .4s ease}
+html.layout-v2 .v2-step.is-current::before{opacity:1}
+html.layout-v2 .v2-step.v2-chstart .v2-label{display:block;margin:-14px 0 10px;font:500 13px/18px var(--v2-text);color:var(--v2-muted)}
+html.layout-v2 .v2-step .v2-label :is(.n,.pos){display:none}
+html.steps-rail .v2-step::before{display:none}
 .v2-chapters .v2-label{margin:0;font:500 14px/20px var(--v2-text);color:var(--v2-muted)}
 .v2-step h2{margin:0;font:500 26px/33px var(--v2-display);letter-spacing:-.014em;color:var(--v2-ink);text-wrap:balance;text-transform:none}
 .v2-body{margin:14px 0 0;font:400 17px/28px var(--v2-text);color:var(--v2-ink2);max-width:62ch;text-wrap:pretty}
@@ -100,9 +113,11 @@ html.layout-v2 .v2-stagechip:not([hidden]){display:flex}
 .v2-seg button[aria-pressed=true]{background:var(--v2-accent);color:var(--v2-accent-ink);font-weight:600}
 .v2-slider{display:flex;align-items:flex-start;gap:14px}
 .v2-grow{flex:1;min-width:0}
+/* The slider's name and value share one line and never wrap: a value that grows ("New octahedral site") would otherwise
+   push the name onto a second line and move everything under it (18 October 2026) */
 .v2-shead{display:flex;justify-content:space-between;align-items:baseline;gap:16px}
-.v2-shead label{font:500 14px/20px var(--v2-text);color:var(--v2-ink2)}
-.v2-shead output{font:600 15px/20px var(--v2-text);color:var(--v2-ink);font-variant-numeric:tabular-nums;text-align:right}
+.v2-shead label{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:500 14px/20px var(--v2-text);color:var(--v2-ink2)}
+.v2-shead output{flex:none;white-space:nowrap;font:600 15px/20px var(--v2-text);color:var(--v2-ink);font-variant-numeric:tabular-nums;text-align:right}
 .v2-shead output small{margin-left:6px;font:400 13px/20px var(--v2-text);color:var(--v2-muted)}
 .v2-track{position:relative;margin-top:8px;height:22px}
 .v2-band{position:absolute;top:6px;height:10px;border-radius:5px;background:rgba(143,168,255,.16);border:1px solid rgba(143,168,255,.4);box-sizing:border-box;pointer-events:none}
@@ -179,11 +194,15 @@ html.steps-rail .v2-pager{display:flex;align-items:center;gap:16px;padding-top:1
  html.layout-v2 .figure-pair .v2-stage{height:var(--v2-stage-m);min-height:0;border-radius:14px}
  html.layout-v2 .v2-dock{display:block;grid-area:dock;position:sticky;top:calc(var(--v2-mast) + 6px + var(--v2-stage-m));z-index:9;min-height:96px;box-sizing:border-box;padding:12px 2px 12px;background:var(--v2-bg);border-bottom:1px solid var(--v2-line);box-shadow:0 14px 18px -12px rgba(15,17,27,.9)}
  html.layout-v2 .v2-dock .v2-note{margin-top:4px;font-size:12px;line-height:16px}
+ html.layout-v2 .v2-dock .v2-shead{gap:12px}
+ html.layout-v2 .v2-dock .v2-shead label{font-size:13px}
+ html.layout-v2 .v2-dock .v2-shead output{font-size:14px}
  html.layout-v2 .v2-long{display:none}
  html.layout-v2 .v2-stage.v2-key-on .v2-key:not(:empty){display:grid!important;grid-template-columns:repeat(2,auto);gap:0 12px;left:10px;bottom:48px;max-width:calc(100% - 20px);padding:6px 10px;font-size:13px;line-height:1.45}
  html.layout-v2 .v2-keybtn{left:10px;bottom:10px}
  html.layout-v2 .v2-step .v2-ctl-slot{display:none}
- html.layout-v2 .v2-step{padding:26px 0 26px}
+ html.layout-v2 .v2-step{padding:22px 0 30px}
+ html.layout-v2 .v2-step.v2-chstart .v2-label{margin:-6px 0 8px}
  html.layout-v2 .v2-step h2{font-size:22px;line-height:28px}
  html.layout-v2 .v2-body{font-size:16px;line-height:25px;margin-top:10px}
  html.layout-v2 .v2-limit{font-size:13.5px;line-height:20px}

@@ -7,7 +7,8 @@ html.layout-v2 main{overflow-x:clip}
 html.layout-v2 #explorer{max-width:none;margin-inline:0;padding:0;scroll-margin-top:var(--v2-mast)}
 /* Cover: the title and the question, then the three paragraphs about the paper in three columns, words unchanged */
 html.layout-v2 .heading{max-width:none;margin:0;padding:calc(var(--v2-mast) + 32px) 0 0}
-html.layout-v2 .heading h1{margin:0;max-width:none;font:500 46px/52px var(--v2-display);letter-spacing:-.022em}
+html.layout-v2 .heading .v2-eyebrow{margin:0;font:500 14px/20px var(--v2-text);color:var(--v2-muted)}
+html.layout-v2 .heading h1{margin:14px 0 0;max-width:none;font:500 46px/52px var(--v2-display);letter-spacing:-.022em}
 html.layout-v2 .heading .fig-question{margin:14px 0 0;max-width:44ch;font:400 21px/31px var(--v2-display);letter-spacing:-.006em;color:var(--v2-ink2)}
 html.layout-v2 .fig-intro{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:44px;margin:22px 0 0;padding:20px 0 0;border:0;border-top:1px solid var(--v2-line)}
 html.layout-v2 .fig-intro>div{margin:0;padding:0;border:0}

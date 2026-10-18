@@ -32,7 +32,8 @@ html.layout-v2 .v2-dview .film-profile .axis{font-size:7px}
 html.layout-v2 .v2-dview .film-readout{margin-top:14px;gap:16px}
 html.layout-v2 .v2-dview .readout-key{font:400 13px/18px var(--v2-text);letter-spacing:0;text-transform:none;color:var(--v2-muted)}
 html.layout-v2 .v2-dview .film-readout output{font:500 20px/26px var(--v2-display);letter-spacing:-.01em;color:var(--v2-ink)}
-html.layout-v2 .v2-dview .particle-stage svg{display:block;width:100%;height:min(calc((100svh - 56px) * .46 - 60px),380px)}
+/* the cross section fits the folded figure's room (kit/layout-v2.mjs fold), so its key is never scaled down with it */
+html.layout-v2 .v2-dview .particle-stage svg{display:block;width:100%;height:max(170px,min(calc((100svh - 56px) * .3 - 50px),380px))}
 html.layout-v2 .v2-dview .concentration-key{margin:10px 0 0;font:400 13px/18px var(--v2-text);color:var(--v2-muted)}
 html.layout-v2 .v2-dview .panel-note:before{display:none}
 /* The stage: the film, square and centred in the taller stage */

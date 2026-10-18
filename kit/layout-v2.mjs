@@ -12,7 +12,8 @@
 //                      that element's text) or data-fmt="name" (the adapter's fmt[name](value))
 // Options: template, sections, chapters, reduced, bar, brand, back, title, kickerInto, credit, explorer, stage, paper, input,
 // key (the stage's legend, folded behind a Key button), hint (the stage's hint, gone at the first touch), shifted(),
-// opening, goModel(k), after(fn), onModel(k, body), more(k, body), hash, fmt.
+// opening, goModel(k), after(fn), onModel(k, body), more(k, body), hash, fmt, figure (the box in the paper column that folds;
+// by default its figure viewport, chart or views; null for none).
 // The model follows the step crossing the reading line until the reader touches the stage; after that the step being read
 // offers "Go to this view", which brings the model there and follows again. A control pressed in any step takes effect at
 // once and brings the model to that step first.
@@ -23,7 +24,7 @@ export const layoutV2 = () => document.documentElement.classList.contains('layou
 export function createLayoutV2(o) {
   const H = document.documentElement, S = o.sections, CH = o.chapters, T = o.template.content, reduced = !!o.reduced;
   const v = {rail: H.classList.contains('steps-rail'), secs: [], ctls: [], slots: [], cur: -1, model: -1, follow: true, phone: false,
-    timer: 0, cand: -1, candT: 0, readTop: 0, jump: -1, jumpT: 0, shift: 0, vis: 0, freeze: 0, opening: false};
+    timer: 0, cand: -1, candT: 0, readTop: 0, jump: -1, jumpT: 0, shift: 0, vis: 0, freeze: 0, opening: false, mast: 56, pin: 120};
   const opening = o.opening || {on: () => false, flying: () => false, end() {}};
   const after = o.after || (fn => fn());
 
@@ -45,6 +46,9 @@ export function createLayoutV2(o) {
     kb.addEventListener('click', () => { const on = !o.stage.classList.contains('v2-key-on'); o.stage.classList.toggle('v2-key-on', on); kb.setAttribute('aria-expanded', String(on)); });
   }
   v.secs = $$('.v2-step', ex); v.ctls = v.secs.map(el => el.querySelector('.v2-ctl')); v.slots = v.secs.map(el => el.querySelector('.v2-ctl-slot'));
+  // The steps are divided by a hairline; the first step of each chapter names its chapter there (layout-v2.css)
+  v.secs.forEach((el, k) => el.classList.toggle('v2-chstart', !k || S[k].ch !== S[k - 1].ch));
+  const stepsEl = $('.v2-steps', ex);
   // The quiet pass: a step's limits and its source line live behind "More on this step" (the source first, then the limit)
   for (const el of v.secs) { const body = el.querySelector('.v2-more-body'); for (const q of ['.v2-foot .v2-src', '.v2-limit']) { const n = el.querySelector(q); if (n && body) body.append(n); } }
   if (o.hint) { o.hint.classList.add('v2-hint'); v.hintText = o.hint.textContent; o.input.addEventListener('pointerdown', () => o.stage.classList.add('v2-touched')); }
@@ -70,7 +74,49 @@ export function createLayoutV2(o) {
   }, true);
   o.input.addEventListener('wheel', e => { if ((e.ctrlKey || e.metaKey) && !v.rail) v.follow = false; }, {passive: true});
   o.input.addEventListener('keydown', e => { if (!v.rail && !e.metaKey && !e.ctrlKey && !e.altKey && /^(Arrow|[+=-]$)/.test(e.key)) v.follow = false; });
-  const mq = matchMedia('(max-width:860px)'), onMq = () => { v.phone = mq.matches; dock(); size(true); }; mq.addEventListener('change', onMq); onMq();
+  // ---- The figure folds as the reader reaches the steps, and the steps move only with the scroll (18 October 2026: "as we
+  // do the initial scroll down the figure from the paper should shrink a bit"; "whole thing needs to be extremely smooth") ----
+  // Once the figure is pinned, its bottom edge follows the first step up until the figure is compact (30% of the screen under
+  // the masthead, or its own height if it is shorter): the words rise to the middle of the screen at the speed of the scroll
+  // and the figure is smaller, never cropped, while the reader is among the steps. It is scaled from its top left corner,
+  // so the page's own figure code (sizes, zoom, outlines, crossfades) is untouched; a zoomed-in figure unfolds again.
+  // The figure's row keeps one height while the reader is among the steps, whatever the figure does (another figure, the
+  // fold, a zoom), so nothing under it is pushed: the steps move with the scroll and nothing else. Before the steps, the row
+  // follows the figure; coming back up, any difference eases out over the fold. Phones do not fold; their row holds the same way.
+  const F = {el: o.figure !== undefined ? o.figure : o.paper.querySelector('.v2-pviewport, .paper-viewport, .v2-chartbox, .v2-dfigs'),
+    R: null, e: 0, u: null, cs: null, m: 0, pmb: 0, mb: 0, tf: '', fmb: '', sc: 1, rest: 0, ct: 0, ready: false};
+  if (F.el) F.mb = parseFloat(getComputedStyle(F.el).marginBottom) || 0;
+  const compact = () => Math.max(180, Math.round((innerHeight - v.mast) * .3));
+  function fold() {
+    const P = o.paper, el = F.el;
+    if (v.rail) { if (F.ready) { if (el) { el.style.transform = el.style.transformOrigin = el.style.marginBottom = ''; } P.style.marginBottom = ''; F.ready = false; F.R = null; F.m = 0; F.sc = 1; F.tf = F.fmb = ''; } return; }
+    // heights to the fraction of a pixel, so the row's height holds exactly and the words never flicker by a pixel
+    const ph0 = P.getBoundingClientRect().height, flow = ph0 + F.pmb + F.m;
+    const u = v.phone ? v.mast - (P.getBoundingClientRect().top + flow) : v.pin - (stepsEl.getBoundingClientRect().top - flow);
+    const hf = el ? el.getBoundingClientRect().height / F.sc : 0, room = Math.min(hf, compact());
+    const ct = v.phone || el?.classList.contains('zoomed') ? hf : room;
+    F.cs = F.cs == null || Math.abs(ct - F.cs) < .5 ? ct : F.cs + (ct - F.cs) * .2;
+    const hd = Math.min(hf, Math.max(hf - Math.max(0, u), F.cs)), sc = hf > 0 ? hd / hf : 1;
+    if (el) {
+      const tf = sc < .9995 ? `scale(${sc.toFixed(4)})` : '', fmb = tf ? (F.mb - (hf - hd)).toFixed(2) + 'px' : '';
+      if (tf !== F.tf) { el.style.transform = tf; el.style.transformOrigin = tf ? '0 0' : ''; F.tf = tf; F.sc = tf ? +sc.toFixed(4) : 1; }
+      if (fmb !== F.fmb) { el.style.marginBottom = fmb; F.fmb = fmb; }
+    }
+    const ph = el ? P.getBoundingClientRect().height : ph0, rest = ph - hd, target = rest + hf, zone = v.phone ? 150 : Math.max(120, hf - F.cs), first = F.R == null;
+    if (first || u <= 0) { F.R = target; F.e = 0; }
+    else if (u < zone) { const was = Math.min(F.u ?? zone, zone); if (u < was && was > 0) F.e *= Math.max(0, u / was); F.R = target + F.e; }
+    else F.e = F.R - target;
+    F.u = u; F.rest = Math.round(rest); F.ct = room; F.ready = true;
+    const m = F.R - ph - F.pmb;
+    if (Math.abs(m - F.m) > .005) {
+      const put = () => { F.m = Math.abs(m) < .005 ? 0 : m; P.style.marginBottom = F.m ? (F.pmb + F.m).toFixed(3) + 'px' : ''; };
+      if (first && u > 0) keep(put); else put();
+    }
+  }
+  const mq = matchMedia('(max-width:860px)'), onMq = () => {
+    v.phone = mq.matches; o.paper.style.marginBottom = ''; F.m = 0; F.R = null; F.pmb = parseFloat(getComputedStyle(o.paper).marginBottom) || 0;
+    dock(); size(true);
+  }; mq.addEventListener('change', onMq); onMq();
   { const ro = new ResizeObserver(() => size(false)); ro.observe(o.paper); ro.observe($('.v2-dock')); ro.observe(o.stage); } addEventListener('resize', () => size(true));
   document.fonts?.ready.then(() => size(true));
   addEventListener('scroll', onScroll, {passive: true});
@@ -167,10 +213,15 @@ export function createLayoutV2(o) {
   // change between steps) never resizes the steps above the one being read. The window, or anything before the reader
   // reaches the steps, sets it again.
   // (v.engaged: the reader has moved through the steps; until then a figure still loading may set the height again)
+  // The reading area starts under the folded figure (fold, above).
   function size(all) {
-    const mast = parseFloat(getComputedStyle(H).getPropertyValue('--v2-mast')) || 56;
-    v.readTop = v.phone ? mast + 6 + o.stage.offsetHeight + $('.v2-dock').offsetHeight : (parseFloat(getComputedStyle(o.paper).top) || 120) + o.paper.offsetHeight;
-    if (all || !v.engaged || !v.secs[0] || v.secs[0].getBoundingClientRect().top > innerHeight) H.style.setProperty('--v2-read', Math.max(360, innerHeight - v.readTop) + 'px');
+    const mast = v.mast = parseFloat(getComputedStyle(H).getPropertyValue('--v2-mast')) || 56;
+    v.pin = parseFloat(getComputedStyle(o.paper).top) || 120;
+    if (all) F.R = null;
+    v.readTop = v.phone ? mast + 6 + o.stage.offsetHeight + $('.v2-dock').offsetHeight : v.pin + (F.ready ? F.rest + F.ct : o.paper.offsetHeight);
+    if (all || !v.engaged || !v.secs[0] || v.secs[0].getBoundingClientRect().top > innerHeight) {
+      const r = Math.max(360, Math.round(innerHeight - v.readTop)) + 'px'; if (H.style.getPropertyValue('--v2-read') !== r) H.style.setProperty('--v2-read', r);
+    }
   }
   function line() { const top = Math.max(v.readTop, v.phone ? 0 : o.paper.getBoundingClientRect().bottom); return top + (innerHeight - top) * .3; }
   function probe() { const y = line(); let k = 0; v.secs.forEach((el, j) => { if (el.getBoundingClientRect().top <= y) k = j; }); return k; }
@@ -211,7 +262,7 @@ export function createLayoutV2(o) {
   // Every frame: the drawing shift, the end of an opening (the model joins the step being read), and the v2 controls copy
   // the state of the page's own controls, so a pressed button is always the true one
   function frame() {
-    shift();
+    fold(); shift();
     // A hint that changes its words (a step with something to click) shows again until the next touch
     if (o.hint) { const t = o.hint.textContent; if (t !== v.hintText) { v.hintText = t; o.stage.classList.remove('v2-touched'); } }
     // An opening's end puts the model on the step being read, even the same one: a page whose opening ends elsewhere

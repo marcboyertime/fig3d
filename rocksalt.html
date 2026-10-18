@@ -420,7 +420,7 @@ html.layout-v2 .page-head{padding-top:calc(var(--v2-mast) + 40px);margin-bottom:
 html.layout-v2 .page-head h1{margin:14px 0 0;font:500 46px/52px var(--font-display);letter-spacing:-.022em}
 html.layout-v2 .page-head .fig-question{margin:14px 0 0;font:400 21px/31px var(--font-display);letter-spacing:-.006em;max-width:36ch;color:var(--ink-2)}
 html.layout-v2 .page-head .fig-intro{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:44px;margin-top:34px;padding-top:24px;border-top:1px solid var(--line)}
-html.layout-v2 .page-head .fig-intro h2{margin:0 0 6px;font:500 15px/22px var(--font-body);letter-spacing:0;text-transform:none;color:var(--ink)}
+html.layout-v2 .page-head .fig-intro h2{margin:0 0 6px;font:500 15px/22px var(--font-body)!important;letter-spacing:0!important;text-transform:none;color:var(--ink)}
 html.layout-v2 .page-head .fig-intro p{font:400 15px/24px var(--font-body);color:var(--ink-2);max-width:none}
 /* The stage's own chips: buttons bottom right, hint top right, legend bottom left */
 html.layout-v2 .viewer .ui-tr{top:auto;bottom:16px;right:16px}
@@ -429,6 +429,9 @@ html.layout-v2 .viewer .ui-bl{left:16px;bottom:16px}
 /* "More on this step" holds the page's full step; the control the step already shows is hidden there (data-v2p) */
 .v2-more-body .pane>.eyebrow,.v2-more-body .pane>h2{display:none}
 .v2-more-body .pane{font-size:15px;line-height:1.6}
+/* Lines whose words come and go keep their room, so a slider never moves what is under them: the Monte Carlo progress
+   line, and on a phone the island counts (two lines each) */
+html.layout-v2 #chartProg:empty::before{content:'\a0'}
 .v2-step[data-sec=frame] [data-v2p~=frame],.v2-step[data-sec=tet] [data-v2p~=tet],.v2-step[data-sec=hop] [data-v2p~=hop],.v2-step[data-sec=count] [data-v2p~=count],.v2-step[data-sec=slab] [data-v2p~=slab],.v2-step[data-sec=diva] [data-v2p~=diva],.v2-step[data-sec=perc] [data-v2p~=perc],.v2-step[data-sec=layered] [data-v2p~=layered],.v2-step[data-sec=spinel] [data-v2p~=spinel],.v2-step[data-sec=drx] [data-v2p~=drx],.v2-step[data-sec=excess] [data-v2p~=excess],.v2-step[data-sec=real] [data-v2p~=real]{display:none!important}
 @media(max-width:860px){
  html.layout-v2 .page-head{padding-top:calc(var(--v2-mast) + 24px)}
@@ -436,6 +439,7 @@ html.layout-v2 .viewer .ui-bl{left:16px;bottom:16px}
  html.layout-v2 .page-head .fig-question{font-size:18px;line-height:26px;margin-top:10px}
  html.layout-v2 .page-head .fig-intro{grid-template-columns:minmax(0,1fr);gap:22px}
  html.layout-v2 #legend .lg i{width:9px;height:9px}
+ html.layout-v2 .stat b{display:block;min-height:2.7em}
 }
 </style>
 

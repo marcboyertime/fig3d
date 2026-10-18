@@ -39,12 +39,13 @@ html.layout-v2 .v2-pane :is(#view-eyebrow,#view-title,#view-copy,#dive){display:
 html.layout-v2 .v2-pane .transport{display:block;margin:18px 0 0;padding:0;border:0}
 html.layout-v2 .v2-step:is([data-sec=inventory],[data-sec=intercalation]) .v2-pane .progress-control{display:none}
 html.layout-v2 .v2-pane .inventory-values{margin-top:16px}
-/* The half-reactions in their step, under its words */
+/* The half-reactions in their step, under its words: one above the other, each on one line, its numbers in fixed-width
+   figures, so moving the slider never re-wraps them and the steps below never jump (18 October 2026) */
 html.layout-v2 .v2-rx{margin:14px 0 4px}
-html.layout-v2 .v2-rx .reaction-pair{display:grid;gap:12px;margin:0}
+html.layout-v2 .v2-rx .reaction-pair{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;margin:0}
 html.layout-v2 .v2-rx .reaction-pair p{margin:0 0 4px;font:500 13px/18px var(--v2-text);letter-spacing:0;text-transform:lowercase;color:var(--v2-muted)}
 html.layout-v2 .v2-rx .reaction-pair p::first-letter{text-transform:uppercase}
-html.layout-v2 .v2-rx .formula{font-size:15px;line-height:1.6;color:var(--v2-ink)}
+html.layout-v2 .v2-rx .formula{font-size:15px;line-height:1.6;color:var(--v2-ink);font-variant-numeric:tabular-nums;white-space:nowrap}
 html.layout-v2 .v2-steps{padding-bottom:calc(var(--v2-read) * .6 + 48px)}
 @media(max-width:860px){
  html.layout-v2 .lesson-title{padding-top:calc(var(--v2-mast) + 24px)}
@@ -57,4 +58,6 @@ html.layout-v2 .v2-steps{padding-bottom:calc(var(--v2-read) * .6 + 48px)}
  /* On the short stage the cell's labels reach its bottom edge: motion and Reset sit at the top right, under the mode */
  html.layout-v2 #viewport .camera-controls{top:30px;right:6px;bottom:auto}
  html.layout-v2 .v2-dock:empty{display:none}
+ /* a phone may wrap an equation: it always keeps two lines, so a value never changes its height */
+ html.layout-v2 .v2-rx .formula{white-space:normal;min-height:3.2em}
 }
