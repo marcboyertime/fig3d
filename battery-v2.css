@@ -21,7 +21,7 @@ html.layout-v2 .fig-intro p{margin:0;font:400 14.5px/23px var(--v2-text);color:v
 html.layout-v2 .view-toolbar,html.layout-v2 .scene-tools,html.layout-v2 .state-section,html.layout-v2 .chemistry{display:none}
 html.layout-v2 .v2-paper{margin:0}
 html.layout-v2 .figure-pair .pair-title{margin:0}
-/* The chart, at the column's width; the inventory sentence under it, without the panel swatch (nothing is outlined) */
+/* The chart, at the column's width; what it shows under it, without the panel swatch (nothing is outlined) */
 html.layout-v2 .v2-chartbox svg{display:block;width:100%;height:auto;overflow:visible}
 html.layout-v2 .v2-chart .panel-note:before{display:none}
 /* The stage: the cell, its labels, and its chrome */
@@ -38,6 +38,7 @@ html.layout-v2 .v2-pane .explanation{padding:0}
 html.layout-v2 .v2-pane :is(#view-eyebrow,#view-title,#view-copy,#dive){display:none}
 html.layout-v2 .v2-pane .transport{display:block;margin:18px 0 0;padding:0;border:0}
 html.layout-v2 .v2-step:is([data-sec=inventory],[data-sec=intercalation]) .v2-pane .progress-control{display:none}
+html.layout-v2 .v2-pane #inventory-copy{margin:16px 0 0;font:400 15px/24px var(--v2-text);color:var(--v2-ink2)}
 html.layout-v2 .v2-pane .inventory-values{margin-top:16px}
 /* The half-reactions in their step, under its words: one above the other, each on one line, its numbers in fixed-width
    figures, so moving the slider never re-wraps them and the steps below never jump (18 October 2026) */

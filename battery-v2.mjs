@@ -27,7 +27,11 @@ if(layoutV2()){
  const mhead=document.createElement('div');mhead.className='pair-head model-head';
  const col=document.createElement('figure');col.className='paper-column v2-paper v2-chart';
  const chart=$('.state-section .graph');chart.classList.add('v2-chartbox');
- const note=$('#inventory-copy');note.classList.add('panel-note');note.setAttribute('aria-live','polite');
+ // The note under the chart says what the chart shows, in the chart's own description (18 October 2026: it used to be the
+ // inventory sentence, which the inventory step's words repeat word for word; that sentence moves to "More on this step")
+ const note=document.createElement('p');note.className='panel-note';note.setAttribute('aria-live','polite');
+ const describe=()=>{const t=`Lithium per host formula unit in each electrode, against graphite x. The markers show the current state; ${mode()==='charge'?'charge raises':'discharge lowers'} graphite x.`;if(note.textContent!==t)note.textContent=t;};
+ describe();new MutationObserver(describe).observe($('#inventory-desc'),{childList:true,characterData:true,subtree:true});
  const cap=document.createElement('figcaption');cap.className='paper-details';cap.append(note);
  col.append(chart,cap);
  const visual=$('.visual-column');visual.classList.add('stage-column');
@@ -37,7 +41,7 @@ if(layoutV2()){
  const hint=$('.camera-controls > span');hint.id='v2-hint';
  stage.append($('#mode-label'),hint,$('.scene-key'),$('.camera-controls'));
  // "More on this step": the electrode roles, the part explanations, the composition and its readouts
- const pane=document.createElement('div');pane.className='v2-pane';pane.append($('.explanation'),$('.transport'),$('.inventory-values'));
+ const pane=document.createElement('div');pane.className='v2-pane';pane.append($('.explanation'),$('.transport'),$('#inventory-copy'),$('.inventory-values'));
 
  const v2=createLayoutV2({
   template:$('#v2-tpl'),sections:SEC,chapters:['Two paths','Nothing used up','Inside graphite'],
