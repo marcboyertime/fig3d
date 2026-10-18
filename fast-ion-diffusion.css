@@ -1,0 +1,268 @@
+:root{color-scheme:dark;--bg:#0f111b;--text:#eef1f9;--muted:#b1bbce;--line:#2a3247;--li:#4fcc71;--oxygen:#eacb4a;--single:#f34345;--zr:#a3a3f7;--up:#ffa676;--down:#87bfff}
+*{box-sizing:border-box}html{scroll-behavior:smooth}#explorer{scroll-margin-top:14px}
+body{margin:0;background:var(--bg);color:var(--text);font:17px/1.65 Sora,Arial,sans-serif}
+button,input{font:inherit}button,a{-webkit-tap-highlight-color:transparent}button{cursor:pointer;color:inherit;background:none;border:0}a{color:inherit;text-decoration:none}
+button:disabled{opacity:.4;cursor:default}
+button:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible,canvas:focus-visible,[tabindex]:focus-visible{outline:2px solid #c0d4ff;outline-offset:4px}
+button:hover:not(:disabled),a:hover{color:#cfdeff}[hidden]{display:none!important}
+.skip{position:fixed;top:12px;left:20px;z-index:99;background:var(--text);color:var(--bg);padding:12px;clip-path:inset(100%)}.skip:focus{clip-path:none}
+.masthead,main,footer{max-width:1720px;margin:auto;padding-inline:clamp(20px,4vw,72px)}
+.masthead{height:72px;display:flex;align-items:center;justify-content:space-between}
+.brand{font-size:26px;font-weight:650;letter-spacing:-1.3px}.brand span{color:#a5beff}.masthead>a:last-child{font-size:14px;color:var(--muted)}
+.eyebrow{color:#afbdda;letter-spacing:.09em;font-size:12px;font-weight:500;text-transform:uppercase;margin:0}
+
+/* Compact introduction: the scene, not the headline, owns the first screen. */
+.intro{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 28px;margin:6px 0 22px}
+.intro .eyebrow{flex-basis:100%}
+.intro h1{font-size:clamp(34px,3.4vw,54px);font-weight:500;letter-spacing:-.05em;line-height:1.08;margin:6px 0 0}
+.intro .question{flex-basis:100%;color:#d5dff3;font-size:clamp(18px,1.5vw,22px);line-height:1.5;margin:4px 0 0;max-width:40em;letter-spacing:-.01em}
+/* The primer: what the paper is and what the figure shows, before the explorer. */
+.primer{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2.1fr);gap:20px clamp(32px,4vw,72px);margin:4px 0 46px;padding-bottom:34px;border-bottom:1px solid var(--line)}
+.primer-lede{font-size:clamp(19px,1.45vw,22px);line-height:1.6;color:#e6ecf8;margin:0;letter-spacing:-.01em}
+.primer-points{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(22px,2.4vw,40px)}
+.primer-points p{margin:0;font-size:15px;line-height:1.7;color:#bac6da}
+.primer-go{display:inline-block;margin-top:14px;font-size:14px;color:#c7d9ff}.primer-go:hover{color:#e3edff}
+.primer-points .primer-step{font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:#b1c8ff;margin-bottom:10px;font-weight:500}
+
+/* One toolbar over the stage; the explanation beside it. */
+.explorer{display:grid;grid-template-columns:minmax(0,1.85fr) minmax(320px,1fr);grid-template-areas:'toolbar inspection' 'stage inspection';grid-template-rows:auto 1fr;column-gap:clamp(28px,3.6vw,64px);align-items:start}
+.toolbar{grid-area:toolbar;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 22px;min-height:52px;margin-bottom:10px}
+.stage-column{grid-area:stage;position:sticky;top:12px}
+.inspection{grid-area:inspection;padding:58px 0 40px;min-width:0}
+.tabs{display:flex;gap:26px}.tabs button{white-space:nowrap;padding:9px 0;border-bottom:2px solid transparent;font-size:16px;color:var(--muted)}.tabs button[aria-selected=true]{color:var(--text);border-color:#98b6ff}
+.display-switch{display:flex;gap:2px;padding:3px;border-radius:9px;background:#171e2d;flex:none}
+.display-switch button{min-height:38px;padding:6px 13px;border-radius:7px;font-size:14px;color:#b5c1d7;white-space:nowrap;transition:background 160ms ease,color 160ms ease}
+.display-switch button[aria-pressed=true]{background:#2b3956;color:#f3f6ff;box-shadow:inset 0 0 0 1px #728abb5c}
+
+/* The stage */
+.stage{position:relative;height:clamp(440px,calc(100svh - 268px),800px);isolation:isolate;overflow:hidden;border-radius:6px;background:radial-gradient(ellipse at 46% 46%,#1b2233 0%,#131826 42%,#0f111b 74%);view-transition-name:fast-ion-scene}
+.scene-content{position:absolute;inset:0;transition:opacity 220ms ease}
+#channel{width:100%;height:100%;display:block;touch-action:pan-y pinch-zoom;cursor:grab}
+#channel:active{cursor:grabbing}
+.showing-paper .scene-content{opacity:0;visibility:hidden;pointer-events:none;transition:opacity 220ms ease,visibility 0s 220ms}
+.is-emerging .scene-content{transition:none}
+/* At the opening's handover the model fades in around the inset (500 ms). A transition, so leaving mid-fade reverses it from where it stands. */
+.is-emerging.handing-over .scene-content{transition:opacity 500ms ease-out}
+.scene-labels{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.scene-labels .label{position:absolute;left:0;top:0;font-size:13px;line-height:22px;color:#e9eef9;white-space:nowrap;padding:0 8px;border-radius:4px;background:#111521c4;opacity:0;transition:opacity 260ms ease;will-change:transform}
+.scene-labels .label.on{opacity:1}
+.scene-labels .label.quiet{color:#cbd4e4;background:none;text-shadow:0 1px 6px #000,0 0 2px #000}
+.scene-labels .label.tension{color:var(--tension);background:none;text-shadow:0 1px 6px #000}.scene-labels .label.compression{color:var(--compression);background:none;text-shadow:0 1px 6px #000}
+.is-emerging .scene-labels,.is-emerging .scene-key{visibility:hidden}
+/* The key sits on a plate in the labels' colour (a little denser, as it is read, not glanced at): atoms turned under it (Full framework on a tablet) never cross its words. */
+.scene-key{position:absolute;bottom:58px;left:50%;transform:translateX(-50%);display:flex;gap:20px;font-size:13px;color:#d1d9e9;white-space:nowrap;pointer-events:none;transition:opacity 220ms ease;padding:2px 12px;border-radius:6px;background:#111521d9}
+.scene-key:empty{visibility:hidden}
+.scene-key span{display:flex;align-items:center;gap:7px}
+.scene-key i{display:inline-block;width:10px;height:10px;border-radius:50%;flex:none}
+.scene-key .arrow{display:inline-block;width:22px;height:10px}
+
+
+/* Bottom bar inside the stage */
+.stage-bar{position:absolute;left:0;right:0;bottom:0;min-height:52px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:6px 14px;z-index:5;background:linear-gradient(#0f111b00,#0f111bd9 55%);pointer-events:none}
+.stage-bar>*{pointer-events:auto}
+.scene-help{font-size:12px;color:#9daac1;margin:0}
+.camera-controls{display:flex;gap:2px;align-items:center}.camera-controls button{min-width:34px;min-height:36px;font-size:16px;padding:3px 6px;color:#bfcce3;border-radius:5px}.camera-controls button:hover{background:#ffffff0d}.camera-controls button:last-child{font-size:13px;margin-left:6px;padding-inline:10px}
+.showing-paper .scene-help,.showing-paper .camera-controls,.opening .scene-help,.opening .camera-controls{display:none}
+.opening-controls{display:flex;align-items:center;gap:18px}
+.pill{background:#b1c8ff;color:#0c1328;padding:8px 16px;border-radius:999px;font-size:14px;font-weight:600}.pill:hover:not(:disabled){background:#d0deff;color:#0c1328}
+.text-action{font-size:14px;padding:8px 0;color:#c7d9ff;text-align:left;line-height:1.5}
+.opening-progress{width:96px;height:2px;background:#2f384e;border-radius:2px;overflow:hidden;position:relative}.opening-progress:after{content:'';position:absolute;inset:0;background:#a5beff;transform-origin:left;transform:scaleX(var(--p,0))}
+.figure-tools{display:flex;align-items:center;justify-content:space-between;gap:12px;flex:1}.figure-tools p{font-size:12px;color:#9daac1;margin:0}.figure-tools>div{display:flex;gap:2px}.figure-tools button{min-width:40px;min-height:38px;font-size:17px;color:#cddbf7;border-radius:5px}.figure-tools button:hover{background:#ffffff0d}.figure-tools #figure-fit{font-size:13px}
+.fallback{position:absolute;left:12px;right:12px;top:10px;z-index:4;font-size:13px;line-height:1.45;color:#ccd6e8;background:#121929e6;padding:8px 12px;border-radius:6px}
+.fallback p{margin:0}
+/* Without 3D, the figure starts below the note instead of under it. */
+.webgl-failed .paper-view{padding-top:56px}
+
+/* Paper view in the same place as the model */
+.paper-view{position:absolute;inset:0;padding:22px 22px 60px;z-index:2;opacity:1;transition:opacity 220ms ease}
+.stage:not(.showing-paper) .paper-view{opacity:0;visibility:hidden;pointer-events:none;transition:opacity 220ms ease,visibility 0s 220ms}
+/* While the inset lifts, the paper view is hidden and holds no fade: as specific as the rule above and later, so the hidden
+   view drops to 0 at the handover instead of fading under the transit, and a figure chosen then fades in from 0, not from mid-fade. */
+.stage.is-emerging .paper-view{visibility:hidden;transition:none}
+.paper-viewport{width:100%;height:100%;overflow:auto;overscroll-behavior:contain;touch-action:pan-x pan-y pinch-zoom;scrollbar-color:#64789e #141b29;border-radius:3px}
+.paper-viewport.zoomed{cursor:grab}.paper-viewport.panning{cursor:grabbing}
+.paper-sheet{min-width:100%;min-height:100%;display:flex}
+.paper-sheet img{display:block;flex:none;margin:auto;height:auto;align-self:center;border-radius:2px;background:#fff;user-select:none;-webkit-user-drag:none}
+.emerge-transit{position:absolute;z-index:3;pointer-events:none}
+.emerge-transit img{display:block;width:100%;height:100%;border-radius:2px}
+.emerge-transit .emerge-hires{position:absolute;opacity:0;border-radius:0}
+.emerge-focus{position:absolute;border:1px solid #a5beff;border-radius:3px;box-shadow:0 0 0 2400px #0f111bc4;opacity:0}
+
+/* Explanation column */
+.caption{min-height:236px}
+.caption .eyebrow{margin:0 0 16px}
+.caption h2{font-size:clamp(28px,2.35vw,38px);font-weight:450;line-height:1.16;letter-spacing:-.04em;margin:0 0 20px;white-space:pre-line}
+.caption>p:last-child{font-size:17px;line-height:1.75;color:#c4cee0;margin:0 0 22px;max-width:30em}
+.caption.changing,.caption #caption-copy.changing{animation:caption-in 420ms var(--fig-ease,ease)}
+@keyframes caption-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.caption-note{font-size:13px;color:#a6b1c7;line-height:1.65;margin:22px 0 0;max-width:34em}
+#controls{transition:opacity 220ms ease}#controls.dimmed{opacity:.55}
+.control-block{margin:22px 0}
+.control-label,.range-heading{font-size:13px;color:#b9c7df;margin:0 0 9px}
+.choices{display:flex;gap:7px;flex-wrap:wrap}
+.choices button{font-size:14px;border:1px solid #37425c;border-radius:6px;padding:7px 12px;display:flex;align-items:center;gap:7px;min-height:40px}
+.choices button[aria-pressed=true]{background:#283552;border-color:#88a6e7;color:#f1f5ff}
+.choices button:hover:not([aria-pressed=true]){background:#1a2336}
+.choices .dir{font-size:12px;color:#99a7c0;letter-spacing:.04em}.bar{text-decoration:overline;text-decoration-thickness:1px}
+.range-heading{display:flex;justify-content:space-between;gap:20px}.range-heading output{color:#dce7fb;font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;height:24px;accent-color:#a6c3ff;cursor:pointer;margin:0}
+.transport{display:flex;align-items:center;gap:12px}
+.play{flex:none;width:38px;height:38px;border-radius:50%;border:1px solid #43547b;display:grid;place-items:center;color:#e5edff}.play svg{width:14px;height:14px;fill:currentColor}.play:hover:not(:disabled){background:#1d2742}
+.route-controls{display:flex;flex-wrap:wrap;gap:22px;margin-top:-6px}
+.reference{margin:24px 0 0}
+.reference button{display:block;padding:0;border-radius:4px;overflow:hidden;background:#fff;max-width:340px;width:100%}
+.reference img{display:block;width:100%;height:auto;transition:transform 400ms var(--fig-ease,ease)}
+.reference button:hover img{transform:scale(1.02)}
+.reference figcaption{font-size:13px;color:#b0bed5;line-height:1.6;margin-top:10px;max-width:30em}
+.paper-details{font-size:14px;line-height:1.75;color:#b1c1db;margin-top:-4px}.paper-details p{margin:0 0 14px;max-width:32em}.paper-details a{color:#c3d6ff}
+
+/* Go deeper: short arguments, one per question */
+.depth-reading{margin-top:30px;border-top:1px solid var(--line);padding-top:20px}
+.depth-reading h3{margin:0 0 6px}
+.depth-reading details{border-bottom:1px solid #212839}
+.depth-reading summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:14px;padding:13px 0;font-size:16px;color:#e8edf9}
+.depth-reading summary::-webkit-details-marker{display:none}
+.depth-reading summary:after{content:'+';color:#95a2ba;font-size:18px;line-height:1}.depth-reading details[open] summary:after{content:'−'}
+.depth-reading details p{margin:0 0 16px;font-size:16px;line-height:1.75;color:#c4d0e4}
+.depth-reading .formula{font-size:18px;color:#ebf0fb;letter-spacing:.02em}
+
+/* Below the explorer */
+.paper-context{margin:110px 0 90px;display:grid;grid-template-columns:1fr 1.35fr;gap:0 9vw;max-width:1120px}
+.paper-context .eyebrow{grid-column:1/-1}.paper-context h2{font-size:clamp(34px,3.6vw,52px);letter-spacing:-.045em;line-height:1.14;font-weight:450;margin:14px 0 25px}.paper-context>div{color:#bac6da;font-size:17px}
+.notes{padding-bottom:75px;max-width:1260px}
+.notes summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;font-size:18px;padding:20px 0;border-top:1px solid var(--line)}.notes summary::-webkit-details-marker{display:none}
+.notes-grid{display:grid;grid-template-columns:1fr 1fr;gap:6vw;padding-top:24px;color:#bac6da;font-size:16px}.notes h2{color:#e7edfb;font-size:21px;font-weight:500;margin:0 0 18px}.notes a{font-size:14px;color:#bdd3ff}.notes p{margin-bottom:22px}
+footer{display:flex;justify-content:space-between;gap:25px;align-items:center;padding-block:40px;font-size:14px}footer>span{font-size:12px;color:#98a6be}
+noscript{display:block;margin:30px 5vw;color:#bdcbe1}
+.webgl-failed #channel{visibility:hidden}
+
+@media(max-width:1180px){
+ .primer{grid-template-columns:1fr}
+ .explorer{grid-template-columns:minmax(0,1.5fr) minmax(290px,1fr);column-gap:28px}
+ .toolbar{gap:8px 18px}.tabs{gap:20px}.tabs button{font-size:15px}
+ .camera-controls button:not([data-camera=reset]){display:none}
+ /* A six-item key (one ion alone, Full framework) is 472 px wide: on narrower stages it wraps instead of being clipped. */
+ .scene-key{left:12px;right:12px;transform:none;flex-wrap:wrap;justify-content:center;white-space:normal;gap:2px 20px;width:fit-content;margin-inline:auto}.scene-key span{white-space:nowrap}
+}
+@media(max-width:860px){
+ .plot-pair{gap:10px}
+ .intro{margin-bottom:14px}.intro h1{font-size:40px}.intro .lede{font-size:16px}
+ .primer{grid-template-columns:1fr;margin-bottom:30px;padding-bottom:26px}.primer-points{grid-template-columns:1fr;gap:20px}.primer-lede{font-size:18px}
+ .explorer{grid-template-columns:1fr;grid-template-areas:'toolbar' 'stage' 'inspection';grid-template-rows:auto}
+ .inspection{padding-top:22px}
+ .toolbar{margin-bottom:8px}.display-switch{width:100%;overflow-x:auto;scrollbar-width:none}.display-switch::-webkit-scrollbar{display:none}.display-switch button{flex:1;padding-inline:8px}
+ .stage-column{top:0;z-index:6;background:var(--bg);padding-bottom:4px}
+ body:not(.exploring) .stage-column{position:relative}
+ .stage{height:min(62svh,560px);min-height:360px;border-radius:4px}
+ body.exploring .stage{height:min(50svh,460px);min-height:320px}
+ .caption{min-height:0}.caption h2{font-size:30px;white-space:normal}
+ .paper-view{padding:12px 10px 56px}.webgl-failed .paper-view{padding-top:72px}
+ .scene-key{bottom:54px;gap:2px 14px;font-size:12px;left:12px;right:12px;transform:none;flex-wrap:wrap;justify-content:center;white-space:normal;width:fit-content;margin-inline:auto}.scene-key span{white-space:nowrap}
+ .paper-context{margin:65px 0 45px;grid-template-columns:1fr}.paper-context h2 br{display:none}
+ .notes-grid{grid-template-columns:1fr;gap:25px}
+}
+@media(max-width:480px){
+ .masthead{height:62px}.masthead,main,footer{padding-inline:18px}
+ .intro h1{font-size:34px}
+ .tabs{gap:22px}.tabs button{font-size:15px}
+ .display-switch button{font-size:13px;min-height:40px}
+ .stage-bar{padding:4px 8px}.scene-help{font-size:11px}
+ .scene-labels .label{font-size:11px;line-height:19px;padding:0 5px}
+ .caption h2{font-size:28px}.caption>p:last-child{font-size:16px}
+ .opening-progress{width:56px}
+ footer{flex-direction:column;align-items:flex-start;padding-block:25px}
+}
+/* First visit: the title arrives alone, then the page builds in reading order. */
+.build-in .masthead,.build-in .intro .eyebrow,.build-in .intro .question,.build-in .primer-lede,.build-in .primer-points>div,.build-in .primer,.build-in .toolbar,.build-in .stage-column,.build-in .caption,.build-in #controls,.build-in .caption-note,.build-in .depth-reading{animation:build-rise 1s cubic-bezier(.22,.75,.2,1) both;animation-delay:var(--d)}
+.build-in .masthead{--d:.3s;animation-name:build-fade}.build-in .intro .eyebrow{--d:1.1s}.build-in .intro .question{--d:1.5s}
+.build-in .intro h1{animation:build-title 2s cubic-bezier(.2,.7,.15,1) both}
+.build-in .primer{--d:2.2s;animation-name:build-line}.build-in .primer-lede{--d:2.2s}
+.build-in .primer-points>div:nth-child(1){--d:2.9s}.build-in .primer-points>div:nth-child(2){--d:3.2s}.build-in .primer-points>div:nth-child(3){--d:3.5s}
+.build-in .toolbar{--d:4.1s}.build-in .stage-column{--d:4.5s;animation-name:build-fade;animation-duration:1.3s}.build-in .caption{--d:5.1s}.build-in #controls{--d:5.5s}.build-in .caption-note{--d:5.7s}.build-in .depth-reading{--d:5.9s}
+/* A new caption still arrives softly on a first visit: the build-in's own rule above would otherwise override it. */
+.build-in .caption.changing{animation:caption-in 420ms var(--fig-ease,ease)}
+@keyframes build-rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes build-fade{from{opacity:0}to{opacity:1}}
+@keyframes build-line{from{border-bottom-color:transparent}to{border-bottom-color:var(--line)}}
+@keyframes build-title{from{opacity:0;filter:blur(14px);transform:translateY(22px);letter-spacing:-.015em}to{opacity:1;filter:blur(0);transform:none;letter-spacing:-.05em}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.scene-content,.is-emerging.handing-over .scene-content,.paper-view,.display-switch button,.caption.changing,.caption #caption-copy.changing{transition:none;animation:none}}
+
+/* ————— Fast-ion companion additions ————— */
+.primer-points b{color:#e8eefb;font-weight:600}
+.question{font-weight:400}
+/* Labels that ride with ions and sites */
+.scene-labels .ion-tag{min-width:22px;height:22px;padding:0;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:600;color:#06200f;background:#a7f1bc;line-height:22px;text-align:center;box-shadow:0 0 0 2px #0f111bb0}
+.scene-labels .ion-tag.selected{background:#fff;color:#0b1a10}
+.scene-labels .site-tag{font-size:12px;color:#dfedff;background:none;padding:0 3px;text-shadow:0 1px 4px #000,0 0 2px #000;font-weight:500}
+.scene-labels .site-tag.dim{color:#a6b7d7}
+.scene-labels .note-tag{font-size:12px;color:#d1dbef;background:#111521cc}
+.scene-key i.ring{background:none;border:1.5px solid #dfedff;width:11px;height:11px}
+.scene-key i.small{width:5px;height:5px}
+/* The 1D model view */
+/* It fades in only as the view before it fades out (120 ms out, 200 ms in), so the chart is never drawn over a fading figure,
+   and it keeps the stage's full height, so it is revealed as the stage reopens rather than rescaled. */
+.chain-view{position:absolute;inset:0;bottom:auto;height:var(--stage-full,100%);padding:18px 18px 58px;display:flex;align-items:center;justify-content:center;z-index:1;transition:opacity 200ms ease-out 160ms}
+.stage:not(.showing-chain) .chain-view{opacity:0;visibility:hidden;pointer-events:none;transition:opacity 120ms ease-in,visibility 0s 120ms}
+@media(max-width:860px){.chain-view{padding:10px 8px 54px}}
+/* Without 3D, the chart starts below the "3D is unavailable" note too, as the figures do. */
+.webgl-failed .chain-view{padding-top:56px}
+/* On phones the stage grows by the note's room instead, so the chart keeps the size it has with 3D (the stage is height-limited there). */
+@media(max-width:860px){.webgl-failed .chain-view{padding-top:72px}body.exploring .stage.webgl-failed.showing-chain{height:calc(min(50svh,460px) + 62px)}}
+.chain-view svg{width:100%;height:100%;overflow:visible}
+.chain-view svg{fill:#d1daed}
+.chain-view text{font-family:var(--fig-font)}
+.chain-view .bars text{paint-order:stroke;stroke:#121521;stroke-width:5px;stroke-linejoin:round}
+.stage.showing-paper .chain-view{visibility:hidden}
+/* Linked plots in the sidebar */
+.plot-block{margin:4px 0 6px}
+.plot-block svg{display:block;width:100%;height:auto;overflow:visible}
+.plot-block text{font-family:var(--fig-font)}
+.plot-pair{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.plot-card{border:0;padding:0;background:none;text-align:left;color:inherit;border-radius:6px;transition:opacity 220ms ease}
+.plot-card[aria-pressed=false]{opacity:.6}.plot-card[aria-pressed=false]:hover{opacity:.8}
+.plot-card .plot-title{display:block;font-size:12px;letter-spacing:.04em;color:#bfcce4;margin:0 0 6px}
+.plot-card[aria-pressed=true] .plot-title{color:#eef2fb}
+.plot-axis-note{font-size:12px;color:#95a2ba;margin:6px 0 0;line-height:1.5}
+.readout{font-size:14px;color:#d7e1f3;line-height:1.6;margin:-8px 0 18px;min-height:3.2em;font-variant-numeric:tabular-nums}
+.readout strong{color:#fff;font-weight:600;font-size:17px}
+.readout span{display:block;color:var(--muted,#9daac4);font-size:13px}
+.range-note{font-size:12px;color:#95a2ba;margin:4px 0 0}
+.control-label.spaced{margin-top:16px}
+.ion-chips{display:flex;gap:7px;flex-wrap:wrap}
+.ion-chips button{min-width:44px;min-height:40px;border:1px solid #315d40;border-radius:20px;padding:4px 12px;font-size:14px;color:#d5f5e3;display:flex;gap:6px;align-items:center}
+.ion-chips button i{font-style:normal;font-size:12px;color:#96bfa7}
+.ion-chips button[aria-pressed=true]{background:#21402d;border-color:#87e4a4;color:#fff}
+.selection{border-left:2px solid #87e4a4;padding:2px 0 2px 14px;margin:18px 0 6px;font-size:14px;line-height:1.65;color:#cdd7ea}
+.selection h3{font-size:15px;font-weight:600;margin:0 0 4px;color:#eef3fb}
+.selection p{margin:0}
+.selection .kind-up{color:var(--up)}.selection .kind-down{color:var(--down)}
+/* K slider: the range the paper plots (2–6.5, Fig. 4d) as a bar under the track, and the two DFT estimates as ticks at their values. */
+.k-scale{--th:16px;position:relative;height:28px;margin-top:3px;font-size:12px;color:#afbdd4}
+.k-scale i{position:absolute;top:0;height:3px;border-radius:2px;background:#47587c;left:calc(var(--th)/2 + (100% - var(--th))/6);right:calc(var(--th)/2 + (100% - var(--th))/12)}
+.k-scale span{position:absolute;top:8px;line-height:1.4;white-space:nowrap;transform:translateX(-50%);left:calc(var(--th)/2 + (100% - var(--th))*(var(--k) - 1)/6)}
+.k-scale span:before{content:'';position:absolute;left:50%;top:-8px;width:1px;height:7px;background:#afbdd4}
+.choices button{text-align:left}
+/* The 1D model replaces the crystal: the canvas, labels and camera tools step aside. */
+.showing-chain .scene-content{opacity:0;visibility:hidden;pointer-events:none;transition:opacity 220ms ease,visibility 0s 220ms}
+.showing-chain .camera-controls,.showing-chain .scene-help{display:none}
+@media(max-width:480px){
+ .ion-chips{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}
+ .ion-chips button{flex-direction:column;gap:0;padding:5px 0;border-radius:12px;min-width:0;justify-content:center}
+ .ion-chips button i{font-size:11px}
+}
+/* Paper figures sit at the top left of the stage, level with the heading beside them, and the text column closes up
+   under its heading instead of keeping the room the 3D view's longer copy needs. */
+.fits-figure .paper-sheet img{align-self:flex-start;margin:0 auto 0 0}
+/* Unzoomed, the figure always fits; while the stage settles it may be briefly taller, which should clip, not scroll. */
+/* Nor does it hold the page: a swipe that starts on an unzoomed figure scrolls the page (contain is for panning a zoomed one). */
+.paper-viewport:not(.zoomed){overflow:hidden;overscroll-behavior:auto}
+body:has(.showing-paper) .caption{min-height:0}
+/* A wide figure closes the stage up around itself (figure-swap.mjs); the 3D layer keeps its full height meanwhile. */
+.stage{transition:height 360ms cubic-bezier(.22,.7,.2,1)}
+/* From the 1D model to a wide figure, the stage closes only once the chart has faded (120 ms), so the closing stage and its bar
+   never cut through a half-faded chart. */
+.stage.leaving-chain{transition-delay:120ms}
+.scene-content{bottom:auto;height:var(--stage-full,100%)}
+@media(prefers-reduced-motion:reduce){.stage,.chain-view,.stage:not(.showing-chain) .chain-view{transition:none}}
+/* The stage changes height under the reader; the page must not scroll to compensate, or everything visibly jumps. */
+html{overflow-anchor:none}

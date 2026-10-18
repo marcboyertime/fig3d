@@ -1,0 +1,192 @@
+/* Layout v2: one screen is the instrument (design/layout-overhaul/spec.md; approved by Marcky on 17 October 2026).
+   The figure, then the current step's claim, words and one control in the left column; the model pinned in the right.
+   Shared by every page that adopts it, with kit/layout-v2.mjs. Everything is scoped to html.layout-v2, so ?layout=v1
+   shows a page's earlier layout unchanged. A page keeps its own cover and the positions of its stage's own chips.
+   The quiet pass (18 October 2026, after Marcky found the page overwhelming): one screen shows one idea in one voice.
+   Six type sizes (13, 14, 15, 17, 26, 46), two weights for words (400, 500) and one for what is chosen (600), three
+   text tones (ink, ink 2, muted) and the accent, no capitals, no numbered circles. The step is its claim, its words and
+   its control; the chapter lives in the rail, the source and the limits behind "More on this step", a control's note
+   appears while the control is used, the stage's key folds behind "Key" and its labels are titles only. */
+html.layout-v2{
+ --v2-mast:56px;--v2-top:72px;--v2-head:48px;--v2-stage:clamp(480px,calc(100svh - 144px),900px);--v2-stage-m:330px;--v2-read:480px;
+ --v2-bg:#0f111b;--v2-soft:#1e2437;--v2-line:#2a3149;--v2-line2:#343c58;--v2-ink:#eef1f8;--v2-ink2:#cdd3e1;--v2-muted:#a7afc4;
+ --v2-faint:#a7afc4;--v2-accent:#8fa8ff;--v2-accent-ink:#0b1020;--v2-glass:rgba(13,16,27,.62);--v2-glass-line:rgba(255,255,255,.09);
+ --v2-text:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;--v2-display:Sora,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+ overflow-anchor:none   /* the layout keeps the reading position itself (kit keep()), as the 7 October rule asks */
+}
+/* Arrival: until the kit has rebuilt the page (html.v2-ready, kit/layout-v2.mjs start()) it stays on its background, so the
+   earlier layout never shows for a frame before v2 replaces it; then it fades in (18 October 2026: nothing on screen
+   changes in a single frame). A page whose script fails still appears after 2.5 s. */
+html.layout-v2:not(.v2-ready) body>*{opacity:0;animation:v2-late 0s 2.5s forwards}
+html.layout-v2.v2-ready body>*{animation:v2-arrive 260ms ease-out both}
+@keyframes v2-late{to{opacity:1}}
+@keyframes v2-arrive{from{opacity:0}}
+@media(prefers-reduced-motion:reduce){html.layout-v2.v2-ready body>*{animation:none}}
+html.layout-v2 .figure-pair .inspection{display:none!important}
+
+/* Masthead: brand and title, the chapter rail, the way out */
+html.layout-v2 .v2-bar{position:fixed;inset:0 0 auto;z-index:40;display:flex;align-items:center;gap:14px;height:var(--v2-mast);box-sizing:border-box;margin:0;padding:0 max(16px,calc((100vw - 1308px)/2));background:rgba(15,17,27,.88);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.06)}
+html.layout-v2 .v2-brand{font-size:20px;letter-spacing:-.8px}
+html.layout-v2 .v2-title{display:none}
+html.layout-v2 .v2-back{margin-left:auto;font:500 14px/1 var(--v2-text);color:var(--v2-ink2);text-decoration:none}
+.v2-rail,.v2-phonebar,.v2-kicker{display:none}
+html.layout-v2 .v2-rail{position:absolute;left:50%;top:0;height:100%;transform:translateX(-50%);display:flex;gap:30px}
+.v2-rail a{position:relative;display:flex;align-items:center;gap:9px;font:500 14px/1 var(--v2-text);color:var(--v2-muted);text-decoration:none;white-space:nowrap}
+.v2-rail a .n,.v2-now .n,.v2-chapters .n{display:none}
+.v2-rail a:hover{color:var(--v2-ink2)}
+.v2-rail a.done{color:var(--v2-muted)}
+.v2-rail a.now{color:var(--v2-ink);font-weight:600}
+.v2-rail a.now::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--v2-accent) var(--p,0%),var(--v2-line2) var(--p,0%))}
+html.layout-v2 .v2-kicker{display:block;margin:0;font:500 14px/20px var(--v2-text);color:var(--v2-muted)}
+
+/* The workspace: figure and steps left, the model right, both pinned under the masthead */
+html.layout-v2 #explorer.figure-pair{margin-top:24px;column-gap:46px;grid-template-areas:'paper-head model-head' 'paper stage' 'steps stage';grid-template-rows:auto auto 1fr}
+html.layout-v2 .figure-pair .pair-head{position:sticky;top:var(--v2-mast);z-index:8;background:var(--v2-bg);min-height:40px;margin:0;padding:calc(var(--v2-top) - var(--v2-mast)) 0 8px;box-sizing:content-box}
+html.layout-v2 .figure-pair .pair-title{font:500 13px/16px var(--v2-text);letter-spacing:0;text-transform:none;color:var(--v2-muted)}
+html.layout-v2 .figure-pair .model-head{visibility:hidden}
+html.layout-v2 .figure-pair .paper-column{top:calc(var(--v2-top) + var(--v2-head));z-index:7;background:var(--v2-bg);align-self:start;padding-bottom:4px}
+html.layout-v2 .figure-pair .paper-column::after{content:'';position:absolute;left:0;right:0;top:100%;height:24px;background:linear-gradient(var(--v2-bg),rgba(15,17,27,0));pointer-events:none}
+html.layout-v2 .figure-pair .paper-details{position:relative;margin-top:12px}
+/* The column's figure box glides to a new figure's height (kit/figure-crossfade.mjs crossfades the pictures) */
+.v2-pviewport{transition:height 420ms cubic-bezier(.4,0,.2,1),width 420ms cubic-bezier(.4,0,.2,1)}
+@media(prefers-reduced-motion:reduce){.v2-pviewport{transition:none}}
+/* two lines are kept for the note, so the pinned figure's height never changes between steps */
+html.layout-v2 .figure-pair .panel-note{margin:0;font:400 14px/21px var(--v2-text);color:var(--v2-muted);min-height:42px}
+html.layout-v2 .figure-pair .stage-column{grid-row:2/4;position:sticky;top:calc(var(--v2-top) + var(--v2-head));align-self:start;z-index:6;padding:0;background:none}
+html.layout-v2 .figure-pair .stage-column::after{display:none}
+html.layout-v2 .figure-pair .v2-stage{height:var(--v2-stage);min-height:0;border-radius:16px}
+.v2-figcredit{max-width:760px;margin:0 0 28px;font-size:14px;line-height:1.6;color:var(--v2-muted)}
+.v2-figcredit p{margin:0 0 6px}
+
+/* The steps: sections that scroll up under the pinned figure */
+.v2-steps,.v2-dock,.v2-stagechip,.v2-chapters{display:none}
+html.layout-v2 .v2-steps{display:block;grid-area:steps;min-width:0;padding-bottom:calc(var(--v2-read) * .6)}
+html.layout-v2 .v2-stagechip:not([hidden]){display:flex}
+/* Steps take their own height with one steady gap between them (18 October: a step as tall as the reading area left up to
+   250 px of blank once the quiet pass shortened the steps). The floor, a third of the reading area, keeps a step that a jump
+   brings to the top of the reading area the one at the reading line. */
+.v2-step{min-height:calc(var(--v2-read) * .34);box-sizing:border-box;padding:40px 0 40px}
+.v2-step .v2-label{display:none}
+.v2-chapters .v2-label{margin:0;font:500 14px/20px var(--v2-text);color:var(--v2-muted)}
+.v2-step h2{margin:0;font:500 26px/33px var(--v2-display);letter-spacing:-.014em;color:var(--v2-ink);text-wrap:balance;text-transform:none}
+.v2-body{margin:14px 0 0;font:400 17px/28px var(--v2-text);color:var(--v2-ink2);max-width:62ch;text-wrap:pretty}
+.v2-body b{font-weight:600;color:var(--v2-ink)}
+.v2-ctl-slot{margin-top:22px}
+.v2-ctl-label{margin:0 0 8px;font:500 14px/20px var(--v2-text);color:var(--v2-ink2)}
+.v2-ctl-label:has(+ .v2-chips){display:none}
+.v2-limit{margin:0 0 14px;font:400 14px/21px var(--v2-text);color:var(--v2-muted)}
+.v2-limit b{font-weight:500;color:var(--v2-ink2)}
+.v2-foot{display:flex;align-items:center;flex-wrap:wrap;gap:10px 16px;margin-top:18px;font:500 14px/20px var(--v2-text)}
+.v2-src{display:none;color:var(--v2-muted)}
+.v2-more-body .v2-src{display:block;margin:0 0 14px}
+.v2-src b{font-weight:500}
+.v2-morebtn{order:-1;display:inline-flex;align-items:center;gap:7px;padding:0;border:0;background:none;font:500 14px/20px var(--v2-text);color:var(--v2-muted);cursor:pointer}
+.v2-morebtn svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;transition:transform .2s}
+.v2-morebtn[aria-expanded=true] svg{transform:rotate(180deg)}
+.v2-morebtn:hover{color:var(--v2-ink)}
+.v2-go{height:32px;padding:0 14px;border-radius:999px;border:1px solid rgba(143,168,255,.55);background:rgba(143,168,255,.12);font:600 14px/30px var(--v2-text);color:var(--v2-ink);cursor:pointer}
+.v2-go:hover{background:rgba(143,168,255,.2)}
+.v2-more-body{margin-top:18px;padding-top:18px;border-top:1px solid var(--v2-line)}
+
+/* Controls: chip, segmented, slider with the source's presets, play */
+.v2-chips{display:flex;flex-wrap:wrap;gap:8px}
+.v2-chip{display:inline-flex;align-items:center;gap:8px;min-height:34px;padding:0 14px;border-radius:999px;border:1px solid transparent;background:var(--v2-soft);font:500 14px/1.2 var(--v2-text);color:var(--v2-ink2);cursor:pointer}
+.v2-chip svg{width:12px;height:12px;stroke:var(--v2-accent);fill:none;stroke-width:2.4;display:none}
+.v2-chip[aria-pressed=true]{background:rgba(143,168,255,.14);border-color:rgba(143,168,255,.5);color:var(--v2-ink)}
+.v2-chip[aria-pressed=true] svg{display:block}
+.v2-seg{display:inline-flex;flex-wrap:wrap;padding:3px;gap:3px;background:var(--v2-soft);border:1px solid var(--v2-line);border-radius:12px;max-width:100%;box-sizing:border-box}
+.v2-seg button{min-height:34px;padding:0 14px;border:0;border-radius:9px;background:none;font:500 14px/1.2 var(--v2-text);color:var(--v2-ink2);cursor:pointer}
+.v2-seg button:hover:not([aria-pressed=true]){color:var(--v2-ink);background:rgba(255,255,255,.05)}
+.v2-seg button[aria-pressed=true]{background:var(--v2-accent);color:var(--v2-accent-ink);font-weight:600}
+.v2-slider{display:flex;align-items:flex-start;gap:14px}
+.v2-grow{flex:1;min-width:0}
+.v2-shead{display:flex;justify-content:space-between;align-items:baseline;gap:16px}
+.v2-shead label{font:500 14px/20px var(--v2-text);color:var(--v2-ink2)}
+.v2-shead output{font:600 15px/20px var(--v2-text);color:var(--v2-ink);font-variant-numeric:tabular-nums;text-align:right}
+.v2-shead output small{margin-left:6px;font:400 13px/20px var(--v2-text);color:var(--v2-muted)}
+.v2-track{position:relative;margin-top:8px;height:22px}
+.v2-band{position:absolute;top:6px;height:10px;border-radius:5px;background:rgba(143,168,255,.16);border:1px solid rgba(143,168,255,.4);box-sizing:border-box;pointer-events:none}
+.v2-tick{position:absolute;top:5px;width:2px;height:12px;margin-left:-1px;border-radius:1px;background:var(--v2-muted);pointer-events:none}
+.v2-range{position:relative;-webkit-appearance:none;appearance:none;width:100%;height:22px;margin:0;background:transparent;cursor:pointer;accent-color:var(--v2-accent)}
+.v2-range::-webkit-slider-runnable-track{height:4px;border-radius:4px;background:linear-gradient(90deg,var(--v2-accent) var(--f,0%),rgba(52,60,88,.9) var(--f,0%))}
+.v2-range::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;margin-top:-7px;border-radius:50%;background:#fff;box-shadow:0 0 0 4px rgba(143,168,255,.35),0 1px 3px rgba(0,0,0,.4)}
+.v2-range::-moz-range-track{height:4px;border-radius:4px;background:rgba(52,60,88,.9)}
+.v2-range::-moz-range-progress{height:4px;border-radius:4px;background:var(--v2-accent)}
+.v2-range::-moz-range-thumb{width:18px;height:18px;border:0;border-radius:50%;background:#fff;box-shadow:0 0 0 4px rgba(143,168,255,.35)}
+.v2-range:focus-visible{outline:2px solid var(--v2-accent);outline-offset:4px;border-radius:6px}
+.v2-presets{position:relative;height:22px;margin-top:6px}
+.v2-presets button{position:absolute;top:0;transform:translateX(-50%);white-space:nowrap;padding:0;border:0;background:none;font:500 13px/22px var(--v2-text);color:var(--v2-muted);cursor:pointer}
+.v2-presets button.first{transform:none}
+.v2-presets button.last{transform:translateX(-100%)}
+.v2-presets button:hover{color:var(--v2-ink)}
+.v2-presets button[aria-pressed=true]{color:var(--v2-accent);font-weight:600}
+.v2-long{display:none}
+.v2-ends{display:flex;justify-content:space-between;margin-top:6px;font:500 13px/18px var(--v2-text);color:var(--v2-muted)}
+/* a control's note (what the slider is not) shows while the control is used, and keeps its line otherwise */
+.v2-note{margin:8px 0 0;min-height:18px;font:400 13px/18px var(--v2-text);color:var(--v2-muted);opacity:0;transition:opacity .2s ease}
+.v2-slider:hover .v2-note,.v2-slider:focus-within .v2-note,.v2-slider.is-drag .v2-note{opacity:1}
+.v2-play{flex:none;display:grid;place-items:center;width:40px;height:40px;margin-top:17px;padding:0;border-radius:50%;border:1px solid rgba(143,168,255,.5);background:none;color:var(--v2-ink);cursor:pointer}
+.v2-play svg{width:14px;height:14px;fill:currentColor}
+.v2-play .i-pause,.v2-play.playing .i-play{display:none}
+.v2-play.playing .i-pause{display:block}
+
+/* The model is not on the step being read (the reader turned it): say so on the stage */
+.v2-stagechip{position:absolute;left:14px;top:12px;z-index:4;align-items:center;gap:10px;padding:5px 5px 5px 14px;border-radius:999px;background:rgba(13,16,27,.74);border:1px solid rgba(255,255,255,.1);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);font:500 13px/18px var(--v2-text);color:var(--v2-ink2)}
+.v2-stagechip b{font-weight:600;color:var(--v2-ink)}
+.v2-stagechip button{height:28px;padding:0 12px;border-radius:999px;border:0;background:var(--v2-accent);font:600 13px/28px var(--v2-text);color:var(--v2-accent-ink);cursor:pointer}
+/* The key folds behind one button (the labels on the model name what the step is about); the hint goes at the first touch */
+html.layout-v2 .v2-key{display:none!important}
+html.layout-v2 .v2-stage.v2-key-on .v2-key:not(:empty){display:block!important;left:16px;bottom:58px;max-width:calc(100% - 32px)}
+html.layout-v2 .v2-keybtn{display:block;position:absolute;left:16px;top:auto;right:auto;bottom:16px;z-index:3;height:30px;padding:0 13px;border-radius:999px;border:1px solid var(--v2-glass-line);background:var(--v2-glass);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);font:500 13px/28px var(--v2-text);color:var(--v2-ink);cursor:pointer}
+.v2-keybtn[aria-expanded=true]{border-color:rgba(143,168,255,.6);color:var(--v2-ink)}
+html.layout-v2 .v2-hint{transition:opacity .4s ease}
+html.layout-v2 .v2-stage.v2-touched .v2-hint{opacity:0;pointer-events:none}
+html.layout-v2 .v2-stage .fig-ann-label span{display:none}
+
+/* The alternative for decision 6: one step at a time, Back and Next (steps=rail) */
+.v2-pager{display:none}
+html.steps-rail .v2-step:not(.is-current){display:none}
+html.steps-rail .v2-step{min-height:0}
+html.steps-rail .v2-steps{padding-bottom:48px}
+html.steps-rail .v2-pager{display:flex;align-items:center;gap:16px;padding-top:16px;border-top:1px solid var(--v2-line)}
+.v2-pager .v2-pos{font:500 13px/16px var(--v2-text);color:var(--v2-muted);font-variant-numeric:tabular-nums}
+.v2-pager button{height:36px;padding:0 16px;border-radius:999px;border:0;background:var(--v2-soft);font:500 14px/36px var(--v2-text);color:var(--v2-ink2);cursor:pointer}
+.v2-pager .v2-next{margin-left:auto;background:var(--v2-accent);color:var(--v2-accent-ink)}
+.v2-pager button:disabled{opacity:.45;cursor:default}
+
+/* Phone: the figure under the title; the stage pinned with this step's control docked under it */
+@media(max-width:860px){
+ html.layout-v2{--v2-mast:52px;--v2-top:52px}
+ html.layout-v2 .v2-bar{padding:0 16px}
+ html.layout-v2 .v2-title,html.layout-v2 .v2-rail,html.layout-v2 .v2-back{display:none}
+ html.layout-v2 .v2-phonebar{display:flex;align-items:center;gap:10px;margin-left:auto}
+ .v2-now{display:flex;align-items:center;gap:8px;font:500 14px/1 var(--v2-text);color:var(--v2-ink)}
+ .v2-now .dots{display:flex;gap:4px;margin-left:2px}
+ .v2-now .dots i{width:5px;height:5px;border-radius:50%;background:var(--v2-line2)}
+ .v2-now .dots i.on{background:var(--v2-accent)}
+ .v2-chbtn{display:grid;place-items:center;width:40px;height:40px;margin-right:-8px;border:0;border-radius:10px;background:none;color:var(--v2-ink2);cursor:pointer}
+ .v2-chbtn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round}
+ html.layout-v2 .v2-chapters:not([hidden]){display:block;position:fixed;top:var(--v2-mast);left:0;right:0;z-index:39;padding:12px 16px 18px;background:rgba(15,17,27,.97);border-bottom:1px solid var(--v2-line)}
+ .v2-chapters ol{list-style:none;margin:8px 0 0;padding:0}
+ .v2-chapters a{display:flex;align-items:center;gap:12px;min-height:44px;font:500 16px/1.2 var(--v2-text);color:var(--v2-ink);text-decoration:none}
+ html.layout-v2 #explorer.figure-pair{margin-top:22px;grid-template-columns:minmax(0,1fr);grid-template-areas:'paper-head' 'paper' 'stage' 'dock' 'steps';grid-template-rows:auto}
+ html.layout-v2 .figure-pair .model-head{display:none}
+ html.layout-v2 .figure-pair .pair-head{position:static;min-height:36px;padding:0}
+ html.layout-v2 .figure-pair .paper-column{position:static;margin-bottom:14px}
+ html.layout-v2 .figure-pair .paper-column::after{display:none}
+ html.layout-v2 .figure-pair .panel-note{font-size:13.5px;line-height:20px}
+ html.layout-v2 .figure-pair .stage-column{grid-row:auto;grid-area:stage;position:sticky;top:var(--v2-mast);z-index:9;background:var(--v2-bg);padding-top:6px}
+ html.layout-v2 .figure-pair .v2-stage{height:var(--v2-stage-m);min-height:0;border-radius:14px}
+ html.layout-v2 .v2-dock{display:block;grid-area:dock;position:sticky;top:calc(var(--v2-mast) + 6px + var(--v2-stage-m));z-index:9;min-height:96px;box-sizing:border-box;padding:12px 2px 12px;background:var(--v2-bg);border-bottom:1px solid var(--v2-line);box-shadow:0 14px 18px -12px rgba(15,17,27,.9)}
+ html.layout-v2 .v2-dock .v2-note{margin-top:4px;font-size:12px;line-height:16px}
+ html.layout-v2 .v2-long{display:none}
+ html.layout-v2 .v2-stage.v2-key-on .v2-key:not(:empty){display:grid!important;grid-template-columns:repeat(2,auto);gap:0 12px;left:10px;bottom:48px;max-width:calc(100% - 20px);padding:6px 10px;font-size:13px;line-height:1.45}
+ html.layout-v2 .v2-keybtn{left:10px;bottom:10px}
+ html.layout-v2 .v2-step .v2-ctl-slot{display:none}
+ html.layout-v2 .v2-step{padding:26px 0 26px}
+ html.layout-v2 .v2-step h2{font-size:22px;line-height:28px}
+ html.layout-v2 .v2-body{font-size:16px;line-height:25px;margin-top:10px}
+ html.layout-v2 .v2-limit{font-size:13.5px;line-height:20px}
+ html.layout-v2 .v2-stagechip{left:10px;top:10px}
+}
+@media(prefers-reduced-motion:reduce){.v2-morebtn svg{transition:none}}

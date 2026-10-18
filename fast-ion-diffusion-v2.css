@@ -1,0 +1,73 @@
+/* Layout v2, fast ion's own parts (the default; ?layout=v1 shows the earlier layout). The shared layout is layout-v2.css
+   with kit/layout-v2.mjs and the quiet pass; the adapter is fast-ion-diffusion-v2.mjs. The figures leave the stage for a
+   column of their own (figure-pair.css), as on silicon and rocksalt. */
+html.layout-v2 main,html.layout-v2 footer{max-width:1340px;padding-inline:16px}
+html.layout-v2 #explorer{scroll-margin-top:var(--v2-mast)}
+/* Cover: the label, the title and the question, the primer's lede, then its three points in three columns, words unchanged */
+html.layout-v2 .intro{display:block;margin:0;padding-top:calc(var(--v2-mast) + 32px)}
+html.layout-v2 .intro .eyebrow{font:500 14px/20px var(--v2-text);letter-spacing:0;text-transform:none;color:var(--v2-muted)}
+html.layout-v2 .intro h1{margin:14px 0 0;font:500 46px/52px var(--v2-display);letter-spacing:-.022em}
+html.layout-v2 .intro .question{margin:14px 0 0;max-width:44ch;font:400 21px/31px var(--v2-display);letter-spacing:-.006em;color:var(--v2-ink2)}
+html.layout-v2 .primer{display:block;margin:18px 0 0;padding:0;border:0}
+html.layout-v2 .primer-lede{max-width:82ch;font:400 15px/24px var(--v2-text);letter-spacing:0;color:var(--v2-muted)}
+html.layout-v2 .primer-points{grid-template-columns:repeat(3,minmax(0,1fr));gap:44px;margin-top:22px;padding-top:20px;border-top:1px solid var(--v2-line)}
+html.layout-v2 .primer-points .primer-step{margin-bottom:6px;font:500 15px/22px var(--v2-text);letter-spacing:0;text-transform:none;color:var(--v2-ink)}
+html.layout-v2 .primer-points p{font:400 14.5px/23px var(--v2-text);color:var(--v2-ink2)}
+html.layout-v2 .primer-go{margin-top:8px;font:500 14px/20px var(--v2-text);color:var(--v2-accent)}
+/* The workspace: the figure column beside the stage; the earlier toolbar (questions, displays) gives way to the chapters */
+@media(min-width:861px){html.layout-v2 #explorer.figure-pair{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+html.layout-v2 #explorer .toolbar{display:none}
+html.layout-v2 .v2-paper{margin:0}
+html.layout-v2 .figure-pair .paper-head{gap:12px}
+html.layout-v2 .v2-figpick button{min-height:32px;padding:0 12px;font-size:13px}
+html.layout-v2 .v2-figtools{display:flex;gap:2px;flex:none}
+html.layout-v2 .v2-figtools button{min-width:34px;min-height:34px;font-size:17px;color:#cddbf7;border-radius:5px}
+html.layout-v2 .v2-figtools button[data-z=fit]{font-size:13px}
+html.layout-v2 .v2-figtools button:hover:not(:disabled){background:#ffffff0d}
+.v2-pview{position:relative;max-width:100%}
+.v2-pviewport{position:relative;overflow:hidden;border-radius:3px;max-width:100%}
+.v2-pviewport.zoomed{overflow:auto;overscroll-behavior:contain;cursor:grab;scrollbar-color:#64789e #141b29}
+.v2-pviewport.panning{cursor:grabbing}
+.v2-psheet{position:relative;width:max-content;overflow:hidden;border-radius:3px}
+.v2-psheet img{display:block;height:auto;background:#fff;user-select:none;-webkit-user-drag:none}
+/* The model's place on the paper's own printed curve */
+.v2-curve-ring{position:absolute;width:14px;height:14px;margin:-7px 0 0 -7px;box-sizing:border-box;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 2px rgba(15,17,27,.85),0 0 10px rgba(143,168,255,.85);pointer-events:none}
+/* The stage holds the model or the 1D chart (the figures have their column), and waits empty before the opening's lift */
+html.layout-v2 #stage:not(.webgl-failed) .paper-view{display:none}
+html.layout-v2 #figure-tools,html.layout-v2 #reference{display:none!important}
+.v2-wait{display:none}
+html.layout-v2 #stage.opening.showing-paper:not(.is-emerging) .v2-wait{display:grid;position:absolute;inset:0;z-index:2;place-items:center;margin:0;padding:0 40px;text-align:center;font:400 14px/21px var(--v2-text);color:var(--v2-muted)}
+html.layout-v2 #explorer>.emerge-transit{z-index:12}
+#explorer:has(>.emerge-transit){overflow-x:clip}
+/* Stage chrome: Reset at the bottom right, the hint at the top left until the first touch, the key behind its button */
+html.layout-v2 #stage .stage-bar{min-height:0;padding:0 16px 16px;align-items:flex-end;background:none}
+html.layout-v2 #stage .camera-controls{margin-left:auto}
+html.layout-v2 #stage .camera-controls button:not([data-camera=reset]){display:none}
+html.layout-v2 #stage .scene-help{position:absolute;left:18px;top:14px;z-index:3}
+html.layout-v2 #stage .scene-key{left:16px;right:auto;bottom:58px;transform:none;margin:0;width:auto}
+/* Steps */
+html.fi-opening .v2-step[data-sec=sites] .v2-ctl,html.fi-opening .v2-dock .v2-ctl{opacity:.55;transition:opacity .22s ease}
+/* "More on this step" holds the question's other controls, its readout and plots, and its Go deeper */
+.v2-pane .control-block:first-child,.v2-pane .plot-block:first-child{margin-top:0}
+.v2-pane .depth-reading{margin-top:22px}
+.v2-step[data-sec=sites] [data-v2p~=sites],.v2-step[data-sec=average] [data-v2p~=average],.v2-step[data-sec=cell] [data-v2p~=cell],.v2-step[data-sec=concerted] [data-v2p~=concerted],.v2-step[data-sec=single] [data-v2p~=single],.v2-step[data-sec=barrier] [data-v2p~=barrier],.v2-step[data-sec=barrierB] [data-v2p~=barrierB]{display:none!important}
+/* The figure's caption and links, with the sources below the workspace */
+html.layout-v2 .v2-credit .v2-figcredit{margin:0 0 22px;padding-top:28px}
+html.layout-v2 .v2-credit .v2-figcredit .eyebrow{margin-bottom:8px}
+html.layout-v2 .v2-credit .v2-figcredit a{color:var(--v2-accent)}
+@media(max-width:860px){
+ html.layout-v2 .intro{padding-top:calc(var(--v2-mast) + 24px)}
+ html.layout-v2 .intro h1{margin-top:10px;font-size:32px;line-height:37px}
+ html.layout-v2 .intro .question{font-size:18px;line-height:26px}
+ html.layout-v2 .primer{margin-top:0}
+ html.layout-v2 .primer-points{grid-template-columns:minmax(0,1fr);gap:22px}
+ html.layout-v2 .v2-figpick{flex:1;overflow-x:auto;scrollbar-width:none}
+ html.layout-v2 #stage .stage-bar{padding:0 10px 10px}
+ html.layout-v2 #stage .scene-help{left:12px;top:10px}
+ html.layout-v2 #stage.opening .v2-keybtn{display:none}
+ html.layout-v2 #stage.v2-key-on .scene-key{left:10px;right:auto;bottom:48px;max-width:calc(100% - 20px)}
+ /* The 1D model's chart carries words and bars: on a phone its stage is taller, and the docked control pins under it */
+ html.layout-v2:has(#stage.showing-chain){--v2-stage-m:min(450px,54svh)}
+}
+/* Figure 4 is short, so the last step reads from high on the screen: the steps run on far enough to keep the stage pinned */
+html.layout-v2 .v2-steps{padding-bottom:calc(var(--v2-read) * .6 + 48px)}

@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0f111b">
+  <title>Diffusion in a particle — Fig.3D</title>
+  <meta name="description" content="Why do smaller particles fill with lithium so much faster? A film of lithium diffusing into a cut-open sphere, and a radius explorer for an ideal constant-diffusivity model.">
+<meta property="og:site_name" content="Fig.3D">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Diffusion in a particle">
+<meta property="og:description" content="Why do smaller particles fill with lithium so much faster? A film of lithium diffusing into a cut-open sphere, and a radius explorer for an ideal constant-diffusivity model.">
+<meta name="twitter:card" content="summary">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"LearningResource","name":"Diffusion in a particle","description":"Why do smaller particles fill with lithium so much faster? A film of lithium diffusing into a cut-open sphere, and a radius explorer for an ideal constant-diffusivity model.","inLanguage":"en","learningResourceType":"interactive visualization","isPartOf":{"@type":"WebSite","name":"Fig.3D"}}</script>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230f111b'/%3E%3Ctext x='5' y='24' font-family='Arial' font-size='25' font-weight='bold' fill='%237d9cff'%3Ef.%3C/text%3E%3C/svg%3E">
+  <link rel="preload" href="assets/fonts/Sora-Variable.ttf" as="font" type="font/ttf" crossorigin><link rel="stylesheet" href="preview.css"><link rel="stylesheet" href="visual-language.css"><link rel="stylesheet" href="film.css"><link rel="stylesheet" href="module-opening.css"><link rel="stylesheet" href="annotations.css"><script>/* Layout v2 is the default (approved 17 October 2026); ?layout=v1 shows the earlier layout for comparison, &steps=rail the step-rail alternative */if(!/[?&]layout=v1\b/.test(location.search)){document.documentElement.classList.add('layout-v2');if(/[?&]steps=rail\b/.test(location.search))document.documentElement.classList.add('steps-rail')}</script><script src="module-opening.js"></script>
+  <noscript><style>.film-stage video{opacity:1}</style></noscript>
+  <script type="module" src="preview.js"></script>
+  <script type="module" src="film.js"></script>
+  <script type="module" src="diffusion-v2.mjs"></script>
+<link rel="stylesheet" href="nearby.css"><link rel="stylesheet" href="design-system.css"><link rel="stylesheet" href="figure-pair.css?v=2"><link rel="stylesheet" href="layout-v2.css"><link rel="stylesheet" href="diffusion-v2.css">
+</head>
+<body class="preview-page"><header class="preview-header" data-open="1"><a class="brand" href="index.html">Fig.<span>3D</span></a><a href="index.html#collection">Back to the collection</a></header><main><section class="film" aria-labelledby="page-title">
+  <header class="module-head"><p class="eyebrow module-eyebrow" data-open="1">FOUNDATION · DIFFUSION</p><div data-open="title"><h1 id="page-title" data-open-line>Diffusion in a particle</h1><p class="fig-question" data-open-line>Why do smaller particles fill with lithium so much faster?</p></div>
+  <section class="fig-intro" data-phone-after=".film-grid" aria-label="About this visualization" data-open="2">
+  <div data-open="2"><h2>The idea</h2><p>A battery electrode is a powder of tiny particles. Lithium can only get into each one through its surface, and then has to spread inward by diffusion: random hopping, with no push toward the center. How long that takes is one of the limits on how fast the material can charge.</p></div>
+  <div data-open="3"><h2>What you’re looking at</h2><p>A round particle with a quarter cut away, so you can see inside. The cut faces are colored by how much lithium is there, from dark purple for empty to blue for full, with contour lines at 20, 40, 60 and 80 percent. The beads show where the lithium is: they follow the amount, not the random path of any one ion. The film loops: lithium goes in, then comes back out.</p></div>
+  <div data-open="4"><h2>Try it</h2><p>Below the film, change the particle’s radius and compare how far lithium has spread after the same 2 seconds. Diffusion time grows with the square of the distance, so half the radius takes a quarter of the time. This is an ideal sphere with one fixed diffusivity, not a measurement of a real material.</p></div>
+  </section></header>
+  <div class="film-label section-label" data-open="5"><span>01 — WATCH IT HAPPEN</span><span>BLENDER FILM</span></div>
+  <div class="film-grid" data-open="5" data-open-stage>
+    <div class="film-stage">
+      <video id="film-video" muted loop playsinline preload="auto" poster="assets/diffusion-film/poster.webp" aria-describedby="film-desc">
+        <source src="assets/diffusion-film/diffusion-960.mp4" type="video/mp4" media="(min-width: 561px)">
+        <source src="assets/diffusion-film/diffusion-960.webm" type="video/webm" media="(min-width: 561px)">
+        <source src="assets/diffusion-film/diffusion-640.mp4" type="video/mp4">
+        <source src="assets/diffusion-film/diffusion-640.webm" type="video/webm">
+      </video>
+      <p id="film-desc" class="sr-only">A sphere with one quarter cut away. The two cut faces are colored by lithium concentration, dark purple for empty and blue for full, with hairline contours at 20, 40, 60 and 80 percent. Beads mark where the lithium is: they gather at the surface and spread toward the center, then thin out from the surface first when the surface is emptied. The film loops every 16 seconds.</p>
+    </div>
+    <div class="film-copy">
+      <div class="eyebrow film-eyebrow"><span class="crosshair" aria-hidden="true">+</span> FIG. 01 <span>SPHERICAL DIFFUSION</span></div>
+      <h2 id="film-title" class="film-title">Lithium fills a particle from the outside in</h2>
+      <ol class="film-steps" id="film-steps">
+        <li data-from="0" data-to="96"><b>The surface fills first</b><span>Lithium enters through the surface, so the outer shell is full long before the middle</span></li>
+        <li data-from="96" data-to="192"><b>The center catches up slowly</b><span>Diffusion carries lithium inward. The deeper it has to go, the longer it takes</span></li>
+        <li data-from="192" data-to="288"><b>Empty the surface, and lithium leaves</b><span>The outer shell drains first while the center is still full</span></li>
+        <li data-from="288" data-to="384"><b>The center is the last to empty</b><span>The same distance sets the pace in both directions</span></li>
+      </ol>
+      <div class="film-readout">
+        <div><span class="readout-key">Lithium</span><output id="film-phase">going in</output></div>
+        <div><span class="readout-key">Time</span><output id="film-time">0.0 s</output></div>
+        <div><span class="readout-key">Average fill</span><output id="film-fill">0%</output></div>
+      </div>
+      <p class="film-time-note" id="film-time-note"></p>
+      <figure class="film-profile">
+        <svg viewBox="0 0 360 84" role="img" aria-label="Live concentration profile from center to surface for the frame on screen">
+          <path d="M28 6V64H352M28 35H352" class="grid"/>
+          <path id="film-profile-fill" class="fill"/><path id="film-profile-line" class="line"/>
+          <g class="axis"><text x="6" y="10">1</text><text x="6" y="67">0</text><text x="28" y="80">center</text><text x="190" y="80" text-anchor="middle">r / R</text><text x="352" y="80" text-anchor="end">surface</text></g>
+        </svg>
+        <figcaption>Concentration from center to surface, for the frame on screen</figcaption>
+      </figure>
+      <div class="film-controls">
+        <button id="film-toggle" class="motion-toggle" type="button" aria-pressed="false"><span class="pause-symbol" aria-hidden="true"></span><span id="film-toggle-label">Pause</span></button>
+        <div class="film-scrub"><input id="film-scrub" type="range" min="0" max="383" step="1" value="0" aria-label="Film position"><div class="scrub-ends"><span>Lithium in</span><span>Lithium out</span></div></div>
+      </div>
+    </div>
+  </div>
+<script src="phone-order.js"></script>
+</section>    <section id="explore" class="exploration light-section" data-open="6" aria-labelledby="explore-title">
+      <div class="section-label"><span>02 — TRY AN IDEA</span><span>INTERACTIVE MODEL PREVIEW</span></div>
+      <div class="explore-heading"><h2 id="explore-title">Small particle<br>Different timescale</h2><p>Same material. Same elapsed time.<br>Change the radius and see what happens inside.</p></div>
+      <div class="experiment">
+        <div class="experiment-figure">
+          <div class="figure-top"><span>FIG. 02 / A</span><span>RADIAL CROSS SECTION</span><span>t = 2 s</span></div>
+          <div class="particle-stage"><svg id="particle" viewBox="0 0 560 380" role="img" aria-labelledby="particle-title particle-desc">
+            <title id="particle-title">Concentration through a spherical particle</title>
+            <desc id="particle-desc">A circular cross section colors the concentration at each radial position. At the same diffusivity and elapsed time, a smaller particle has a more uniform profile.</desc>
+            <defs><radialGradient id="concentration-gradient"></radialGradient></defs>
+            <path d="M54 190H506M280 45V335" stroke="#2f364d" stroke-dasharray="3 6"/>
+            <circle id="particle-outline" cx="280" cy="190" r="60" fill="url(#concentration-gradient)" stroke="#a5adc5" stroke-opacity=".7" stroke-width="1"/><g id="particle-contours"></g>
+            <path id="radius-line" d="M280 190H340" stroke="#fff" stroke-width="1.2"/>
+            <circle cx="280" cy="190" r="3" fill="#fff"/>
+            <text id="radius-label" x="305" y="207" fill="#fff" font-size="15" font-family="monospace">R</text>
+          </svg></div>
+          <div class="concentration-key"><span>Relative concentration, c/cₛ</span><span class="color-key"><span>0</span><i aria-hidden="true"></i><span>1</span></span></div>
+          <div class="profile-header"><span>FIG. 02 / B</span><span>THE SAME FIELD, AS A PROFILE</span></div>
+          <svg class="profile-plot" viewBox="0 0 560 130" role="img" aria-labelledby="profile-title profile-desc">
+            <title id="profile-title">Radial concentration profile</title><desc id="profile-desc">Concentration from center to surface. The horizontal axis is normalized distance r over R; the vertical axis is relative concentration from zero to one.</desc>
+            <path d="M34 15V99H538M34 15H538M34 57H538" stroke="#2f364d" fill="none" stroke-width=".7"/>
+            <path id="profile-fill" fill="#84a4ff" fill-opacity=".12"/><path id="profile-curve" stroke="#84a4ff" stroke-width="2" fill="none"/>
+            <g font-size="12" fill="#a0a8bf" font-family="monospace"><text x="10" y="20">1</text><text x="10" y="103">0</text><text x="34" y="122">center</text><text x="280" y="122" text-anchor="middle">r / R</text><text x="538" y="122" text-anchor="end">surface</text></g>
+          </svg>
+        </div>
+        <div class="experiment-controls">
+          <div class="interaction-label"><span class="accent-square" aria-hidden="true"></span> COMPARE SIZES</div>
+          <h3>Half the distance<br>A quarter of the time</h3>
+          <p>The characteristic diffusion time scales with the square of the particle radius. A shorter path makes a big difference.</p>
+          <div class="radius-control"><label for="radius">Particle radius <output id="radius-value" for="radius">50 <span>nm</span></output></label><input id="radius" type="range" min="25" max="100" step="5" value="50" aria-describedby="radius-help"><div class="range-ends"><span>25 nm</span><span>100 nm</span></div><p id="radius-help">Drag to compare the concentration profiles.</p></div>
+          <div class="result-line"><output id="scale-value" for="radius">1.00<span>×</span></output><p>characteristic diffusion time<br><small>Relative to a 50 nm particle, at fixed D</small></p></div>
+          <p class="fixed-inputs">Fixed: D = 10⁻¹⁶ m²/s · elapsed time = 2 s</p>
+          <button id="model-open" class="line-button" type="button">The model & its limits <span aria-hidden="true">+</span></button>
+        </div>
+      </div>
+      <p class="experiment-caption">An idealized sphere. Illustrative inputs. A starting point for understanding diffusion—not a prediction of battery performance.</p>
+    </section>
+
+<!-- Layout v2 (the default; ?layout=v1 shows the earlier layout): the steps, chapter rail, phone bar, dock and stage chip.
+     diffusion-v2.mjs moves them into place; each step is cut from this page's own words and model notes. -->
+<template id="v2-tpl">
+<nav class="v2-rail" aria-label="Chapters"><a href="#fill" data-ch="0"><span class="n">1</span><span class="t">Watch it happen</span></a><a href="#size" data-ch="1"><span class="n">2</span><span class="t">Compare sizes</span></a></nav>
+<div class="v2-phonebar"><span class="v2-now"><span class="n">1</span><span class="t">Watch it happen</span><span class="dots"></span></span><button class="v2-chbtn" type="button" aria-label="Chapters" aria-expanded="false" aria-controls="v2-chapters"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h9"/></svg></button></div>
+<nav class="v2-chapters" id="v2-chapters" aria-label="Chapters" hidden><p class="v2-label">Chapters</p><ol><li><a href="#fill" data-ch="0"><span class="n">1</span>Watch it happen</a></li><li><a href="#size" data-ch="1"><span class="n">2</span>Compare sizes</a></li></ol></nav>
+<div class="v2-steps">
+<section class="v2-step" data-sec="fill" aria-labelledby="v2h-fill">
+<p class="v2-label"><span class="n">1</span>Watch it happen<span class="pos">1 of 4</span></p>
+<h2 id="v2h-fill">The surface fills first</h2>
+<p class="v2-body">Lithium enters through the surface, so the outer shell is full long before the middle.</p>
+<p class="v2-limit">The beads show where the lithium is: they follow the amount, not the random path of any one ion.</p>
+<div class="v2-foot"><span class="v2-src">In the model · Crank (1975), eq. 6.18</span><button class="v2-morebtn" type="button" aria-expanded="false" aria-controls="v2m-fill">More on this step<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4"/></svg></button><button class="v2-go" type="button" hidden>Go to this view</button></div><div class="v2-more-body" id="v2m-fill" hidden></div>
+</section>
+<section class="v2-step" data-sec="center" aria-labelledby="v2h-center">
+<p class="v2-label"><span class="n">1</span>Watch it happen<span class="pos">2 of 4</span></p>
+<h2 id="v2h-center">The center catches up slowly</h2>
+<p class="v2-body">Diffusion carries lithium inward. The deeper it has to go, the longer it takes.</p>
+<p class="v2-limit">Diffusion is random hopping, with no push toward the center.</p>
+<div class="v2-foot"><span class="v2-src">In the model · Crank (1975), eq. 6.18</span><button class="v2-morebtn" type="button" aria-expanded="false" aria-controls="v2m-center">More on this step<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4"/></svg></button><button class="v2-go" type="button" hidden>Go to this view</button></div><div class="v2-more-body" id="v2m-center" hidden></div>
+</section>
+<section class="v2-step" data-sec="empty" aria-labelledby="v2h-empty">
+<p class="v2-label"><span class="n">1</span>Watch it happen<span class="pos">3 of 4</span></p>
+<h2 id="v2h-empty">Empty the surface, and lithium leaves</h2>
+<p class="v2-body">The outer shell drains first while the center is still full.</p>
+<p class="v2-limit">The cutaway is a viewing aid, not a change to the sphere’s boundary conditions.</p>
+<div class="v2-foot"><span class="v2-src">In the model · Crank (1975), eq. 6.18</span><button class="v2-morebtn" type="button" aria-expanded="false" aria-controls="v2m-empty">More on this step<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4"/></svg></button><button class="v2-go" type="button" hidden>Go to this view</button></div><div class="v2-more-body" id="v2m-empty" hidden></div>
+</section>
+<section class="v2-step" data-sec="last" aria-labelledby="v2h-last">
+<p class="v2-label"><span class="n">1</span>Watch it happen<span class="pos">4 of 4</span></p>
+<h2 id="v2h-last">The center is the last to empty</h2>
+<p class="v2-body">The same distance sets the pace in both directions.</p>
+<p class="v2-limit">The film loops: lithium goes in, then comes back out.</p>
+<div class="v2-foot"><span class="v2-src">In the model · Crank (1975), eq. 6.18</span><button class="v2-morebtn" type="button" aria-expanded="false" aria-controls="v2m-last">More on this step<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4"/></svg></button><button class="v2-go" type="button" hidden>Go to this view</button></div><div class="v2-more-body" id="v2m-last" hidden></div>
+</section>
+<section class="v2-step" data-sec="size" aria-labelledby="v2h-size">
+<p class="v2-label"><span class="n">2</span>Compare sizes<span class="pos">1 of 1</span></p>
+<h2 id="v2h-size">Half the distance, a quarter of the time</h2>
+<p class="v2-body">The characteristic diffusion time scales with the square of the particle radius. A shorter path makes a big difference.</p>
+<div class="v2-rx"></div>
+<div class="v2-ctl-slot"><div class="v2-ctl"><div class="v2-slider" data-range="#radius" data-out="#radius-value"><div class="v2-grow"><div class="v2-shead"><label for="v2r-size">Particle radius</label><output></output></div><div class="v2-track"><input class="v2-range" id="v2r-size" type="range" min="25" max="100" step="5" value="50"></div><div class="v2-ends" aria-hidden="true"><span>25 nm</span><span>100 nm</span></div></div></div></div></div>
+<p class="v2-limit">Fixed: D = 10⁻¹⁶ m²/s, elapsed time 2 s. An idealized sphere with illustrative inputs: a starting point for understanding diffusion, not a prediction of battery performance.</p>
+<div class="v2-foot"><span class="v2-src">In the model · Crank (1975), eq. 6.18</span><button class="v2-morebtn" type="button" aria-expanded="false" aria-controls="v2m-size">More on this step<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4"/></svg></button><button class="v2-go" type="button" hidden>Go to this view</button></div><div class="v2-more-body" id="v2m-size" hidden></div>
+</section>
+<div class="v2-pager"><button class="v2-prev" type="button">← Back</button><span class="v2-pos"></span><button class="v2-next" type="button">Next →</button></div>
+</div>
+<section class="v2-dock" aria-label="This step’s control"></section>
+<div class="v2-stagechip ui-tl" hidden><span>Showing <b class="v2-chip-now"></b></span><button type="button">Go to this view</button></div>
+</template>
+<!-- nearby: written by tools/build-nearby.mjs from catalog.json -->
+<nav class="nearby" data-page="diffusion" aria-labelledby="nearby-title"><h2 id="nearby-title">Nearby</h2><ul><li><a href="battery.html"><span class="nearby-kicker">Foundation · Energy</span><span class="nearby-title">How a battery works</span><span class="nearby-why">Where such particles sit: lithium leaving one electrode's grains and entering the other's in a working cell.</span></a></li></ul></nav>
+<!-- /nearby -->
+</main>  <dialog id="model-dialog" aria-labelledby="model-title"><button class="dialog-close" type="button" aria-label="Close model notes">×</button><div class="eyebrow">MODEL NOTES</div><h2 id="model-title">A smaller distance<br>A different timescale</h2><p>The diagram uses the analytical series solution for diffusion into a sphere (Crank, <i>The Mathematics of Diffusion</i>, 2nd ed., 1975, eq. 6.18). The surface concentration is held constant; concentration starts at zero throughout the interior. Diffusivity is constant and the sphere does not change shape.</p><p>The concentration profile is shown at the same illustrative elapsed time and diffusivity for each radius. The characteristic diffusion time scales as <strong>R² / D</strong>. Doubling the radius gives four times the characteristic time at fixed D.</p><p class="equation">c(x, τ) = 1 − 2/(πx) Σ [ (−1)ⁿ⁺¹ sin(nπx) / n ] e<sup>−n²π²τ</sup></p><p>Here x = r/R and τ = Dt/R². The preview uses D = 10⁻¹⁶ m²/s, t = 2 s, and 40 series terms. These are illustrative inputs, not measured properties of a particular cathode.</p><p>The film at the top uses the same equation, solved numerically while the surface concentration switches between 1 and 0 every 8 seconds of film. It shows the repeating cycle, so the last frame joins the first. The colors and contours on the cut faces come straight from that solution. Each bead is placed so the beads on a face follow the same concentration, which makes them trace the flow of lithium rather than individual random walks. The cutaway is a viewing aid, not a change to the sphere’s boundary conditions. The film’s time readout uses the radius chosen below.</p><p>The model omits particle interactions, electrode reactions, changing diffusivity, phase transitions, and electrochemical boundary conditions. It cannot predict a real battery’s capacity or charging speed.</p><a class="text-link" href="https://weewave.mer.utexas.edu/MED_files/MED_research/MEMS_chem_snsr/beads/sph_diff_web.html" target="_blank" rel="noopener">Background: diffusion into a sphere · UT Austin</a></dialog>
+<style>.preview-header{display:flex;justify-content:space-between;align-items:center;padding:28px var(--gutter);font-size:14px}</style></body></html>

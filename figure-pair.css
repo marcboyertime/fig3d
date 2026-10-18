@@ -1,0 +1,70 @@
+/* Figure pair: the original paper figure on the left, the visualization on the right, compared at a glance.
+   Shared layout; a page opts in with class="figure-pair" on its explorer and these grid areas:
+     .paper-head  — figure picker and zoom, over the figure
+     .model-head  — the page's questions, over the visualization
+     .paper-column — the figure (#paper-view) and, directly under it, its highlight note and caption
+     .stage-column — the visualization
+     .inspection  — words and controls for the visualization, directly under it
+   Spacing rules (also in DESIGN_AND_PRODUCT_HANDOFF.md, 14 October 2026):
+   - Two equal columns with one gutter (--pair-gap). Both heads share one row, so the figure's top edge and the
+     stage's top edge are the same line.
+   - The figure fits its column's width and never grows taller than the stage or past 1.6× its native pixels. It sits
+     top left; there is no box around it, so a wide figure never floats in empty space, and its caption follows it.
+   - Words sit under what they describe, after the same gap on both sides (--pair-under).
+   - On desktop the figure and the visualization are pinned together as one band (owner decision 7, 16 October 2026):
+     the words and controls scroll up beneath them, so a control and what it moves are on screen together. A control
+     already scrolled past sits under the band until the reader scrolls back; a short fade marks the band's edge.
+   - Below 861 px the pair stacks: questions, figure picker, figure, its note, then the visualization. */
+.figure-pair{
+ --pair-gap:clamp(28px,3vw,52px);--pair-head:52px;--pair-head-gap:12px;--pair-under:20px;
+ --pair-stage:clamp(380px,calc(100svh - 380px),640px);--pair-mark:#87a7ff;
+ position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+ grid-template-areas:'paper-head model-head' 'paper stage' 'paper inspection';
+ grid-template-rows:auto auto 1fr;column-gap:var(--pair-gap);align-items:start
+}
+.figure-pair .pair-head{min-height:var(--pair-head);margin-bottom:var(--pair-head-gap);display:flex;align-items:center;justify-content:space-between;gap:8px 18px;min-width:0}
+.figure-pair .paper-head{grid-area:paper-head}
+.figure-pair .model-head{grid-area:model-head}
+.figure-pair .paper-column{grid-area:paper;margin:0;min-width:0;position:sticky;top:12px}
+@media(min-width:861px){
+ .figure-pair .stage-column{position:sticky;top:12px;align-self:start;z-index:5;background:var(--bg,#0f111b);padding-bottom:var(--pair-under)}
+ .figure-pair .stage-column::after{content:'';position:absolute;left:0;right:0;top:100%;height:28px;background:linear-gradient(var(--bg,#0f111b),transparent);pointer-events:none}
+}
+.figure-pair .stage-column{grid-area:stage;min-width:0}
+.figure-pair .inspection{grid-area:inspection;min-width:0;padding:var(--pair-under) 0 40px}
+
+/* The figure: sized by script to fit; the frame is exactly the figure, so nothing around it is empty. */
+.figure-pair .paper-view{position:relative;max-width:100%}
+.figure-pair .paper-viewport{position:relative;overflow:hidden;border-radius:3px;max-width:100%;transition:height 360ms cubic-bezier(.22,.7,.2,1),width 360ms cubic-bezier(.22,.7,.2,1)}
+.figure-pair .paper-viewport.zoomed{overflow:auto;overscroll-behavior:contain;cursor:grab;scrollbar-color:#64789e #141b29}
+.figure-pair .paper-viewport.panning{cursor:grabbing}
+.figure-pair .paper-sheet{position:relative;display:block;width:max-content;overflow:hidden;border-radius:3px}
+.figure-pair .paper-sheet img{display:block;height:auto;background:#fff;user-select:none;-webkit-user-drag:none}
+
+/* The panel that matches the visualization: outlined, the rest of the figure quietly dimmed. */
+.panel-mark{--glide:520ms cubic-bezier(.22,.7,.2,1);position:absolute;border:2px solid var(--pair-mark,#87a7ff);border-radius:4px;box-shadow:0 0 0 4000px color-mix(in srgb,var(--bg,#0f111b) 16%,transparent);pointer-events:none;opacity:0;
+ transition:opacity 110ms ease-in,left var(--glide),top var(--glide),width var(--glide),height var(--glide)}
+/* Leaves as fast as the old figure fades (figure-swap.mjs, 120 ms); arrives with the new one (200 ms). */
+.panel-mark.on{opacity:1;transition:opacity 220ms ease-out,left var(--glide),top var(--glide),width var(--glide),height var(--glide)}
+.panel-note{display:flex;align-items:baseline;gap:10px;margin:0 0 14px;font-size:14px;line-height:1.55;color:var(--text);min-height:1.55em;transition:opacity 240ms ease}
+.panel-note:before{content:'';flex:none;width:10px;height:10px;border:2px solid var(--pair-mark,#87a7ff);border-radius:2px;transform:translateY(1px)}
+.panel-note:empty{opacity:0}.panel-note:empty:before{visibility:hidden}
+/* No panel matches the visualization's current state: nothing is outlined, and the note (with a dashed swatch) says why. */
+.panel-note.is-unmatched{color:var(--muted,#b1bbce)}.panel-note.is-unmatched:before{border-style:dashed;opacity:.6}
+.figure-pair .paper-details{margin-top:var(--pair-under);font-size:14px;line-height:1.7;color:var(--muted);max-width:44em}
+.figure-pair .paper-details .eyebrow{margin:0 0 8px}
+.figure-pair .paper-details p{margin:0 0 12px}
+
+@media(max-width:1180px){.figure-pair{--pair-gap:28px;--pair-stage:clamp(420px,calc(100svh - 300px),600px)}}
+@media(max-width:860px){
+ .figure-pair{grid-template-columns:minmax(0,1fr);grid-template-areas:'model-head' 'paper-head' 'paper' 'stage' 'inspection';grid-template-rows:auto;--pair-head:44px;--pair-under:16px}
+ .figure-pair .paper-column{position:static;margin-bottom:22px}
+ .figure-pair .paper-head{margin-bottom:10px}
+ .figure-pair .model-head{margin-bottom:6px}
+ .figure-pair .paper-details{margin-top:12px;font-size:13px}
+ /* On phones the figure keeps only its highlight note (the picker names the figure); the long caption and links live in the notes below. */
+ .figure-pair .paper-details .eyebrow,.figure-pair .paper-details #paper-caption,.figure-pair .paper-details .paper-links{display:none}
+ /* Two lines are kept for the note, so a longer note never pushes the stage down mid-opening. */
+ .figure-pair .panel-note{margin:0;font-size:13px;min-height:3.1em}
+}
+@media(prefers-reduced-motion:reduce){.panel-mark,.figure-pair .paper-viewport{transition:none}}

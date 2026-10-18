@@ -1,0 +1,75 @@
+/* Fig.3D design system (17 October 2026): rocksalt's visual pass, carried to every page.
+   Linked last on each page, after the page's own stylesheet. It sets the shared type, the interface colours and the shared
+   components (question tabs, figure switches, choices, actions, readouts, and the stage's controls, key and hints). Each
+   page's own stylesheet keeps its layout and its subject colours (a figure's species, a colour map).
+   Marcky, 17 October: "do whatever it takes to make this as high quality as possible". */
+:root{
+ --ds-bg:#0f111b;--ds-surface:#161b2b;--ds-soft:#1e2437;--ds-line:#2a3149;
+ --ds-ink:#eef1f8;--ds-ink-2:#cdd3e1;--ds-muted:#a7afc4;
+ --ds-accent:#8fa8ff;--ds-accent-hover:#a3b7ff;--ds-accent-ink:#0b1020;--ds-accent-soft:rgba(143,168,255,.13);
+ --ds-stage-chip:rgba(13,16,27,.62);--ds-stage-line:rgba(255,255,255,.09);
+ --ds-font-text:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+ --ds-font-display:Sora,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+ --ds-font-mono:ui-monospace,'SF Mono',SFMono-Regular,Menlo,Consolas,monospace;
+ --fig-font:var(--ds-font-text);   /* every page and the shared labels read their text face from --fig-font */
+}
+
+/* ---- Type: the system text face for reading and controls; Sora for titles, the brand and ledes ---- */
+body{font-family:var(--ds-font-text);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
+button,input,select,textarea,summary{font-family:inherit}
+/* h3 is a title on every page (a card's title on the index, 18–41 px); an h3 that is a label carries .eyebrow, which wins below */
+:root :is(h1,h2,h3,.brand,.fig-brand,.primer-lede,.fig-question){font-family:var(--ds-font-display)}
+/* Labels are small capitals in the text face, not titles */
+:root .eyebrow{font-family:var(--ds-font-text);font-weight:650;font-size:11.5px;letter-spacing:.09em;line-height:1.5;text-transform:uppercase}
+:root .fig-intro h2{font-family:var(--ds-font-text);font-weight:650;font-size:11.5px;letter-spacing:.09em;text-transform:uppercase}
+output{font-variant-numeric:tabular-nums}
+::selection{background:rgba(143,168,255,.32)}
+
+/* ---- Question tabs: the chosen question underlined in the accent ---- */
+.tabs button,.view-tabs button{font-family:var(--ds-font-text);font-weight:550;letter-spacing:0}
+.tabs button[aria-selected=true]{border-color:var(--ds-accent)}
+.view-tabs button:after{background:var(--ds-accent)}
+
+/* ---- Figure switches: one soft track, the chosen figure filled in the accent ---- */
+.display-switch,.mode-switch{background:var(--ds-soft);border:1px solid var(--ds-line);border-radius:12px;padding:3px;gap:3px}
+.display-switch button,.mode-switch button{border-radius:9px;font:600 13.5px/1.2 var(--ds-font-text);color:var(--ds-ink-2);transition:background .16s ease,color .16s ease}
+.display-switch button:hover:not([aria-pressed=true]),.mode-switch button:hover:not([aria-pressed=true]){color:var(--ds-ink);background:rgba(255,255,255,.05)}
+.display-switch button[aria-pressed=true],.mode-switch button[aria-pressed=true]{background:var(--ds-accent);color:var(--ds-accent-ink);box-shadow:none}
+
+/* ---- Choices: soft tiles, the chosen one outlined in the accent ---- */
+.choices button{border:1px solid transparent;border-radius:10px;background:var(--ds-soft);font:600 13.5px/1.25 var(--ds-font-text);color:var(--ds-ink-2);transition:background .16s ease,border-color .16s ease,color .16s ease}
+.choices button:hover:not([aria-pressed=true]){background:var(--ds-soft);border-color:rgba(143,168,255,.45);color:var(--ds-ink)}
+.choices button[aria-pressed=true]{background:var(--ds-accent-soft);border-color:var(--ds-accent);color:var(--ds-ink)}
+
+/* ---- Labels, values and the ends of a range ---- */
+.control-label,.range-heading{font:600 13.5px/1.35 var(--ds-font-text);color:var(--ds-ink-2)}
+.range-heading output{font:600 14px/1.35 var(--ds-font-text);color:var(--ds-ink)}
+.end-labels,.range-ends{font:500 12px/1.4 var(--ds-font-text);color:var(--ds-muted)}
+input[type=range]{accent-color:var(--ds-accent)}
+
+/* ---- Actions: one filled accent for the main action, accent text for quieter ones ---- */
+.pill,.primary{background:var(--ds-accent);color:var(--ds-accent-ink);font-family:var(--ds-font-text);font-weight:650}
+.pill:hover:not(:disabled),.primary:hover{background:var(--ds-accent-hover);color:var(--ds-accent-ink)}
+.text-action{font-family:var(--ds-font-text);font-weight:600;color:var(--ds-accent)}
+.text-action:hover{color:var(--ds-accent-hover)}
+.play{border-color:rgba(143,168,255,.5)}
+.play:hover:not(:disabled){background:var(--ds-accent-soft)}
+.quiet{font-family:var(--ds-font-text);font-weight:600}
+
+/* ---- The stage: rounded, with a hairline, its own soft light behind the model ---- */
+:is(.stage,.scene-stage){border-radius:14px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.05)}
+/* Its controls, key and hints sit on quiet glass over the model */
+.camera-controls{gap:2px;padding:3px;border-radius:999px;background:var(--ds-stage-chip);border:1px solid var(--ds-stage-line);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.camera-controls button{border-radius:999px;color:var(--ds-ink-2);font-family:var(--ds-font-text)}
+.camera-controls button:hover{background:rgba(255,255,255,.07);color:var(--ds-ink)}
+/* A hint inside the glass (battery's "Drag to rotate") reads as a quiet label at its start, clear of the edge */
+.camera-controls>span{padding:0 4px 0 12px;color:var(--ds-muted);white-space:nowrap}
+/* Where a page drops the controls below the stage onto a line of their own (battery and nanoparticle on a phone), the glass
+   hugs the buttons at the right instead of spanning the line */
+@media(max-width:760px){:root :is(.scene-tools,.scene-footer)>.camera-controls{width:fit-content;max-width:100%;margin-left:auto}}
+:is(.stage,.scene-stage) .scene-key{padding:7px 14px;border-radius:999px;background:var(--ds-stage-chip);border:1px solid var(--ds-stage-line);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);font:500 12.5px/1.3 var(--ds-font-text);color:var(--ds-ink)}
+.scene-help{font-family:var(--ds-font-text);font-weight:500;color:var(--ds-muted)}
+
+/* ---- Reading: summaries and details in the text face, with clear weight ---- */
+.depth-reading summary,.notes summary{font-family:var(--ds-font-text);font-weight:600}
+@media(prefers-reduced-motion:reduce){.display-switch button,.mode-switch button,.choices button{transition:none}}

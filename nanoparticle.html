@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0f111b">
+<title>Inside a nanoparticle (Kang et al. 2024, Fig. 1) — Fig.3D</title><meta name="description" content="Explore gold crystal faces, atomic neighbors, particle size and adsorption geometry in one interactive 3D nanoparticle.">
+<meta property="og:site_name" content="Fig.3D">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Inside a nanoparticle">
+<meta property="og:description" content="Explore gold crystal faces, atomic neighbors, particle size and adsorption geometry in one interactive 3D nanoparticle.">
+<meta name="twitter:card" content="summary">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"LearningResource","name":"Inside a nanoparticle","description":"Explore gold crystal faces, atomic neighbors, particle size and adsorption geometry in one interactive 3D nanoparticle.","inLanguage":"en","learningResourceType":"interactive visualization","isPartOf":{"@type":"WebSite","name":"Fig.3D"},"isBasedOn":{"@type":"ScholarlyArticle","headline":"Effect of crystal facets in plasmonic catalysis","datePublished":"2024","sameAs":"https://doi.org/10.1038/s41467-024-47994-y","isPartOf":{"@type":"Periodical","name":"Nature Communications"},"author":[{"@type":"Person","name":"Y. Kang"}]}}</script>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='26' fill='%239db5ff' font-size='30'%3Ef.%3C/text%3E%3C/svg%3E">
+<link rel="preload" href="assets/fonts/Sora-Variable.ttf" as="font" type="font/ttf" crossorigin><link rel="preload" href="assets/nanoparticle/kang-figure-1a-f.webp" as="image"><link rel="stylesheet" href="visual-language.css"><link rel="stylesheet" href="nanoparticle.css?v=20261016-1"><link rel="stylesheet" href="module-opening.css"><link rel="stylesheet" href="annotations.css"><script>/* Layout v2 is the default (approved 17 October 2026); ?layout=v1 shows the earlier layout for comparison, &steps=rail the step-rail alternative */if(!/[?&]layout=v1\b/.test(location.search)){document.documentElement.classList.add('layout-v2');if(/[?&]steps=rail\b/.test(location.search))document.documentElement.classList.add('steps-rail')}</script><script src="module-opening.js"></script>
+<script src="navigation-motion.js"></script><script defer src="assets/battery-three-r128.min.js"></script><script type="module" src="nanoparticle.js?v=20261018-1"></script><script type="module" src="nanoparticle-v2.mjs"></script>
+<noscript><style>#paper{display:flex!important}.caption[aria-live],#explore-controls,.explorer-toolbar,.scene-footer{display:none}</style></noscript>
+<link rel="stylesheet" href="nearby.css"><link rel="stylesheet" href="design-system.css"><link rel="stylesheet" href="figure-pair.css?v=2"><link rel="stylesheet" href="layout-v2.css"><link rel="stylesheet" href="nanoparticle-v2.css">
+</head><body>
+<a class="skip" href="#explorer">Skip to the visualization</a>
+<header class="masthead" data-open="1"><a class="brand" href="index.html" aria-label="Fig.3D home">Fig.<span>3D</span></a><a class="back-link" href="index.html#collection"><span aria-hidden="true">↗</span> The collection</a></header>
+<main>
+<div class="heading"><div data-open="title"><h1 data-open-line>Inside a nanoparticle</h1><p class="fig-question" data-open-line>Why would the shape of a gold particle change the chemistry on its surface?</p></div>
+<section class="fig-intro" data-phone-after="#explorer" aria-label="About this paper" data-open="2">
+<div data-open="2"><h2>The paper</h2><p>Kang et al. made gold particles about 60 nanometres across in three shapes, each covered by a different crystal face, and used them to turn CO₂ into CO. In the dark, the face mattered most. When light excited the particles, the authors conclude that edges and corners took over as the main reaction sites.</p></div>
+<div data-open="3"><h2>What you’re looking at</h2><p>Two of their electron micrographs: cubes with square {100} faces (Figure 1a) and octahedra with triangular {111} faces (Figure 1c). The 3D model that follows is an ideal gold crystal with both kinds of face, one sphere per atom. It is far smaller than the real particles and is not reconstructed from the images.</p></div>
+<div data-open="4"><h2>What to look for</h2><p>In this model an atom inside has 12 nearest neighbours. At the surface it has fewer: 9 on a triangular face, 8 on a square face, 7 on an edge, 5 at a corner. The tabs let you compare faces, count neighbours, grow the particle and find where a molecule could sit. The model counts geometry; it does not compute chemistry.</p></div>
+</section></div>
+<section id="explorer" data-open="5" data-open-stage aria-label="Interactive gold nanoparticle">
+<div class="explorer-toolbar"><div class="view-tabs" role="tablist" aria-label="Explore the nanoparticle"><button role="tab" aria-selected="true" aria-controls="inspection" id="tab-surfaces" data-view="surfaces">Surfaces</button><button role="tab" aria-selected="false" aria-controls="inspection" id="tab-neighbors" data-view="neighbors" tabindex="-1">Neighbors</button><button role="tab" aria-selected="false" aria-controls="inspection" id="tab-size" data-view="size" tabindex="-1">Size</button><button role="tab" aria-selected="false" aria-controls="inspection" id="tab-binding" data-view="binding" tabindex="-1">Binding</button></div>
+<button id="paper-open" class="paper-open" aria-haspopup="dialog" aria-controls="paper-dialog">View paper figure</button></div>
+<div class="explorer-layout">
+<div class="scene-column">
+<div class="scene-stage" id="scene-stage">
+<canvas id="particle" tabindex="0" role="img" aria-label="Interactive gold cuboctahedron. Drag to rotate; select an atom or use the site buttons." aria-describedby="scene-help"></canvas>
+<div class="paper" id="paper"><div class="paper-images"><figure><img id="paper-a" src="assets/nanoparticle/kang-panel-a.webp" alt="Kang et al. Figure 1a: scanning electron micrograph of gold nanocubes, with 100 nanometre scale bar." width="498" height="494"><figcaption>Square faces · {100}</figcaption></figure><figure><img id="paper-c" src="assets/nanoparticle/kang-panel-c.webp" alt="Kang et al. Figure 1c: gold octahedra, with 100 nanometre scale bar." width="495" height="494"><figcaption>Triangular faces · {111}</figcaption></figure></div><p>Kang et al. · Figure 1a, c · <a href="https://doi.org/10.1038/s41467-024-47994-y" target="_blank" rel="noopener">Nature Communications, 2024 ↗</a><br><span>CC BY 4.0 · cropped panels</span></p></div>
+<svg class="shape-traces" id="shape-traces" aria-hidden="true"><path id="square-trace" pathLength="1"/><path id="triangle-trace" pathLength="1"/></svg>
+<div class="scene-badge" id="scene-badge" hidden><span class="gold-dot"></span> Au <span id="scene-identity">Ideal FCC crystal</span></div>
+<div class="scene-label" id="scene-label" hidden></div>
+<div class="intro-dock"><div class="intro-transport" id="intro-transport"><button id="explore-now" class="primary">Explore <span aria-hidden="true">↗</span></button><button id="intro-pause" class="quiet" aria-label="Pause opening">Pause</button></div></div>
+<div class="fallback" id="fallback" hidden><div id="fallback-graphic"></div><p>The live 3D view is unavailable. Explore the same model counts and explanations below.</p></div>
+</div>
+<div class="scene-footer"><p id="scene-help">Drag to turn · select a face <span class="touch-help">Swipe sideways to turn; scroll vertically.</span></p><div class="camera-controls" role="group" aria-label="Camera controls"><button data-camera="up" aria-label="Rotate upward" title="Rotate upward">↑</button><button data-camera="down" aria-label="Rotate downward" title="Rotate downward">↓</button><button data-camera="in" aria-label="Zoom in" title="Zoom in">+</button><button data-camera="out" aria-label="Zoom out" title="Zoom out">−</button><button data-camera="reset" class="reset">Reset view</button></div></div>
+</div>
+<div class="inspection" id="inspection" role="tabpanel" aria-labelledby="tab-surfaces">
+<div class="caption" aria-live="polite" aria-atomic="true"><p class="eyebrow" id="caption-kicker">TWO SURFACE PATTERNS</p><h2 id="caption-title">A square terrace</h2><p id="caption-copy">Look along this {100} face: the atoms form a square grid. Turn the particle to see how the terrace meets its neighbors.</p></div>
+<noscript><div class="caption"><p class="eyebrow">FROM THE PAPER</p><h2>A surface has its own structure</h2><p>Different shapes expose different crystal faces. Start with two images of gold nanoparticles.</p></div></noscript>
+<div id="explore-controls">
+<div id="face-controls" class="control-block"><p class="control-label">Choose a terrace</p><div class="choices"><button data-face="100:1,0,0" aria-pressed="true"><span class="face-symbol square" aria-hidden="true"></span>Square {100}</button><button data-face="111:1,1,1" aria-pressed="false"><span class="face-symbol triangle" aria-hidden="true"></span>Triangular {111}</button></div></div>
+<div id="neighbor-controls" class="control-block" hidden><p class="control-label">Inspect an atom</p><div class="choices site-shortcuts"><button data-atom="face">Face</button><button data-atom="edge">Edge</button><button data-atom="corner">Corner</button><button data-atom="interior">Interior</button></div><div class="neighbor-readout"><strong id="neighbor-count">8</strong><span>nearest<br>neighbors</span><svg id="neighbor-dots" viewBox="0 0 104 104" aria-hidden="true"></svg></div><button id="cutaway" class="text-action" aria-pressed="false">Show inside <span aria-hidden="true">↗</span></button><button id="return" class="text-action">Return to the particle <span aria-hidden="true">↙</span></button></div>
+<div id="size-controls" class="control-block" hidden><div class="range-heading"><label for="shells">Complete atomic shells</label><output id="shell-count" for="shells">6</output></div><input type="range" id="shells" min="3" max="10" value="6" step="1"><div class="range-ends"><span>3</span><span>10</span></div><div class="size-readout"><div><strong id="total-atoms">923</strong><span>atoms in the particle</span></div><div><strong id="surface-percent">39.2<span>%</span></strong><span>at the surface</span></div></div><div class="fraction-bar" role="img" id="fraction-bar" aria-label="39.2 percent surface atoms"><span></span></div><p class="fine" id="surface-exact">362 surface atoms / 923 total</p><p class="fine">Fixed spatial scale · complete-shell comparisons</p></div>
+<div id="binding-controls" class="control-block" hidden><p class="control-label">Place a geometric marker</p><div class="choices binding-choices" id="binding-choices"></div><button id="stacking" class="text-action" aria-pressed="false" hidden>Reveal underlying layers <span aria-hidden="true">↗</span></button><p class="fine" id="binding-detail"></p><details class="paper-comparison"><summary>Connect to catalytic chemistry <span aria-hidden="true">+</span></summary><p>Published COOH* formation energies</p><p class="fine energy-scale">Bars run from 0 to 1.6 eV. Shorter is a smaller formation energy: a less uphill step.</p><div class="energy-row"><span>Au {100}</span><div><i style="width:75%"></i></div><strong>1.2 eV</strong></div><div class="energy-row"><span>Au {111}</span><div><i style="width:87.5%"></i></div><strong>1.4 eV</strong></div><p class="fine">Kang et al., 2024 · DFT calculations. These are formation energies, not activation barriers or predictions from this explorer. A neighbor count alone cannot rank catalytic activity.</p><a href="#scientific-notes" class="text-action">Calculation context &amp; source ↗</a></details></div>
+</div>
+</div>
+</div>
+</section>
+<script src="phone-order.js"></script>
+<section class="notes" id="scientific-notes" data-open="6"><details><summary>Source &amp; scientific model <span aria-hidden="true">+</span></summary><div class="notes-grid"><div><h2>One ideal particle,<br>two kinds of terrace</h2><p>Our gold cuboctahedron is generated from an FCC lattice. The model uses a = 4.08 Å and whole atomic shells. It combines six {100} and eight {111} faces. It is an explanatory model, not a reconstruction of the photographed particles or their size.</p><p>Neighbors are calculated from coordinates. Lines connect nearest neighbors; they do not represent individual covalent bonds. Hiding atoms changes visibility, never the scientific count. A surface atom has fewer than 12 nearest neighbors in this unrelaxed model.</p></div><div><h2>Geometry opens a question</h2><p>Atop, bridge and hollow markers locate possible adsorption positions. The marker is a geometric probe, not a molecule, calculated path or identified active site. Chemistry also depends on electronic structure, adsorbate, potential and environment.</p><p>The paper’s slab calculations use VASP / PAW / PBE, four-layer 4 × 2 surfaces (128 atoms), 30 Å vacuum and a 450 eV cutoff. Reaction free energies include zero-point and entropy corrections at 298.15 K. See the paper’s DFT Calculation section and Figure S10. Plasmonic excitation and quantitative activity prediction are outside this explorer.</p><p><a href="https://www.nature.com/articles/s41467-024-47994-y" target="_blank" rel="noopener">Kang et al. · Effect of crystal facets in plasmonic catalysis ↗</a></p><p class="fine">Figure 1a, c © the authors 2024, <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>. Complete panels cropped losslessly; animated outlines added separately.</p><p><a href="references/nanoparticle/scientific-notes.md">Model assumptions &amp; claim ledger</a> · <a href="references/nanoparticle/kang-2024-figure-1.png" target="_blank">Full original figure</a> · <a href="https://docs.ase-lib.org/ase/cluster/cluster.html" target="_blank" rel="noopener">Independent ASE reference</a></p></div></div></details></section>
+
+<!-- Layout v2 (the default; ?layout=v1 shows the earlier layout): the steps, chapter rail, phone bar, dock and stage chip.
+     nanoparticle-v2.mjs moves them into place; each step is cut from this page's own captions and notes. -->
+<template id="v2-tpl">
+<nav class="v2-rail" aria-label="Chapters"><a href="#square" data-ch="0"><span class="n">1</span><span class="t">Surfaces</span></a><a href="#face" data-ch="1"><span class="n">2</span><span class="t">Neighbors</span></a><a href="#size" data-ch="2"><span class="n">3</span><span class="t">Size</span></a><a href="#sites" data-ch="3"><span class="n">4</span><span class="t">Binding</span></a></nav>
+<div class="v2-phonebar"><span class="v2-now"><span class="n">1</span><span class="t">Surfaces</span><span class="dots"></span></span><button class="v2-chbtn" type="button" aria-label="Chapters" aria-expanded="false" aria-controls="v2-chapters"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h9"/></svg></button></div>
+<nav class="v2-chapters" id="v2-chapters" aria-label="Chapters" hidden><p class="v2-label">Chapters</p><ol><li><a href="#square" data-ch="0"><span class="n">1</span>Surfaces</a></li><li><a href="#face" data-ch="1"><span class="n">2</span>Neighbors</a></li><li><a href="#size" data-ch="2"><span class="n">3</span>Size</a></li><li><a href="#sites" data-ch="3"><span class="n">4</span>Binding</a></li></ol></nav>
+<div class="v2-steps">
+<section class="v2-step" data-sec="square" aria-labelledby="v2h-square">
+<p class="v2-label"><span class="n">1</span>Surfaces<span class="pos">1 of 2</span></p>
+<h2 id="v2h-square">A square terrace</h2>
+<p class="v2-body">Look along this {100} face: the atoms form a square grid. Turn the particle to see how the terrace meets its neighbors.</p>
+<div class="v2-ctl-slot"><div class="v2-ctl"><p class="v2-ctl-label">Choose a terrace</p><div class="v2-seg" role="group" aria-label="Choose a terrace"><button type="button" data-click="[data-face='100:1,0,0']" aria-pressed="false">Square {100}</button><button type="button" data-click="[data-face='111:1,1,1']" aria-pressed="false">Triangular {111}</button></div></div></div>
+<p class="v2-limit">An ideal gold crystal, one sphere per atom: far smaller than the real particles, and not reconstructed from the images.</p>
+<div class="v2-foot"><span class="v2-src">In the paper · Figure 1a, d</span><button class="v2-morebtn" type="button" aria-expanded="false" aria-controls="v2m-square">More on this step<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4"/></svg></button><button class="v2-go" type="button" hidden>Go to this view</button></div><div class="v2-more-body" id="v2m-square" hidden></div>
+</section>
+<section class="v2-step" data-sec="triangle" aria-labelledby="v2h-triangle">
+<p class="v2-label"><span class="n">1</span>Surfaces<span class="pos">2 of 2</span></p>
+<h2 id="v2h-triangle">A triangular terrace</h2>
+<p class="v2-body">On this {111} face, the atoms form a close-packed triangular pattern. The same crystal can expose both arrangements.</p>
+<div class="v2-ctl-slot"><div class="v2-ctl"><p class="v2-ctl-label">Choose a terrace</p><div class="v2-seg" role="group" aria-label="Choose a terrace"><button type="button" data-click="[data-face='100:1,0,0']" aria-pressed="false">Square {100}</button><button type="button" data-click="[data-face='111:1,1,1']" aria-pressed="false">Triangular {111}</button></div></div></div>
+<p class="v2-limit">An ideal gold crystal, one sphere per atom: far smaller than the real particles, and not reconstructed from the images.</p>
+<div class="v2-foot"><span class="v2-src">In the paper · Figure 1c, f</span><button class="v2-morebtn" type="button" aria-expanded="false" aria-controls="v2m-triangle">More on this step<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4"/></svg></button><button class="v2-go" type="button" hidden>Go to this view</button></div><div class="v2-more-body" id="v2m-triangle" hidden></div>
+</section>
+<section class="v2-step" data-sec="face" aria-labelledby="v2h-face">
+<p class="v2-label"><span class="n">2</span>Neighbors<span class="pos">1 of 4</span></p>
+<h2 id="v2h-face">A face atom has company</h2>
+<p class="v2-body">Neighbors on the terrace and underneath it surround this atom. The open side faces the outside: on a square face it keeps 8 of the 12 an atom inside has.</p>
+<div class="v2-ctl-slot"><div class="v2-ctl"><p class="v2-ctl-label">Inspect an atom</p><div class="v2-seg" role="group" aria-label="Inspect an atom"><button type="button" data-click="[data-atom='face']" aria-pressed="false">Face</button><button type="button" data-click="[data-atom='edge']" aria-pressed="false">Edge</button><button type="button" data-click="[data-atom='corner']" aria-pressed="false">Corner</button><button type="button" data-click="[data-atom='interior']" aria-pressed="false">Interior</button></div></div></div>
+<p class="v2-limit">Neighbors are calculated from coordinates. Lines connect nearest neighbors; they do not represent individual covalent bonds.</p>
+<div class="v2-foot"><span class="v2-src">In the model · counted from coordinates</span><button class="v2-morebtn" type="button" aria-expanded="false" aria-controls="v2m-face">More on this step<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4"/></svg></button><button class="v2-go" type="button" hidden>Go to this view</button></div><div class="v2-more-body" id="v2m-face" hidden></div>
+</section>
+<section class="v2-step" data-sec="edge" aria-labelledby="v2h-edge">
+<p class="v2-label"><span class="n">2</span>Neighbors<span class="pos">2 of 4</span></p>
+<h2 id="v2h-edge">At an edge, fewer neighbors</h2>
+<p class="v2-body">Two terraces meet. The local surroundings open out in more than one direction: an edge atom has 7 nearest neighbors.</p>
+<div class="v2-ctl-slot"><div class="v2-ctl"><p class="v2-ctl-label">Inspect an atom</p><div class="v2-seg" role="group" aria-label="Inspect an atom"><button type="button" data-click="[data-atom='face']" aria-pressed="false">Face</button><button type="button" data-click="[data-atom='edge']" aria-pressed="false">Edge</button><button type="button" data-click="[data-atom='corner']" aria-pressed="false">Corner</button><button type="button" data-click="[data-atom='interior']" aria-pressed="false">Interior</button></div></div></div>
+<p class="v2-limit">Neighbors are calculated from coordinates. Lines connect nearest neighbors; they do not represent individual covalent bonds.</p>
+<div class="v2-foot"><span class="v2-src">In the model · counted from coordinates</span><button class="v2-morebtn" type="button" aria-expanded="false" aria-controls="v2m-edge">More on this step<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4"/></svg></button><button class="v2-go" type="button" hidden>Go to this view</button></div><div class="v2-more-body" id="v2m-edge" hidden></div>
+</section>
+<section class="v2-step" data-sec="corner" aria-labelledby="v2h-corner">
+<p class="v2-label"><span class="n">2</span>Neighbors<span class="pos">3 of 4</span></p>
+<h2 id="v2h-corner">A corner opens further</h2>
+<p class="v2-body">Two square and two triangular faces meet at this corner. Only five neighbors remain.</p>
+<div class="v2-ctl-slot"><div class="v2-ctl"><p class="v2-ctl-label">Inspect an atom</p><div class="v2-seg" role="group" aria-label="Inspect an atom"><button type="button" data-click="[data-atom='face']" aria-pressed="false">Face</button><button type="button" data-click="[data-atom='edge']" aria-pressed="false">Edge</button><button type="button" data-click="[data-atom='corner']" aria-pressed="false">Corner</button><button type="button" data-click="[data-atom='interior']" aria-pressed="false">Interior</button></div></div></div>
+<p class="v2-limit">Neighbors are calculated from coordinates. Lines connect nearest neighbors; they do not represent individual covalent bonds.</p>
+<div class="v2-foot"><span class="v2-src">In the model · counted from coordinates</span><button class="v2-morebtn" type="button" aria-expanded="false" aria-controls="v2m-corner">More on this step<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4"/></svg></button><button class="v2-go" type="button" hidden>Go to this view</button></div><div class="v2-more-body" id="v2m-corner" hidden></div>
+</section>
+<section class="v2-step" data-sec="inside" aria-labelledby="v2h-inside">
+<p class="v2-label"><span class="n">2</span>Neighbors<span class="pos">4 of 4</span></p>
+<h2 id="v2h-inside">Inside, all twelve</h2>
+<p class="v2-body">This interior atom and its twelve nearest neighbors are buried inside the particle. The cut opens it; hidden atoms still count.</p>
+<div class="v2-ctl-slot"><div class="v2-ctl"><div class="v2-chips"><button class="v2-chip" type="button" data-click="#v2-cutaway" aria-pressed="false"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.5l2.5 2.5L10 3"/></svg>Show inside</button></div></div></div>
+<p class="v2-limit">Hiding atoms changes visibility, never the scientific count.</p>
+<div class="v2-foot"><span class="v2-src">In the model · counted from coordinates</span><button class="v2-morebtn" type="button" aria-expanded="false" aria-controls="v2m-inside">More on this step<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4"/></svg></button><button class="v2-go" type="button" hidden>Go to this view</button></div><div class="v2-more-body" id="v2m-inside" hidden></div>
+</section>
+<section class="v2-step" data-sec="size" aria-labelledby="v2h-size">
+<p class="v2-label"><span class="n">3</span>Size<span class="pos">1 of 1</span></p>
+<h2 id="v2h-size">Small changes the balance</h2>
+<p class="v2-body">The outside grows with area; the interior grows with volume. Smaller particles put a larger share of their atoms at the surface.</p>
+<div class="v2-ctl-slot"><div class="v2-ctl"><div class="v2-slider" data-range="#shells" data-out="#shell-count"><div class="v2-grow"><div class="v2-shead"><label for="v2r-size">Complete atomic shells</label><output></output></div><div class="v2-track"><input class="v2-range" id="v2r-size" type="range" min="3" max="10" step="1" value="6"></div><div class="v2-ends" aria-hidden="true"><span>3</span><span>10</span></div></div></div></div></div>
+<p class="v2-limit">Fixed spatial scale · complete-shell comparisons. The photographed particles are about 60 nanometres across.</p>
+<div class="v2-foot"><span class="v2-src">In the paper · Figure 1a–c</span><button class="v2-morebtn" type="button" aria-expanded="false" aria-controls="v2m-size">More on this step<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4"/></svg></button><button class="v2-go" type="button" hidden>Go to this view</button></div><div class="v2-more-body" id="v2m-size" hidden></div>
+</section>
+<section class="v2-step" data-sec="sites" aria-labelledby="v2h-sites">
+<p class="v2-label"><span class="n">4</span>Binding<span class="pos">1 of 2</span></p>
+<h2 id="v2h-sites">Where a molecule could sit</h2>
+<p class="v2-body">Atop, bridge and hollow markers locate possible adsorption positions. The marker is a geometric probe, not a molecule, calculated path or identified active site.</p>
+<div class="v2-ctl-slot"><div class="v2-ctl"><p class="v2-ctl-label">Place a geometric marker</p><div class="v2-seg" role="group" aria-label="Place a geometric marker"><button type="button" data-click="[data-site='atop']" aria-pressed="false">Atop</button><button type="button" data-click="[data-site='bridge']" aria-pressed="false">Bridge</button><button type="button" data-click="[data-site='hollow']" aria-pressed="false">Fourfold hollow</button></div></div></div>
+<p class="v2-limit">Chemistry also depends on electronic structure, adsorbate, potential and environment.</p>
+<div class="v2-foot"><span class="v2-src">In the paper · Figure 1a</span><button class="v2-morebtn" type="button" aria-expanded="false" aria-controls="v2m-sites">More on this step<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4"/></svg></button><button class="v2-go" type="button" hidden>Go to this view</button></div><div class="v2-more-body" id="v2m-sites" hidden></div>
+</section>
+<section class="v2-step" data-sec="hollows" aria-labelledby="v2h-hollows">
+<p class="v2-label"><span class="n">4</span>Binding<span class="pos">2 of 2</span></p>
+<h2 id="v2h-hollows">Two kinds of triangular hollow</h2>
+<p class="v2-body">On a triangular face three atoms surround each hollow. Under an FCC hollow the next layer has a gap; under an HCP hollow an atom lies directly beneath.</p>
+<div class="v2-ctl-slot"><div class="v2-ctl"><p class="v2-ctl-label">Place a geometric marker</p><div class="v2-seg" role="group" aria-label="Place a geometric marker"><button type="button" data-click="[data-site='fcc']" aria-pressed="false">FCC hollow</button><button type="button" data-click="[data-site='hcp']" aria-pressed="false">HCP hollow</button></div><div class="v2-chips"><button class="v2-chip" type="button" data-click="#stacking" aria-pressed="false"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.5l2.5 2.5L10 3"/></svg>Reveal underlying layers</button></div></div></div>
+<p class="v2-limit">Revealing the layers changes visibility only; the marker locates a position, not a molecule.</p>
+<div class="v2-foot"><span class="v2-src">In the paper · Figure 1c</span><button class="v2-morebtn" type="button" aria-expanded="false" aria-controls="v2m-hollows">More on this step<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4"/></svg></button><button class="v2-go" type="button" hidden>Go to this view</button></div><div class="v2-more-body" id="v2m-hollows" hidden></div>
+</section>
+<div class="v2-pager"><button class="v2-prev" type="button">← Back</button><span class="v2-pos"></span><button class="v2-next" type="button">Next →</button></div>
+</div>
+<section class="v2-dock" aria-label="This step’s control"></section>
+<div class="v2-stagechip ui-tl" hidden><span>Showing <b class="v2-chip-now"></b></span><button type="button">Go to this view</button></div>
+</template>
+<!-- nearby: written by tools/build-nearby.mjs from catalog.json -->
+<nav class="nearby" data-page="nanoparticle" aria-labelledby="nearby-title"><h2 id="nearby-title">Nearby</h2><ul><li><a href="rocksalt.html"><span class="nearby-kicker">Companion preview · Cathodes</span><span class="nearby-title">Rocksalt Li Pathways</span><span class="nearby-why">The fcc lattice again: in a rocksalt cathode, oxygen sits on it and lithium hops between its holes.</span></a></li></ul></nav>
+<!-- /nearby -->
+</main>
+<dialog id="paper-dialog" class="paper-dialog" aria-labelledby="paper-dialog-title">
+<div class="paper-dialog-header"><div><p class="eyebrow">KANG ET AL., 2024</p><h2 id="paper-dialog-title">The paper figure</h2></div><button id="paper-close" class="paper-close" autofocus>Back to visualization <span aria-hidden="true">×</span></button></div>
+<p class="paper-dialog-intro">Two experimental particle shapes expose different crystal faces. Take your time—your place in the visualization is saved.</p>
+<div class="paper-dialog-images"><figure><img src="assets/nanoparticle/kang-panel-a.webp" width="498" height="494" alt="Figure 1a: scanning electron micrograph of gold nanocubes, with a 100 nanometre scale bar."><figcaption>Panel a · Square faces {100}</figcaption></figure><figure><img src="assets/nanoparticle/kang-panel-c.webp" width="495" height="494" alt="Figure 1c: scanning electron micrograph of gold octahedra, with a 100 nanometre scale bar."><figcaption>Panel c · Triangular faces {111}</figcaption></figure></div>
+<div class="paper-dialog-credit"><p>Kang et al., <cite>Effect of crystal facets in plasmonic catalysis</cite><br>Nature Communications, 2024 · CC BY 4.0 · original panels cropped losslessly</p><div><a href="references/nanoparticle/kang-2024-figure-1.png" target="_blank" rel="noopener">View complete Figure 1 ↗</a><a href="https://www.nature.com/articles/s41467-024-47994-y" target="_blank" rel="noopener">Read the paper ↗</a></div></div>
+</dialog>
+<footer data-open="6"><a href="index.html#collection">Continue exploring the collection <span aria-hidden="true">↗</span></a><span>Fig.3D · Materials science, made visible</span></footer>
+<noscript><img src="assets/nanoparticle/fallback.svg" alt="Gold cuboctahedron with a highlighted square terrace." style="max-width:100%;width:640px"><p class="noscript">JavaScript enables the interactive scene. The source and model explanation remain available above.</p></noscript>
+</body></html>

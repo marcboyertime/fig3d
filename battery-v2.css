@@ -1,0 +1,60 @@
+/* Layout v2, the battery foundation's own parts (the default; ?layout=v1 shows the earlier layout). The shared layout is
+   layout-v2.css with kit/layout-v2.mjs and the quiet pass; the adapter is battery-v2.mjs. The lithium-inventory chart takes
+   the figure's place beside the cell (design/layout-overhaul/mockups/battery-desktop.html). */
+html.layout-v2 body>header{max-width:none}
+html.layout-v2 .header-topic{display:none}
+html.layout-v2 main,html.layout-v2 footer{max-width:1340px;margin-inline:auto;padding-inline:16px;box-sizing:border-box}
+html.layout-v2 main{overflow-x:clip}
+html.layout-v2 #explorer{scroll-margin-top:var(--v2-mast)}
+/* Cover: the label, the title and the question, then the three paragraphs in three columns, words unchanged */
+html.layout-v2 .lesson-title{display:block;padding:calc(var(--v2-mast) + 32px) 0 0}
+html.layout-v2 .lesson-title .eyebrow{font:500 14px/20px var(--v2-text);letter-spacing:0;text-transform:lowercase;color:var(--v2-muted)}
+html.layout-v2 .lesson-title .eyebrow::first-letter{text-transform:uppercase}
+html.layout-v2 .lesson-title h1{margin:14px 0 0;font:500 46px/52px var(--v2-display);letter-spacing:-.022em}
+html.layout-v2 .lesson-title .fig-question{margin:14px 0 0;max-width:44ch;font:400 21px/31px var(--v2-display);letter-spacing:-.006em;color:var(--v2-ink2)}
+html.layout-v2 .fig-intro{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:44px;margin:22px 0 0;padding:20px 0 0;border:0;border-top:1px solid var(--v2-line)}
+html.layout-v2 .fig-intro>div{margin:0;padding:0;border:0}
+html.layout-v2 .fig-intro h2{margin:0 0 6px;font:500 15px/22px var(--v2-text);letter-spacing:0;text-transform:none;color:var(--v2-ink)}
+html.layout-v2 .fig-intro p{margin:0;font:400 14.5px/23px var(--v2-text);color:var(--v2-ink2)}
+/* The workspace: the chart beside the cell; the toolbar gives way to the chapters, the sections below to the steps */
+@media(min-width:861px){html.layout-v2 #explorer.figure-pair{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 46px}}
+html.layout-v2 .view-toolbar,html.layout-v2 .scene-tools,html.layout-v2 .state-section,html.layout-v2 .chemistry{display:none}
+html.layout-v2 .v2-paper{margin:0}
+html.layout-v2 .figure-pair .pair-title{margin:0}
+/* The chart, at the column's width; the inventory sentence under it, without the panel swatch (nothing is outlined) */
+html.layout-v2 .v2-chartbox svg{display:block;width:100%;height:auto;overflow:visible}
+html.layout-v2 .v2-chart .panel-note:before{display:none}
+/* The stage: the cell, its labels, and its chrome */
+html.layout-v2 #viewport{height:var(--v2-stage);border-radius:16px;background:radial-gradient(ellipse at 50% 50%,#17213370,transparent 65%),#121521}
+html.layout-v2 #viewport #mode-label{position:absolute;top:14px;right:16px;z-index:4;margin:0;font:500 13px/18px var(--v2-text);letter-spacing:0;color:var(--v2-ink2)}
+html.layout-v2 #viewport #mode-label span{display:inline-block;text-transform:lowercase}
+html.layout-v2 #viewport #mode-label span::first-letter{text-transform:uppercase}
+html.layout-v2 #viewport #v2-hint{position:absolute;left:18px;top:14px;z-index:3;font:400 13px/18px var(--v2-text);color:var(--v2-muted)}
+html.layout-v2 #viewport .camera-controls{position:absolute;left:auto;right:12px;bottom:12px;z-index:4}
+html.layout-v2 #viewport.v2-key-on .scene-key{position:absolute;display:flex!important;gap:16px;padding:6px 12px;border-radius:10px;border:1px solid var(--v2-glass-line);background:var(--v2-glass);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);font:400 13px/18px var(--v2-text);min-height:0;z-index:4}
+html.layout-v2 #viewport .scene-key .key-hint{display:none}
+/* "More on this step": the roles, the part explanations and the composition; the caption and the dive are the steps now */
+html.layout-v2 .v2-pane .explanation{padding:0}
+html.layout-v2 .v2-pane :is(#view-eyebrow,#view-title,#view-copy,#dive){display:none}
+html.layout-v2 .v2-pane .transport{display:block;margin:18px 0 0;padding:0;border:0}
+html.layout-v2 .v2-step:is([data-sec=inventory],[data-sec=intercalation]) .v2-pane .progress-control{display:none}
+html.layout-v2 .v2-pane .inventory-values{margin-top:16px}
+/* The half-reactions in their step, under its words */
+html.layout-v2 .v2-rx{margin:14px 0 4px}
+html.layout-v2 .v2-rx .reaction-pair{display:grid;gap:12px;margin:0}
+html.layout-v2 .v2-rx .reaction-pair p{margin:0 0 4px;font:500 13px/18px var(--v2-text);letter-spacing:0;text-transform:lowercase;color:var(--v2-muted)}
+html.layout-v2 .v2-rx .reaction-pair p::first-letter{text-transform:uppercase}
+html.layout-v2 .v2-rx .formula{font-size:15px;line-height:1.6;color:var(--v2-ink)}
+html.layout-v2 .v2-steps{padding-bottom:calc(var(--v2-read) * .6 + 48px)}
+@media(max-width:860px){
+ html.layout-v2 .lesson-title{padding-top:calc(var(--v2-mast) + 24px)}
+ html.layout-v2 .lesson-title h1{font-size:32px;line-height:37px}
+ html.layout-v2 .lesson-title .fig-question{font-size:18px;line-height:26px}
+ html.layout-v2 .fig-intro{grid-template-columns:minmax(0,1fr);gap:22px}
+ html.layout-v2 #viewport{height:var(--v2-stage-m);border-radius:14px}
+ html.layout-v2 #viewport #v2-hint{left:12px;top:10px}
+ html.layout-v2 #viewport #mode-label{top:10px;right:12px}
+ /* On the short stage the cell's labels reach its bottom edge: motion and Reset sit at the top right, under the mode */
+ html.layout-v2 #viewport .camera-controls{top:30px;right:6px;bottom:auto}
+ html.layout-v2 .v2-dock:empty{display:none}
+}

@@ -1,0 +1,103 @@
+{
+ "source": "he-zhu-mo-2017.pdf",
+ "source_sha256": "1c1ecf6babe4ce97de819eafde63d04f8c41f5de3ad8d424668957dabc593921",
+ "licence": "CC BY 4.0",
+ "figures": {
+  "figure-1": {
+   "page": 2,
+   "clip_pt": [
+    300.0,
+    46.0,
+    552.0,
+    393.0
+   ],
+   "width": 1008,
+   "height": 1388,
+   "sha256": "db825b9d7a0240d9681e43ae1931209f6e4e4a951088e59a721a69cbae167eed"
+  },
+  "figure-2": {
+   "page": 3,
+   "clip_pt": [
+    44.0,
+    48.0,
+    552.0,
+    386.0
+   ],
+   "width": 2032,
+   "height": 1352,
+   "sha256": "e67e1650d9b97d1a1b3cea08bc8dfd9a5cccf5dbceede82a6d5f8321b4d66be6"
+  },
+  "figure-3": {
+   "page": 4,
+   "clip_pt": [
+    56.0,
+    52.0,
+    540.0,
+    297.0
+   ],
+   "width": 1936,
+   "height": 980,
+   "sha256": "fe74f62808238e1b27aed04eeeb2c2cffe10c149e1540b575692a4b10d9282a2"
+  },
+  "figure-4": {
+   "page": 5,
+   "clip_pt": [
+    56.0,
+    46.0,
+    540.0,
+    170.0
+   ],
+   "width": 1936,
+   "height": 496,
+   "sha256": "aba7f324ffde16154615a2e2bec216cfcd52a48de5af90b790c35460c36faed9"
+  },
+  "figure-3b": {
+   "page": 4,
+   "clip_pt": [
+    242.0,
+    52.0,
+    376.0,
+    175.0
+   ],
+   "width": 536,
+   "height": 492,
+   "sha256": "732f77a08931f454c87006d552b26c87b36594b421719ebf2291cdef3f2cb941"
+  },
+  "figure-3e": {
+   "page": 4,
+   "clip_pt": [
+    242.0,
+    174.0,
+    376.0,
+    296.0
+   ],
+   "width": 536,
+   "height": 488,
+   "sha256": "c6e850af4164d8e16fa0d182f5ac21649a48a424fc6f140ae9b4730fb0f549c3"
+  },
+  "figure-2e": {
+   "page": 3,
+   "clip_pt": [
+    214.0,
+    172.0,
+    366.0,
+    268.0
+   ],
+   "width": 608,
+   "height": 384,
+   "sha256": "666bf8566f4d7bf2dd3c90313adc37d7a545e73d91048a988d4322c5f5f5d005"
+  },
+  "figure-3b-inset": {
+   "page": 4,
+   "clip_pt": [
+    269.69,
+    72.49,
+    362.32,
+    114.87
+   ],
+   "width": 742,
+   "height": 340,
+   "sha256": "437b930a3dfddfb5382ac5df3ef5eef1c3ce61fd612bca29ad6d467f9b1ec51a"
+  }
+ }
+}
