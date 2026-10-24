@@ -1109,7 +1109,8 @@ function dip(fn){if(!GL||reduced){fn();return}if(dipQ){dipQ.push(fn);return}dipQ
 function fadeIn(el){const a=el.animate([{opacity:0},{opacity:1}],{duration:420,easing:'ease-out',fill:'forwards'});
   a.finished.then(()=>{const all=el.getAnimations();all.slice(0,all.indexOf(a)+1).forEach(o=>o.cancel())},()=>{})}
 // What the words should stay off: the drawn atoms (as screen circles) and the stage's own chips.
-function avoidZones(){const v=viewer.getBoundingClientRect(),ui=[...viewer.querySelectorAll('.ui-bl,.ui-tr,.ui-tl,.ui-br')].filter(e=>e.offsetParent).map(e=>{const r=e.getBoundingClientRect();return{x:r.left-v.left-6,y:r.top-v.top-6,w:r.width+12,h:r.height+12}});const f=v.height/(2*Math.tan(camera.fov*Math.PI/360));return[...noteBodies.map(([p,r])=>{const c=scr(p,v.width,v.height);return{x:c.x,y:c.y,r:r*f/c.d+3}}),...ui]}
+// (the buttons in the labels' own pixels: the labels' layer is drawn shifted or folded with the model, kit/layout-v2.mjs)
+function avoidZones(){const v=viewer.getBoundingClientRect(),L=$('#labels'),l=L.getBoundingClientRect(),k=L.offsetWidth?l.width/L.offsetWidth:1,ui=[...viewer.querySelectorAll('.ui-bl,.ui-tr,.ui-tl,.ui-br')].filter(e=>e.offsetParent).map(e=>{const r=e.getBoundingClientRect();return{x:(r.left-l.left)/k-6,y:(r.top-l.top)/k-6,w:r.width/k+12,h:r.height/k+12}});const f=v.height/(2*Math.tan(camera.fov*Math.PI/360));return[...noteBodies.map(([p,r])=>{const c=scr(p,v.width,v.height);return{x:c.x,y:c.y,r:r*f/c.d+3}}),...ui]}
 function scr(v,W,H){const p=_p.copy(v).project(camera);return{x:(p.x*.5+.5)*W,y:(-p.y*.5+.5)*H,d:camera.position.distanceTo(v),front:p.z<1}}
 const _p=GL?V(0,0,0):null;
 if(GL)import('./annotations.mjs').then(m=>{notes=new m.Annotations(viewer,{className:'rocksalt-notes',compactWidth:520,avoid:avoidZones});window.__notesModule=m;flushNotes(true)});

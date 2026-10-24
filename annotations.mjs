@@ -57,6 +57,12 @@ export class Annotations{
     new IntersectionObserver(entries=>{this.visible=entries.some(e=>e.isIntersecting);if(this.visible)this.kick();},{rootMargin:'120px'}).observe(stage);
   }
   get compact(){return this.width<this.options.compactWidth;}
+  // An element's box in this layer's own pixels, where at() and avoid() place things, plus pad on each side, whatever the
+  // layer's transform on screen (a stage drawn shifted or folded, kit/layout-v2.mjs): for the stage's buttons the words avoid.
+  rect(el,pad=0){
+    const l=this.layer.getBoundingClientRect(),k=this.layer.offsetWidth?l.width/this.layer.offsetWidth:1,r=el.getBoundingClientRect();
+    return {x:(r.left-l.left)/k-pad,y:(r.top-l.top)/k-pad,w:r.width/k+2*pad,h:r.height/k+2*pad};
+  }
   resize(){
     const r=this.stage.getBoundingClientRect();this.width=r.width;this.height=r.height;
     this.svg.setAttribute('viewBox',`0 0 ${r.width} ${r.height}`);

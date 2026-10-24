@@ -145,21 +145,25 @@ function updatePlots(){
 const shownProgress=()=>scene&&state.question!=='barrier'?scene.view.progress:state.progress;
 
 // ————— The 1D model, drawn in the stage —————
-// Two layouts: wide for desktop stages, tall for phones, so the words stay readable at either size.
+// Three layouts: wide for desktop stages, tall for narrow ones, so the words stay readable at either size, and phone for
+// layout v2 on a phone (23 October 2026): the tall drawing across, shorter down, so it fills the phone's wide, low stage
+// (the same stage as the model's: the stage no longer grows for the chart) with its words as large as before.
 const LAYOUTS={
  wide:{CV:{w:960,h:530,l:70,r:900,top:40,base:220},F:15,B:{...LEDGER.wide,top:318,row:31,h:19},R:15,axis:'Position along the line (Å) · the pattern repeats every 12 Å'},
- tall:{CV:{w:480,h:600,l:46,r:462,top:48,base:205},F:17,B:{...LEDGER.tall,top:318,row:35,h:23},R:17,axis:'Position (Å) · repeats every 12 Å'}};
+ tall:{CV:{w:480,h:600,l:46,r:462,top:48,base:205},F:17,B:{...LEDGER.tall,top:318,row:35,h:23},R:17,axis:'Position (Å) · repeats every 12 Å'},
+ phone:{CV:{w:480,h:406,l:46,r:462,top:46,base:146},F:17,B:{...LEDGER.phone,top:246,row:24,h:18},R:16,tick:22,label:42,axis:'Position (Å) · repeats every 12 Å'}};
+const phoneV2=matchMedia('(max-width:860px)');
 let LY=LAYOUTS.wide,CV=LY.CV;
 const cx=x=>CV.l+(CV.r-CV.l)*x/12,cy=e=>CV.base-(CV.base-CV.top)*e/.75;
 let chainBuilt='';
 function drawChain(){
  const svg=$('chain-svg'),s=state.progress,row=chainRow(MODEL,state.K,state.landscape,s),land=state.landscape;
- const kind=$('stage').clientWidth<600?'tall':'wide',F=LAYOUTS[kind].F;
+ const kind=$('stage').clientWidth<600?(phoneV2.matches&&document.documentElement.classList.contains('layout-v2')?'phone':'tall'):'wide',F=LAYOUTS[kind].F;
  if(chainBuilt!==land+kind){chainBuilt=land+kind;LY=LAYOUTS[kind];CV=LY.CV;svg.setAttribute('viewBox',`0 0 ${CV.w} ${CV.h}`);for(const n of [...svg.querySelectorAll('g,path,line,text:not(title):not(desc)')])n.remove();
   const g=el('g',{class:'axes'});
   for(const e of [0,.3,.6]){g.append(el('line',{x1:CV.l,x2:CV.r,y1:cy(e),y2:cy(e),stroke:'#fff','stroke-opacity':e?.06:.25}));g.append(el('text',{x:CV.l-10,y:cy(e)+5,'text-anchor':'end','font-size':F,fill:'#95a2ba'},e.toFixed(1)));}
-  for(const x of [0,3,6,9,12])g.append(el('text',{x:cx(x),y:CV.base+24,'text-anchor':'middle','font-size':F,fill:'#95a2ba'},x));
-  g.append(el('text',{x:(CV.l+CV.r)/2,y:CV.base+48,'text-anchor':'middle','font-size':F,fill:'#afbdd4'},LY.axis));
+  for(const x of [0,3,6,9,12])g.append(el('text',{x:cx(x),y:CV.base+(LY.tick??24),'text-anchor':'middle','font-size':F,fill:'#95a2ba'},x));
+  g.append(el('text',{x:(CV.l+CV.r)/2,y:CV.base+(LY.label??48),'text-anchor':'middle','font-size':F,fill:'#afbdd4'},LY.axis));
   g.append(el('text',{x:CV.l-10,y:CV.top-16,'text-anchor':'start','font-size':F,fill:'#afbdd4'},'Framework landscape φ (eV)'));
   const pts=[];for(let i=0;i<=480;i++){const x=12*i/480;pts.push([cx(x),cy(phi(x,land))]);}
   g.append(el('path',{d:path(pts),fill:'none',stroke:'#86adef','stroke-width':2.4}));
@@ -182,7 +186,7 @@ function drawChain(){
  bars.append(el('line',{x1:B.zero,x2:B.zero,y1:B.top-8,y2:yAt(5)+B.row-2,stroke:'#fff','stroke-opacity':.32}));
  bars.append(el('line',{x1:B.lab,x2:CV.r,y1:yAt(5)-7,y2:yAt(5)-7,stroke:'#fff','stroke-opacity':.14}));
  // The reference line gives way on rows whose value is written across it (ledgerRefPath): no dashes through the digits.
- const ref=ledgerRef(B,land);bars.append(el('path',{d:ledgerRefPath(B,land,items.map(([,v,i])=>({v,y:yAt(i),h:B.h})),B.top-8,yAt(5)+B.row-2),fill:'none',stroke:'#fff','stroke-dasharray':'5 5','stroke-opacity':.55}),el('text',{x:ref+6,y:B.top-8,'text-anchor':kind==='tall'?'middle':'start','font-size':F-2,fill:'#d7e1f3'},'one ion alone: 0.60'));
+ const ref=ledgerRef(B,land);bars.append(el('path',{d:ledgerRefPath(B,land,items.map(([,v,i])=>({v,y:yAt(i),h:B.h})),B.top-8,yAt(5)+B.row-2),fill:'none',stroke:'#fff','stroke-dasharray':'5 5','stroke-opacity':.55}),el('text',{x:ref+6,y:B.top-8,'text-anchor':kind==='wide'?'start':'middle','font-size':F-2,fill:'#d7e1f3'},'one ion alone: 0.60'));
  // Names in a column on the left, values at their bars' ends: a falling ion's bar and number never cover its name.
  items.forEach(([name,v,i])=>{const y=yAt(i),h=B.h,b=ledgerBar(B,land,v),fill=i===5?'#ffffff':i===4?'#c1afff':v>=0?'#ffa676':'#87bfff';
   bars.append(el('text',{x:B.lab,y:y+h/2+5,'text-anchor':'start','font-size':B.font,fill:i===5?'#fff':'#afbdd4','font-weight':i===5?600:400},name));
@@ -196,7 +200,7 @@ const labelBox=$('scene-labels');
 const ionTags=DATA.ions.map(i=>{const t=document.createElement('span');t.className='label ion-tag';t.textContent=i.id;labelBox.append(t);return t;});
 const siteTags=DATA.sites.map(s=>{const t=document.createElement('span');t.className='label site-tag';t.textContent=s.kind;labelBox.append(t);return t;});
 // Callouts that explain: the group or the selected ion during the event, the lone ion in the reference, and one site of each kind.
-const notes=new Annotations($('stage'),{className:'channel-notes',avoid:()=>[...$('stage').querySelectorAll('.scene-key,.stage-bar,.stage-tools')].filter(e=>e.offsetParent).map(e=>{const st=$('stage').getBoundingClientRect(),r=e.getBoundingClientRect();return {x:r.left-st.left-6,y:r.top-st.top-6,w:r.width+12,h:r.height+12};})});
+const notes=new Annotations($('stage'),{className:'channel-notes',avoid:()=>[...$('stage').querySelectorAll('.scene-key,.stage-bar,.stage-tools')].filter(e=>e.offsetParent).map(e=>notes.rect(e,6))});
 let notesKey='';const CALLOUT_SITES=['T2','O2'];
 function noteSpecs(sc){
  const v=sc.view,list=[];if(showingPaper()||state.display==='chain'||failed||(state.opening&&state.beat!=null&&state.beat<3)||v.cell>.5)return list;

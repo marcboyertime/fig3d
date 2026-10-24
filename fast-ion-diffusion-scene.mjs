@@ -160,7 +160,8 @@ export class ChannelScene{
   this.halo.visible=!!at&&v.cell<.5;if(at){this.halo.position.copy(at);this.halo.quaternion.copy(this.pose.quat);}
   this.canvas.dataset.progress=v.progress.toFixed(4);this.canvas.dataset.rendered='true';
  }
- resize(){const r=this.canvas.getBoundingClientRect();if(r.width<10||r.height<10)return;this.width=r.width;this.height=r.height;this.renderer.setPixelRatio(Math.min(devicePixelRatio,2));this.renderer.setSize(r.width,r.height,false);this.dirty=true;this.wake();}
+ // The drawing buffer follows the canvas's layout size, so a transform (the phone layout's fold, 22 Oct) never changes it
+ resize(){const r={width:this.canvas.clientWidth,height:this.canvas.clientHeight};if(r.width<10||r.height<10)return;this.width=r.width;this.height=r.height;this.renderer.setPixelRatio(Math.min(devicePixelRatio,2));this.renderer.setSize(r.width,r.height,false);this.dirty=true;this.wake();}
  // Narrow stages keep the channel's length in view rather than its height.
  halfHeightFor(h){return h*Math.max(1,1.5/(this.width/this.height));}
  updateCamera(){
@@ -191,7 +192,8 @@ export class ChannelScene{
  orbit(dx,dy){const k=Math.PI/Math.max(320,this.width*.8),up=new T.Vector3(0,1,0).applyQuaternion(this.pose.quat),right=new T.Vector3(1,0,0).applyQuaternion(this.pose.quat);
   const q=new T.Quaternion().setFromAxisAngle(up,-dx*k).multiply(new T.Quaternion().setFromAxisAngle(right,-dy*k));this.pose.quat.premultiply(q).normalize();this.dirty=true;this.wake();}
  pick(clientX,clientY){
-  const r=this.canvas.getBoundingClientRect(),x=clientX-r.left,y=clientY-r.top;let best=null,bd=Infinity;
+  // (in the canvas's own pixels, as project() gives them, also while the phone layout's fold scales the canvas)
+  const r=this.canvas.getBoundingClientRect(),k=this.canvas.clientWidth/r.width||1,x=(clientX-r.left)*k,y=(clientY-r.top)*k;let best=null,bd=Infinity;
   for(const m of this.pickables){if(!m.visible)continue;if(m.userData.kind==='ion'&&m.material.opacity<.5)continue;const p=this.project([m.position.x,m.position.y,m.position.z]),dd=Math.hypot(p.x-x,p.y-y);const reach=Math.max(16,(m.userData.kind==='ion'?R_LI:R_SITE)*this.pixelsPerAngstrom()+6);
    const score=dd-(m.userData.kind==='ion'?4:0)+p.z*2;if(dd<reach&&score<bd){bd=score;best=m.userData;}}
   return best;

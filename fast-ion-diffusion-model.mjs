@@ -121,10 +121,11 @@ export const PAPER_K={min:2,max:6.5};
 export const paperK=K=>K>=PAPER_K.min-1e-9&&K<=PAPER_K.max+1e-9;
 // An energy relative to a reference, worded by its side: never "−0.10 eV above".
 export function signedEnergy(E){const v=Math.abs(E)<.005?0:E;return {value:Math.abs(v).toFixed(2),side:v<0?'below':'above'};}
-// The energy ledger's horizontal bars (SVG units of the wide and tall 1D-model layouts). Names sit in a column from
-// `lab`; bars grow from `zero`; each value is written at its bar's end. Zero and reach leave room for the largest
+// The energy ledger's horizontal bars (SVG units of the wide, tall and phone 1D-model layouts). Names sit in a column
+// from `lab`; bars grow from `zero`; each value is written at its bar's end. Zero and reach leave room for the largest
 // values the re-run reaches (Δφ −0.60…+0.60 eV, total up to 1.72 eV in landscape b) without touching the names.
-export const LEDGER={wide:{lab:60,zero:500,reach:330,font:14,width:960},tall:{lab:36,zero:287,reach:134,font:16,width:480}};
+// The phone layout (layout v2 on a phone, 23 October 2026) is the tall one across and shorter down.
+export const LEDGER={wide:{lab:60,zero:500,reach:330,font:14,width:960},tall:{lab:36,zero:287,reach:134,font:16,width:480},phone:{lab:36,zero:287,reach:134,font:16,width:480}};
 export function ledgerBar(L,land,v){const w=v*L.reach/(land==='a'?.8:1.75);return {x:Math.min(L.zero,L.zero+w),w:Math.abs(w),text:w>=0?L.zero+w+8:L.zero+w-8,anchor:w>=0?'start':'end'};}
 // The dashed "one ion alone: 0.60" line gives way on any row whose value is written across it, so its dashes never run
 // through the digits. Values are five characters, at most 3.1 em wide (measured "−0.60" 2.99 em in Sora); rows [{v,y,h}]

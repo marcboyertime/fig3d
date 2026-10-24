@@ -11,7 +11,8 @@
 //   .v2-slider[data-range="sel"]  a range that sets a page range; [data-set] presets; output via data-out="sel" (copy
 //                      that element's text) or data-fmt="name" (the adapter's fmt[name](value))
 // Options: template, sections, chapters, reduced, bar, brand, back, title, kickerInto, credit, explorer, stage, paper, input,
-// key (the stage's legend, folded behind a Key button), hint (the stage's hint, gone at the first touch), shifted(),
+// key (the stage's legend, folded behind a Key button), hint (the stage's hint, gone at the first touch), shifted() (the
+// stage's picture and its labels: drawn in the part of the stage on screen, and scaled when a phone's stage folds),
 // opening, goModel(k), after(fn), onModel(k, body), more(k, body), hash, fmt, figure (the box in the paper column that folds;
 // by default its figure viewport, chart or views; null for none).
 // The model follows the step crossing the reading line until the reader touches the stage; after that the step being read
@@ -24,7 +25,7 @@ export const layoutV2 = () => document.documentElement.classList.contains('layou
 export function createLayoutV2(o) {
   const H = document.documentElement, S = o.sections, CH = o.chapters, T = o.template.content, reduced = !!o.reduced;
   const v = {rail: H.classList.contains('steps-rail'), secs: [], ctls: [], slots: [], cur: -1, model: -1, follow: true, phone: false,
-    timer: 0, cand: -1, candT: 0, readTop: 0, jump: -1, jumpT: 0, shift: 0, vis: 0, freeze: 0, opening: false, mast: 56, pin: 120};
+    timer: 0, cand: -1, candT: 0, readTop: 0, jump: -1, jumpT: 0, shift: 0, vis: 0, freeze: 0, opening: false, mast: 56, pin: 120, fold: 0};
   const opening = o.opening || {on: () => false, flying: () => false, end() {}};
   const after = o.after || (fn => fn());
 
@@ -42,7 +43,7 @@ export function createLayoutV2(o) {
   if (o.key) {   // phones: the stage's key folds behind a button (ui-tl, so labels that avoid the stage's chips keep clear)
     o.key.classList.add('v2-key');
     const kb = document.createElement('button'); kb.type = 'button'; kb.className = 'v2-keybtn ui-tl'; kb.textContent = 'Key';
-    kb.setAttribute('aria-expanded', 'false'); if (o.key.id) kb.setAttribute('aria-controls', o.key.id); o.stage.append(kb);
+    kb.setAttribute('aria-expanded', 'false'); if (o.key.id) kb.setAttribute('aria-controls', o.key.id); o.stage.append(kb); v.kb = kb;
     kb.addEventListener('click', () => { const on = !o.stage.classList.contains('v2-key-on'); o.stage.classList.toggle('v2-key-on', on); kb.setAttribute('aria-expanded', String(on)); });
   }
   v.secs = $$('.v2-step', ex); v.ctls = v.secs.map(el => el.querySelector('.v2-ctl')); v.slots = v.secs.map(el => el.querySelector('.v2-ctl-slot'));
@@ -113,11 +114,56 @@ export function createLayoutV2(o) {
       if (first && u > 0) keep(put); else put();
     }
   }
+  // ---- Phones: the stage folds as the reader reaches the steps (22 October 2026: on a phone too, the step being read
+  // starts nearer the middle of the screen) ----
+  // Once the stage is pinned, its bottom edge, with the docked control under it, follows the first step up until the stage
+  // is compact (--v2-stage-c, layout-v2.css), as the figure folds on desktop; scrolling back up unfolds it. The picture (the
+  // page's shifted layers, and anything else as tall as half the stage) is scaled from the stage's top centre, so it is
+  // smaller, never cropped, and a picture that fills its frame (nanoparticle's terraces) fades at its new edges instead of
+  // ending on a hard line; the stage's own buttons in its lower half ride up with the edge, and its hairline is redrawn
+  // there (layout-v2.css). Only a clip, a mask and transforms change, so no canvas is resized and nothing in the page's flow
+  // moves: the words still move only with the scroll.
+  const SF = {col: o.stage.closest('.stage-column') || o.stage.parentNode, f: 0, R: '', put: new WeakMap(), c: document.createElement('div')};
+  SF.c.className = 'v2-stage-c'; SF.c.setAttribute('aria-hidden', 'true'); document.body.append(SF.c);
+  const put = (el, k, val) => { let m = SF.put.get(el); if (!m) SF.put.set(el, m = {}); if ((m[k] ?? '') !== val) { m[k] = val; el.style[k] = val; } };
+  function stageFold() {
+    const st = o.stage, S = st.offsetHeight, d = $('.v2-dock'), shown = !!d.offsetParent, top = shown ? parseFloat(getComputedStyle(d).top) : 0;
+    // A stage gliding to another height (fast ion's chart): the dock's pinned place is set by the height the stage glides
+    // to, so while the dock rests there it follows the stage's height now instead (it would cover or leave a gap otherwise;
+    // that place is the masthead, the stage column's 6 px and the stage's height, layout-v2.css)
+    const lag = shown && Math.abs(d.getBoundingClientRect().top - (SF.dt || 0) - top) < 1 ? S - (top - v.mast - 6) : 0;
+    // how far the steps have moved under the pinned stage and dock (the dock's bottom once pinned)
+    const b0 = shown ? top + lag + d.offsetHeight : v.mast + SF.col.offsetHeight;
+    let f = v.fold > 0 && S > 0 ? clamp(b0 - stepsEl.getBoundingClientRect().top, 0, v.fold) : 0;
+    if (f < .05) f = 0; const dt = Math.abs(lag - f) < .05 ? 0 : lag - f;
+    if (!f && !SF.f && !dt && !SF.dt) return; SF.f = f; SF.dt = dt;
+    const s = ((S - f) / S).toFixed(4), up = f ? `0 ${(-f).toFixed(2)}px` : '', drawn = o.shifted().filter(Boolean);
+    if (!SF.R) { const cs = getComputedStyle(st); SF.R = cs.borderRadius; st.classList.toggle('v2-ringed', /inset/.test(cs.boxShadow)); }
+    put(st, 'clipPath', f ? `inset(0 0 ${f.toFixed(2)}px 0 round ${SF.R})` : ''); put(SF.col, 'clipPath', f ? `inset(0 0 ${f.toFixed(2)}px 0)` : '');
+    put(d, 'translate', dt ? `0 ${dt.toFixed(2)}px` : '');
+    st.classList.toggle('v2-folded', !!f); st.style.setProperty('--v2-f', f.toFixed(2) + 'px');
+    // the soft edge grows with the fold (24 px of the picture's own width at full fold)
+    const e = (24 * f / v.fold).toFixed(1) + 'px', mask = f ? `linear-gradient(90deg,transparent,#000 ${e},#000 calc(100% - ${e}),transparent),linear-gradient(#000 calc(100% - ${e}),transparent)` : '';
+    for (const el of drawn) if (el.matches('canvas,video')) { put(el, 'maskImage', mask); put(el, 'webkitMaskImage', mask); put(el, 'maskComposite', f ? 'intersect' : ''); put(el, 'webkitMaskComposite', f ? 'source-in' : ''); }
+    for (const el of st.children) {
+      const pic = el.offsetHeight >= S / 2 || drawn.some(x => el.contains(x));
+      put(el, 'scale', f && pic ? s : ''); put(el, 'transformOrigin', f && pic ? `${(st.clientWidth / 2 - el.offsetLeft).toFixed(1)}px ${-el.offsetTop}px` : '');
+      put(el, 'translate', f && !pic && el.offsetTop + el.offsetHeight / 2 > S / 2 ? up : '');
+    }
+  }
   const mq = matchMedia('(max-width:860px)'), onMq = () => {
     v.phone = mq.matches; o.paper.style.marginBottom = ''; F.m = 0; F.R = null; F.pmb = parseFloat(getComputedStyle(o.paper).marginBottom) || 0;
-    dock(); size(true);
+    SF.R = ''; v.colH = undefined; dock(); size(true);
   }; mq.addEventListener('change', onMq); onMq();
   { const ro = new ResizeObserver(() => size(false)); ro.observe(o.paper); ro.observe($('.v2-dock')); ro.observe(o.stage); } addEventListener('resize', () => size(true));
+  // A pinned stage that changes height on a phone (fast ion's chart is taller, and its stage glides to it) pushes the steps
+  // under it: the step being read keeps its place on the screen through every frame of the glide (this runs after layout,
+  // before paint), so its words still move only with the scroll: they move down the page by what the stage grew.
+  new ResizeObserver(() => {
+    const h = SF.col.getBoundingClientRect().height, d = h - (v.colH ?? h), a = v.secs[v.cur]; v.colH = h;
+    if (Math.abs(d) < .01 || !v.phone || v.rail || v.jump >= 0 || !a || SF.col.getBoundingClientRect().top > v.mast + 1) return;
+    const r = a.getBoundingClientRect(); if (r.top < innerHeight && r.bottom > 0) scrollBy({top: d, behavior: 'instant'});
+  }).observe(SF.col);
   document.fonts?.ready.then(() => size(true));
   addEventListener('scroll', onScroll, {passive: true});
   // Words that change in place never change in one frame (18 October 2026: scrolling never jumps or cuts): the note under
@@ -207,18 +253,43 @@ export function createLayoutV2(o) {
     const nx = $('.v2-next'); nx.disabled = k === S.length - 1; nx.textContent = k < S.length - 1 ? `Next: ${S[k + 1].short} →` : 'Last step';
   }
   function dock() { const d = $('.v2-dock'); v.ctls.forEach((c, j) => { if (!c) return; const want = v.phone && j === v.cur ? d : v.slots[j]; if (c.parentNode !== want) want.append(c); }); }
+  // On a phone a docked control is one row with its label (layout-v2.css). Where that is wider than the screen the label
+  // steps aside, then the choices take two rows, within the dock's one height; a row that would still not fit scrolls
+  // sideways: its edges fade where more is hidden, and the chosen option is brought clear of the fades by the least scroll,
+  // at once when the control docks and by a glide when the choice changes.
+  function fit(c, d) {
+    c.classList.remove('v2-nolabel', 'v2-wrap', 'v2-scroll', 'v2-fade-l', 'v2-fade-r'); c.scrollLeft = 0;
+    const wide = () => c.scrollWidth > c.clientWidth + 1;
+    if (!wide()) return; c.classList.add('v2-nolabel'); if (!wide()) return; c.classList.add('v2-wrap');
+    const cs = getComputedStyle(d), room = parseFloat(cs.minHeight) - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom) - parseFloat(cs.borderBottomWidth);
+    if (!wide() && c.offsetHeight <= room + .5) return; c.classList.remove('v2-wrap'); c.classList.add('v2-scroll');
+  }
+  function row() {
+    const d = $('.v2-dock'), c = v.phone ? v.ctls[v.cur] : null;
+    if (!c || c.parentNode !== d || c.querySelector('.v2-slider')) { v.row = null; return; }
+    if (v.row !== c) { fit(c, d); if (!c.classList.contains('v2-scroll')) { v.row = c; return; } }
+    if (!c.classList.contains('v2-scroll')) return;
+    const p = c.querySelector('[aria-pressed=true]');
+    if (v.row !== c || v.rowP !== p) {
+      if (p) { const a = p.getBoundingClientRect(), b = c.getBoundingClientRect(), r = a.right - (b.right - 40), l = a.left - (b.left + 40);
+        const by = r > 0 ? r : l < 0 && c.scrollLeft > 0 ? l : 0; if (by) c.scrollTo({left: c.scrollLeft + by, behavior: v.row !== c || reduced ? 'instant' : 'smooth'}); }
+      v.row = c; v.rowP = p;
+    }
+    c.classList.toggle('v2-fade-l', c.scrollLeft > 1); c.classList.toggle('v2-fade-r', c.scrollLeft + c.clientWidth < c.scrollWidth - 1);
+  }
   function menu(open) { $('.v2-chapters').hidden = !open; $('.v2-chbtn').setAttribute('aria-expanded', String(open)); }
   // Where the reading area starts once the figure (desktop) or the stage and its dock (phone) are pinned. A step is as tall
   // as that area; the height is kept while the reader is among the steps, so a figure of another shape (silicon's figures
   // change between steps) never resizes the steps above the one being read. The window, or anything before the reader
   // reaches the steps, sets it again.
   // (v.engaged: the reader has moved through the steps; until then a figure still loading may set the height again)
-  // The reading area starts under the folded figure (fold, above).
+  // The reading area starts under the folded figure (fold, above), or on a phone under the folded stage (stageFold).
   function size(all) {
     const mast = v.mast = parseFloat(getComputedStyle(H).getPropertyValue('--v2-mast')) || 56;
     v.pin = parseFloat(getComputedStyle(o.paper).top) || 120;
-    if (all) F.R = null;
-    v.readTop = v.phone ? mast + 6 + o.stage.offsetHeight + $('.v2-dock').offsetHeight : v.pin + (F.ready ? F.rest + F.ct : o.paper.offsetHeight);
+    if (all) { F.R = null; v.row = null; }   // (a docked row is fitted again, row())
+    v.fold = v.phone && !v.rail ? Math.max(0, o.stage.offsetHeight - SF.c.offsetHeight) : 0;
+    v.readTop = v.phone ? mast + 6 + o.stage.offsetHeight + $('.v2-dock').offsetHeight - v.fold : v.pin + (F.ready ? F.rest + F.ct : o.paper.offsetHeight);
     if (all || !v.engaged || !v.secs[0] || v.secs[0].getBoundingClientRect().top > innerHeight) {
       const r = Math.max(360, Math.round(innerHeight - v.readTop)) + 'px'; if (H.style.getPropertyValue('--v2-read') !== r) H.style.setProperty('--v2-read', r);
     }
@@ -262,7 +333,11 @@ export function createLayoutV2(o) {
   // Every frame: the drawing shift, the end of an opening (the model joins the step being read), and the v2 controls copy
   // the state of the page's own controls, so a pressed button is always the true one
   function frame() {
-    fold(); shift();
+    fold(); stageFold(); shift(); row();
+    // A step whose key names nothing (fast ion's chart, interwoven's first two chapters) has no Key button: it fades out
+    // instead of opening nothing
+    if (v.kb) { const empty = !o.key.textContent.trim(); if (empty !== v.kb.classList.contains('v2-keyempty')) {
+      v.kb.classList.toggle('v2-keyempty', empty); if (empty) { o.stage.classList.remove('v2-key-on'); v.kb.setAttribute('aria-expanded', 'false'); } } }
     // A hint that changes its words (a step with something to click) shows again until the next touch
     if (o.hint) { const t = o.hint.textContent; if (t !== v.hintText) { v.hintText = t; o.stage.classList.remove('v2-touched'); } }
     // An opening's end puts the model on the step being read, even the same one: a page whose opening ends elsewhere

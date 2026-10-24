@@ -154,6 +154,8 @@ html.layout-v2 .v2-key{display:none!important}
 html.layout-v2 .v2-stage.v2-key-on .v2-key:not(:empty){display:block!important;left:16px;bottom:58px;max-width:calc(100% - 32px)}
 html.layout-v2 .v2-keybtn{display:block;position:absolute;left:16px;top:auto;right:auto;bottom:16px;z-index:3;height:30px;padding:0 13px;border-radius:999px;border:1px solid var(--v2-glass-line);background:var(--v2-glass);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);font:500 13px/28px var(--v2-text);color:var(--v2-ink);cursor:pointer}
 .v2-keybtn[aria-expanded=true]{border-color:rgba(143,168,255,.6);color:var(--v2-ink)}
+html.layout-v2 .v2-keybtn{transition:opacity .2s ease,visibility 0s}
+html.layout-v2 .v2-keybtn.v2-keyempty{opacity:0;visibility:hidden;pointer-events:none;transition:opacity .2s ease,visibility 0s .2s}
 html.layout-v2 .v2-hint{transition:opacity .4s ease}
 html.layout-v2 .v2-stage.v2-touched .v2-hint{opacity:0;pointer-events:none}
 html.layout-v2 .v2-stage .fig-ann-label span{display:none}
@@ -169,9 +171,16 @@ html.steps-rail .v2-pager{display:flex;align-items:center;gap:16px;padding-top:1
 .v2-pager .v2-next{margin-left:auto;background:var(--v2-accent);color:var(--v2-accent-ink)}
 .v2-pager button:disabled{opacity:.45;cursor:default}
 
-/* Phone: the figure under the title; the stage pinned with this step's control docked under it */
+/* The compact stage's height on a phone, read by the kit (kit/layout-v2.mjs stageFold) */
+.v2-stage-c{position:fixed;left:0;top:0;width:0;height:var(--v2-stage-c,0px);visibility:hidden;pointer-events:none}
+
+/* Phone: the figure under the title; the stage pinned with this step's control docked under it.
+   22 October 2026 (the words at eye level on a phone too): the stage is at most 42% of a short screen, and once the reader
+   is among the steps it folds to --v2-stage-c, 36% of the screen under the masthead (never under 78% of itself, so its
+   labels stay legible); its picture is scaled, never cropped (kit stageFold). The dock keeps one height, a slider's, with
+   every control fitted inside it, so the step being read starts at the same place on every step. */
 @media(max-width:860px){
- html.layout-v2{--v2-mast:52px;--v2-top:52px}
+ html.layout-v2{--v2-mast:52px;--v2-top:52px;--v2-stage-m:min(330px,42svh);--v2-stage-c:clamp(calc(var(--v2-stage-m) * .78),calc((100svh - var(--v2-mast)) * .36),var(--v2-stage-m))}
  html.layout-v2 .v2-bar{padding:0 16px}
  html.layout-v2 .v2-title,html.layout-v2 .v2-rail,html.layout-v2 .v2-back{display:none}
  html.layout-v2 .v2-phonebar{display:flex;align-items:center;gap:10px;margin-left:auto}
@@ -189,11 +198,48 @@ html.steps-rail .v2-pager{display:flex;align-items:center;gap:16px;padding-top:1
  html.layout-v2 .figure-pair .pair-head{position:static;min-height:36px;padding:0}
  html.layout-v2 .figure-pair .paper-column{position:static;margin-bottom:14px}
  html.layout-v2 .figure-pair .paper-column::after{display:none}
- html.layout-v2 .figure-pair .panel-note{font-size:13.5px;line-height:20px}
+ /* three lines are kept for the note on a phone (rocksalt's and fast ion's reach three): a note that gained or lost a line
+    moved every word under it, by a frame's flicker or, scrolling back up to the figure, a 17 px jump (22 October 2026) */
+ html.layout-v2 .figure-pair .panel-note{font-size:13.5px;line-height:20px;min-height:60px}
  html.layout-v2 .figure-pair .stage-column{grid-row:auto;grid-area:stage;position:sticky;top:var(--v2-mast);z-index:9;background:var(--v2-bg);padding-top:6px}
  html.layout-v2 .figure-pair .v2-stage{height:var(--v2-stage-m);min-height:0;border-radius:14px}
- html.layout-v2 .v2-dock{display:block;grid-area:dock;position:sticky;top:calc(var(--v2-mast) + 6px + var(--v2-stage-m));z-index:9;min-height:96px;box-sizing:border-box;padding:12px 2px 12px;background:var(--v2-bg);border-bottom:1px solid var(--v2-line);box-shadow:0 14px 18px -12px rgba(15,17,27,.9)}
- html.layout-v2 .v2-dock .v2-note{margin-top:4px;font-size:12px;line-height:16px}
+ /* A folded stage keeps the hairline round its lower edge, where the fold's clip cuts its own (kit stageFold) */
+ html.layout-v2 .v2-stage.v2-folded.v2-ringed::after{content:'';position:absolute;left:0;right:0;bottom:0;z-index:5;height:14px;border-radius:0 0 14px 14px;box-shadow:inset 0 -1px rgba(255,255,255,.05),inset 1px 0 rgba(255,255,255,.05),inset -1px 0 rgba(255,255,255,.05);translate:0 calc(-1 * var(--v2-f,0px));pointer-events:none}
+ /* The dock is as tall as a slider on every step (81 px; it was 96 to 155) */
+ html.layout-v2 .v2-dock{display:flex;flex-direction:column;justify-content:center;grid-area:dock;position:sticky;top:calc(var(--v2-mast) + 6px + var(--v2-stage-m));z-index:9;min-height:81px;box-sizing:border-box;padding:8px 2px;background:var(--v2-bg);border-bottom:1px solid var(--v2-line);box-shadow:0 14px 18px -12px rgba(15,17,27,.9)}
+ /* Choices: the label, then the chips or the segments, in one row. Where that is wider than the screen the label steps
+    aside (it still names the choices to assistive technology), then the choices take two rows of slightly smaller buttons;
+    a row that would still not fit scrolls sideways, its edges fading where more is hidden (kit row()) */
+ html.layout-v2 .v2-dock .v2-ctl:not(:has(.v2-slider)){display:flex;align-items:center;gap:8px}
+ html.layout-v2 .v2-dock .v2-ctl>*{flex:none}
+ html.layout-v2 .v2-dock .v2-ctl-label{margin:0 4px 0 0;white-space:nowrap;font-size:13px;color:var(--v2-muted)}
+ html.layout-v2 .v2-dock :is(.v2-chips,.v2-seg){flex-wrap:nowrap;max-width:none}
+ html.layout-v2 .v2-dock :is(.v2-chip,.v2-seg button){flex:none;white-space:nowrap}
+ html.layout-v2 .v2-dock .v2-ctl.v2-nolabel>.v2-ctl-label{position:absolute;width:1px;height:1px;margin:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+ html.layout-v2 .v2-dock:has(.v2-wrap){padding-top:6px;padding-bottom:6px}
+ html.layout-v2 .v2-dock .v2-ctl.v2-wrap{flex-wrap:wrap;gap:4px 8px}
+ html.layout-v2 .v2-dock .v2-ctl.v2-wrap>*{flex:0 1 auto;max-width:100%}
+ html.layout-v2 .v2-dock .v2-ctl.v2-wrap .v2-chips{flex-wrap:wrap;gap:4px 8px}
+ html.layout-v2 .v2-dock .v2-ctl.v2-wrap .v2-seg{flex-wrap:wrap}
+ html.layout-v2 .v2-dock .v2-ctl.v2-wrap :is(.v2-chip,.v2-seg button){min-height:28px}
+ html.layout-v2 .v2-dock .v2-ctl.v2-scroll{margin:-4px -2px;padding:4px 2px;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none}
+ html.layout-v2 .v2-dock .v2-ctl.v2-scroll::-webkit-scrollbar{display:none}
+ html.layout-v2 .v2-dock .v2-ctl.v2-fade-r{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 36px),transparent)}
+ html.layout-v2 .v2-dock .v2-ctl.v2-fade-l{-webkit-mask-image:linear-gradient(90deg,transparent,#000 36px);mask-image:linear-gradient(90deg,transparent,#000 36px)}
+ html.layout-v2 .v2-dock .v2-ctl.v2-fade-l.v2-fade-r{-webkit-mask-image:linear-gradient(90deg,transparent,#000 36px,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(90deg,transparent,#000 36px,#000 calc(100% - 36px),transparent)}
+ /* A slider: its name and value, the track, then its presets or ends, with no spare line */
+ html.layout-v2 .v2-dock .v2-track{margin-top:2px}
+ html.layout-v2 .v2-dock .v2-range{height:22px;margin:0}
+ html.layout-v2 .v2-dock .v2-shead :is(sub,sup){line-height:0}
+ html.layout-v2 .v2-dock .v2-presets{height:20px;margin-top:0}
+ html.layout-v2 .v2-dock .v2-presets button{line-height:20px}
+ html.layout-v2 .v2-dock .v2-ends{margin-top:2px}
+ html.layout-v2 .v2-dock .v2-play{width:36px;height:36px;margin-top:15px}
+ /* Its note (what the slider is not) shows while the slider is dragged, over the stage's lower edge, above the thumb and
+    clear of the reader's finger, instead of keeping a line of its own in the dock */
+ html.layout-v2 .v2-dock .v2-note{position:absolute;left:8px;right:8px;bottom:calc(100% + 8px);min-height:0;margin:0;padding:7px 11px;box-sizing:border-box;border-radius:10px;border:1px solid var(--v2-glass-line);background:var(--v2-glass);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);font:400 13px/18px var(--v2-text);color:var(--v2-ink2);pointer-events:none}
+ html.layout-v2 .v2-dock .v2-slider:is(:hover,:focus-within) .v2-note{opacity:0}
+ html.layout-v2 .v2-dock .v2-slider.is-drag .v2-note,html.layout-v2 .v2-dock .v2-slider:has(:focus-visible) .v2-note{opacity:1}
  html.layout-v2 .v2-dock .v2-shead{gap:12px}
  html.layout-v2 .v2-dock .v2-shead label{font-size:13px}
  html.layout-v2 .v2-dock .v2-shead output{font-size:14px}
@@ -201,8 +247,8 @@ html.steps-rail .v2-pager{display:flex;align-items:center;gap:16px;padding-top:1
  html.layout-v2 .v2-stage.v2-key-on .v2-key:not(:empty){display:grid!important;grid-template-columns:repeat(2,auto);gap:0 12px;left:10px;bottom:48px;max-width:calc(100% - 20px);padding:6px 10px;font-size:13px;line-height:1.45}
  html.layout-v2 .v2-keybtn{left:10px;bottom:10px}
  html.layout-v2 .v2-step .v2-ctl-slot{display:none}
- html.layout-v2 .v2-step{padding:22px 0 30px}
- html.layout-v2 .v2-step.v2-chstart .v2-label{margin:-6px 0 8px}
+ html.layout-v2 .v2-step{padding:18px 0 30px}
+ html.layout-v2 .v2-step.v2-chstart .v2-label{margin:-6px 0 6px}
  html.layout-v2 .v2-step h2{font-size:22px;line-height:28px}
  html.layout-v2 .v2-body{font-size:16px;line-height:25px;margin-top:10px}
  html.layout-v2 .v2-limit{font-size:13.5px;line-height:20px}

@@ -68,8 +68,11 @@ html.layout-v2 .v2-credit .v2-figcredit a{color:var(--v2-accent)}
  html.layout-v2 #stage .scene-help{left:12px;top:10px}
  html.layout-v2 #stage.opening .v2-keybtn{display:none}
  html.layout-v2 #stage.v2-key-on .scene-key{left:10px;right:auto;bottom:48px;max-width:calc(100% - 20px)}
- /* The 1D model's chart carries words and bars: on a phone its stage is taller, and the docked control pins under it */
- html.layout-v2:has(#stage.showing-chain){--v2-stage-m:min(450px,54svh)}
+ /* The 1D model's chart (23 October 2026): it used to get a taller stage on a phone (450 px) for its portrait drawing,
+    so the stage glided to another height between steps and those steps' words started two thirds down the screen. It
+    now has a phone drawing of its own, as wide as the stage and lower (fast-ion-diffusion.js LAYOUTS.phone), in the
+    model's stage, folding with it; it has no key, so the Key button leaves it (kit), and it takes the stage bar's room. */
+ html.layout-v2 #stage .chain-view{padding-bottom:12px}
 }
 /* Figure 4 is short, so the last step reads from high on the screen: the steps run on far enough to keep the stage pinned */
 html.layout-v2 .v2-steps{padding-bottom:calc(var(--v2-read) * .6 + 48px)}
