@@ -1,0 +1,17 @@
+/* The site footer, the same on every page: the brand, three ways on (the collection, About, Sources & licences) and the
+   copyright line. Written into each page by tools/build-chrome.mjs from site.json. One quiet line under a hairline, text
+   only. Each property is set here so a page's own footer rule cannot change it. */
+footer.site-footer{display:flex;flex-direction:row;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:14px 40px;box-sizing:border-box;width:auto;max-width:none;min-height:0;margin:clamp(56px,7vw,104px) 0 0;padding:26px var(--site-footer-gutter,var(--gutter,clamp(20px,4vw,72px))) 34px;border:0;border-top:1px solid #ffffff1c;background:none;color:#9aa2b4;font:400 13px/1.5 var(--ds-font-text,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif);letter-spacing:0;text-transform:none;text-align:left}
+footer.site-footer a{color:#c9cfdd;text-decoration:none;border:0;padding:0;font-size:13px;width:auto;transition:color .18s}
+footer.site-footer a:hover,footer.site-footer a[aria-current=page]{color:#a9b8ff}
+footer.site-footer a:focus-visible{outline:2px solid #a9b8ff;outline-offset:5px;border-radius:2px}
+footer.site-footer .site-footer-brand{font:600 17px/1 var(--ds-font-display,Sora,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif);letter-spacing:-.045em;color:#eef1fa;view-transition-name:none}
+footer.site-footer .site-footer-brand span{font-weight:300;color:inherit}
+footer.site-footer nav{display:flex;flex-wrap:wrap;gap:8px 28px;margin:0 auto 0 0;padding:0;font-size:13px;position:static;height:auto;border:0;background:none}
+footer.site-footer p{margin:0;padding:0;width:auto;max-width:none;font-size:13px;line-height:1.5;color:#9aa2b4}
+/* A companion's reading column (layout v2) is 1340 px wide with a 16 px gutter; the footer sits on the same column. */
+html.layout-v2 footer.site-footer{max-width:1340px;margin-inline:auto;padding-inline:16px}
+/* The homepage ends on a full-width band, so its footer needs no gap of its own. */
+body:has(.home-hero) footer.site-footer{margin-top:0}
+@media(max-width:560px){footer.site-footer{gap:12px 24px}footer.site-footer nav{order:3;width:100%;margin:0}}
+@media(prefers-reduced-motion:reduce){footer.site-footer a{transition:none}}

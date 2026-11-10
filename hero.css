@@ -1,0 +1,115 @@
+/* Homepage hero: the headline and the figure stage share one top line; the caption panel sits under the stage. */
+.home-hero{--header-h:112px;--copy-w:clamp(330px,34vw,540px);--col-gap:clamp(28px,4.4vw,84px);--panel-h:176px;--bleed-top:64px;--bleed-left:calc(var(--col-gap) * .85);
+ position:relative;overflow:hidden;display:grid;align-content:center;min-height:clamp(760px,100vh,1120px);min-height:clamp(760px,100svh,1120px);
+ padding:calc(var(--header-h) + clamp(22px,4.5vh,60px)) var(--gutter) clamp(26px,5vh,64px);
+ background:radial-gradient(ellipse 62% 70% at 74% 46%,#1d265040,transparent 70%)}
+.home-hero-grid{display:grid;grid-template-columns:var(--copy-w) minmax(0,1fr);column-gap:var(--col-gap);align-items:start}
+
+/* Copy. The negative top margin lifts the eyebrow's half-leading so its capitals sit on the stage's top edge. */
+.hero-copy{position:relative;z-index:2;margin-top:-.42em}
+.hero-copy .eyebrow{margin:0 0 clamp(16px,2.2vh,24px);color:#aaafbf}
+.home-hero h1{font-size:clamp(46px,4.15vw,76px);font-weight:400;line-height:1.1;letter-spacing:-.062em;margin:0 0 clamp(20px,2.8vh,28px)}
+.home-hero h1 span{color:var(--white)}
+#understanding-word{color:#afc1f7}
+/* Stacked layouts underline the word whose picture is on stage (wide layouts draw connectors instead). */
+#figure-word,#understanding-word{--mark:0;background:linear-gradient(#a7bdff,#a7bdff) no-repeat 0 calc(100% - .05em)/calc(var(--mark) * 100%) 2px}
+.hero-intro{font-size:18px;line-height:1.7;color:#c3c8d3;margin:0 0 30px;max-width:25em}
+.hero-copy .text-link{color:var(--accent)}
+
+/* Stage. The canvases bleed past the frame so the outer oxygen context is never clipped at the frame edge. */
+.hero-figure{margin:0;min-width:0;justify-self:end;width:min(100%,calc((100vh - var(--header-h) - var(--panel-h) - 140px) * 1500 / 850));width:min(100%,calc((100svh - var(--header-h) - var(--panel-h) - 140px) * 1500 / 850));position:relative}
+.hero-frame{position:relative;aspect-ratio:1500/850;width:100%}
+.hero-stage{position:absolute;inset:calc(-1 * var(--bleed-top)) calc(-1 * var(--gutter)) -10px calc(-1 * var(--bleed-left));z-index:1}
+.hero-stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+#hero-paper{z-index:0}#hero-gl{z-index:1;pointer-events:none}#hero-canvas{z-index:2;touch-action:pan-y;outline:none}
+.hero-frame:has(#hero-canvas:focus-visible)::after{content:'';position:absolute;inset:-8px;border:1px solid #84a4ff;border-radius:6px;pointer-events:none;z-index:3}
+@supports not selector(:has(*)){#hero-canvas:focus-visible{outline:1px solid #84a4ff;outline-offset:-8px}}
+.hero-frame noscript img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+
+/* Connectors: a hairline that strengthens toward its target, a small origin dot and a narrow filled head. */
+.hero-connectors{position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none;overflow:visible;color:#a7bdff}
+.hero-connectors .connector{opacity:0}
+.hero-connectors .line{fill:none;stroke-width:1.5;stroke-linecap:round}
+.hero-connectors .head{fill:#c0d1ff}
+.hero-connectors .dot{fill:#a7bdff;opacity:.8}
+
+/* Panel: kicker, narrated caption, transport, then the inspection key and sources. */
+.hero-panel{position:relative;z-index:3;margin-top:clamp(18px,2.6vh,28px);display:grid;gap:8px}
+.hero-kicker{font-size:11.5px;line-height:1.5;letter-spacing:.12em;text-transform:uppercase;color:#95a0c2;min-height:1.5em}
+.hero-caption{font-size:clamp(17px,1.32vw,20px);line-height:1.42;color:#ebeffb;letter-spacing:-.005em;min-height:2.84em;max-width:34em;text-wrap:balance}
+.hero-transport{display:flex;align-items:center;gap:10px;margin-top:2px}
+.hero-icon{flex:none;width:34px;height:34px;padding:0;display:grid;place-items:center;border:1px solid #ffffff24;border-radius:50%;background:#ffffff08;color:#dce6ff}
+.hero-icon:hover{border-color:#a7bdff90;color:#fff;background:#ffffff12}
+.hero-icon svg{width:16px;height:16px;fill:currentColor}
+.hero-icon .i-play{transform:translateX(.5px)}
+#hero-play[data-state=pause] .i-play,#hero-play:not([data-state=pause]) .i-pause{display:none}
+.hero-icon:focus-visible{outline:2px solid #92acff;outline-offset:3px}
+.hero-scrub{position:relative;flex:1;height:34px;min-width:0}
+.hero-scrub input{position:relative;z-index:1;display:block;width:100%;height:34px;margin:0;background:transparent;cursor:pointer;-webkit-appearance:none;appearance:none;--progress:0%}
+.hero-scrub input:focus-visible{outline:2px solid #92acff;outline-offset:2px;border-radius:4px}
+.hero-scrub input::-webkit-slider-runnable-track{height:2px;border-radius:2px;background:linear-gradient(90deg,#a7bdff var(--progress),#ffffff26 var(--progress))}
+.hero-scrub input::-moz-range-track{height:2px;border-radius:2px;background:#ffffff26}
+.hero-scrub input::-moz-range-progress{height:2px;border-radius:2px;background:#a7bdff}
+.hero-scrub input::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;margin-top:-5.5px;border-radius:50%;background:#ebf0ff;border:0;box-shadow:0 0 0 4px #a7bdff2e}
+.hero-scrub input::-moz-range-thumb{width:13px;height:13px;border-radius:50%;background:#ebf0ff;border:0;box-shadow:0 0 0 4px #a7bdff2e}
+.hero-ticks{position:absolute;left:6.5px;right:6.5px;top:50%;height:0;pointer-events:none}
+.hero-ticks i{position:absolute;top:-4px;width:1px;height:8px;background:#ffffff38}
+.hero-meta{display:flex;align-items:center;gap:6px 16px;flex-wrap:wrap;margin-top:2px}
+.hero-species{display:flex;align-items:center;gap:2px 16px;flex-wrap:wrap}
+.hero-meta button:not(.hero-icon){border:0;background:none;padding:6px 0;font-size:13px;line-height:1.4;color:#bec9e3;white-space:nowrap}
+.hero-meta button:not(.hero-icon):hover{color:#fff}
+.hero-species button{display:inline-flex;align-items:center;gap:7px}
+.hero-species button[aria-pressed=true]{color:#fff;text-decoration:underline;text-decoration-color:#a7bdff;text-underline-offset:6px}
+.swatch{display:inline-block;width:9px;height:9px;border-radius:50%}
+.swatch-li{background:radial-gradient(circle at 35% 30%,#e5f9d8,#a7e487 55%,#74b158)}
+.swatch-o{background:radial-gradient(circle at 35% 30%,#ffccce,#ec5961 55%,#ad3840)}
+.swatch-tm{background:radial-gradient(circle at 35% 30%,#f5cdff,#ba5ee2 55%,#833aac)}
+.swatch-site{width:10px;height:10px;border:1.3px dashed #d7e1f7}
+#hero-reset{color:#a7bdff}
+#hero-notes{margin-left:auto;color:#9ca9cb}
+/* The figure's licence credit stays in view after the kicker moves on to the model. It hangs under the panel,
+   right-aligned, so it never changes the hero's layout. */
+.hero-credit{position:absolute;top:100%;right:0;margin-top:4px;font-size:12px;line-height:1.4;color:#8f99b6;white-space:nowrap}
+.hero-credit a{border-bottom:1px solid #8f99b666}
+.hero-credit a:hover{color:#dce6ff}
+
+@media(min-width:1500px){.home-hero{--copy-w:clamp(460px,31vw,600px)}}
+@media(max-width:1100px) and (min-width:701px){
+ .home-hero{--copy-w:clamp(290px,38vw,420px);--col-gap:clamp(24px,3.4vw,40px);--panel-h:190px}
+ .home-hero h1{font-size:clamp(40px,4.9vw,54px)}
+ .hero-intro{font-size:16.5px}
+ .hero-species{gap:2px 12px}
+}
+/* Portrait tablets stack like phones: a two-column hero would leave the stage too small to read. */
+@media(max-width:1100px) and (min-width:701px) and (orientation:portrait){
+ .home-hero{--bleed-top:48px;min-height:0;align-content:start;padding:calc(var(--header-h) + 56px) var(--gutter) 64px}
+ .home-hero-grid{grid-template-columns:minmax(0,1fr);row-gap:44px}
+ .hero-copy{margin-top:0}
+ .home-hero h1{font-size:clamp(50px,7.4vw,72px);line-height:1.08}
+ .hero-intro{font-size:18px;max-width:30em}
+ .hero-figure{width:auto;justify-self:stretch}
+ .hero-stage{inset:calc(-1 * var(--bleed-top)) calc(-1 * var(--gutter)) -10px}
+}
+@media(max-width:700px){
+ .home-hero{--header-h:84px;--bleed-top:36px;min-height:0;align-content:start;padding:calc(var(--header-h) + 30px) var(--gutter) 34px}
+ .home-hero-grid{grid-template-columns:minmax(0,1fr);row-gap:26px}
+ .hero-copy{margin-top:0}
+ .home-hero h1{font-size:clamp(33px,9vw,47px);line-height:1.16;margin-bottom:18px}
+ .hero-copy .eyebrow{margin-bottom:16px}
+ .hero-intro{font-size:16px;margin-bottom:22px}
+ .hero-figure{width:auto;justify-self:stretch}
+ .hero-frame{width:auto;aspect-ratio:1/.9;margin-inline:calc(-.55 * var(--gutter))}
+ .hero-stage{inset:calc(-1 * var(--bleed-top)) calc(-.45 * var(--gutter)) -8px}
+ .hero-caption{font-size:16.5px;min-height:2.9em}
+ .hero-meta{gap:4px 14px}
+ .hero-species{gap:2px 14px}
+ #hero-notes{margin-left:0}
+ .hero-credit{left:0;right:auto}
+}
+
+/* The story's end beat (owner decision 9, 16 Oct 2026): one quiet line into the companion for the same hop. Its row is
+   reserved from the start, so nothing moves when it appears; it shows only once the story has reached its end. */
+.hero-continue{justify-self:start;font-size:15px;line-height:1.5;letter-spacing:-.01em;color:#c9d6ff;text-decoration:none;border-bottom:1px solid #c9d6ff66;padding-bottom:2px;opacity:0;visibility:hidden;transform:translateY(6px);transition:opacity .9s ease,transform .9s ease,visibility 0s linear .9s}
+.hero-continue[data-shown="true"]{opacity:1;visibility:visible;transform:none;transition:opacity .9s ease,transform .9s ease,visibility 0s}
+.hero-continue:hover,.hero-continue:focus-visible{color:#fff;border-bottom-color:#fff}
+@media(prefers-reduced-motion:reduce){.hero-continue{transition:none}}

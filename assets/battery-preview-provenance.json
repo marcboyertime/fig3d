@@ -1,0 +1,9 @@
+{
+  "type": "Live purpose-composed Three.js scene, without module labels or controls",
+  "entry": "battery-teaser.js",
+  "shared_geometry": "battery-scene.mjs",
+  "state": "batteryState(0.5, discharge): graphite x=0.450, oxide x=0.750",
+  "motion": "Four-second burst on entry, hover or keyboard focus; static for reduced-motion preference",
+  "date": "2026-09-30",
+  "rejected_approaches": "Generated generic battery cutaway and cropped module screenshots are not rendered or included in this package."
+}

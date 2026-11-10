@@ -1,0 +1,10 @@
+{
+  "file": "hau-2025-figure-1.webp",
+  "derived_from": "references/hau-2025-figure-1-original.png",
+  "source_sha256": "5c60f2d19cdaa51b6e5250586ecda5aeea77740a9b2ab3e3e6c5c1ca0acef1a4",
+  "sha256": "a049bd90130b65d181be6211fa99ef1e94dbb1601505da671decfbadc8a7ee9c",
+  "encoding": "WebP lossless (Pillow, method 6)",
+  "pixel_identical_to_source": true,
+  "check": "Decoded RGB pixels compared one by one against the PNG on 2026-09-30",
+  "purpose": "Smaller download for the homepage hero (724,892 vs 1,014,459 bytes). The PNG stays the untouched reference and the runtime fallback."
+}
