@@ -36,6 +36,8 @@ export function createLayoutV2(o) {
   const back = o.back || null;
   bar.insertBefore(T.querySelector('.v2-rail'), back); bar.insertBefore(T.querySelector('.v2-phonebar'), back);
   document.body.append(T.querySelector('.v2-chapters'));
+  // On a phone the masthead has no room for "The collection": the chapter menu ends with it (14 November 2026)
+  if (back) { const home = document.createElement('a'); home.className = 'v2-home'; home.href = back.getAttribute('href'); home.textContent = 'The collection'; $('.v2-chapters').append(home); }
   const kicker = T.querySelector('.v2-kicker'); if (kicker && o.kickerInto) o.kickerInto.prepend(kicker);
   if (o.credit) { const c = document.createElement('div'); c.className = 'v2-figcredit'; c.append(...o.credit.nodes.filter(Boolean)); o.credit.into.prepend(c); }
   const ex = o.explorer; ex.append(T.querySelector('.v2-steps'), T.querySelector('.v2-dock'));
@@ -54,7 +56,7 @@ export function createLayoutV2(o) {
   for (const el of v.secs) { const body = el.querySelector('.v2-more-body'); for (const q of ['.v2-foot .v2-src', '.v2-limit']) { const n = el.querySelector(q); if (n && body) body.append(n); } }
   if (o.hint) { o.hint.classList.add('v2-hint'); v.hintText = o.hint.textContent; o.input.addEventListener('pointerdown', () => o.stage.classList.add('v2-touched')); }
   v.secs.forEach((el, k) => wire(el, k));
-  $$('.v2-rail a, .v2-chapters a').forEach(a => a.addEventListener('click', e => { e.preventDefault(); menu(false); jumpTo(idx(a.getAttribute('href').slice(1))); }));
+  $$('.v2-rail a, .v2-chapters a:not(.v2-home)').forEach(a => a.addEventListener('click', e => { e.preventDefault(); menu(false); jumpTo(idx(a.getAttribute('href').slice(1))); }));
   $('.v2-chbtn').addEventListener('click', () => menu($('.v2-chapters').hidden));
   $('.v2-stagechip button').addEventListener('click', () => { v.follow = true; model(v.cur); });
   $('.v2-prev').addEventListener('click', () => go(v.cur - 1)); $('.v2-next').addEventListener('click', () => go(v.cur + 1));
@@ -300,7 +302,16 @@ export function createLayoutV2(o) {
   // state; while a jump glides, the steps it passes do not take over
   function onScroll() {
     if (v.rail) return;
-    if (v.jump >= 0) { clearTimeout(v.jumpT); v.jumpT = setTimeout(() => { const k = v.jump; v.jump = -1; settle(k); onScroll(); }, 180); return; }
+    // A glide is over when the page has stopped moving, not when scroll events pause: a slow frame (a scene being
+    // rebuilt) pauses them mid-glide, and an instant correction made then is added to the glide still running, which
+    // overshoots to the end of the page (14 November 2026). So after the pause, two frames must pass without movement.
+    if (v.jump >= 0) {
+      clearTimeout(v.jumpT);
+      v.jumpT = setTimeout(() => { const y0 = scrollY; requestAnimationFrame(() => requestAnimationFrame(() => {
+        if (v.jump < 0) return; if (Math.abs(scrollY - y0) > .5) { onScroll(); return; }
+        const k = v.jump; v.jump = -1; settle(k); onScroll(); })); }, 180);
+      return;
+    }
     const k = probe(), now = performance.now(); if (k !== v.cand) { v.cand = k; v.candT = now; }
     clearTimeout(v.timer); if (v.cand === v.cur) return;
     if (now - v.candT >= 160) set(v.cand, 'scroll'); else v.timer = setTimeout(onScroll, 170);

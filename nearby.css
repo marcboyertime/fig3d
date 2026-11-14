@@ -15,4 +15,5 @@
 .nearby[data-page=nanoparticle]{margin-inline:4.5%}
 @media(max-width:760px){.nearby[data-page=nanoparticle]{margin-inline:6%}}
 .nearby[data-page=rocksalt]{margin-top:clamp(48px,6vw,88px)}
+html.layout-v2 .nearby[data-page=diffusion],html.layout-v2 .nearby[data-page=nanoparticle]{margin-inline:0}
 @media(prefers-reduced-motion:reduce){.nearby-title{transition:none}}

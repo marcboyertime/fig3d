@@ -81,7 +81,10 @@ html.layout-v2 .v2-step.v2-chstart .v2-label{display:block;margin:-14px 0 10px;f
 html.layout-v2 .v2-step .v2-label :is(.n,.pos){display:none}
 html.steps-rail .v2-step::before{display:none}
 .v2-chapters .v2-label{margin:0;font:500 14px/20px var(--v2-text);color:var(--v2-muted)}
-.v2-step h2{margin:0;font:500 26px/33px var(--v2-display);letter-spacing:-.014em;color:var(--v2-ink);text-wrap:balance;text-transform:none}
+.v2-step h2{margin:0;font:500 26px/33px var(--v2-display);letter-spacing:-.014em;color:var(--v2-ink);text-wrap:balance;text-transform:none;transition:color .35s ease}
+/* The step being read keeps the full ink; the titles of the others step back a tone, so the next headline does not
+   outshout the words being read (14 November 2026). Scroll sections only: the step rail shows one step at a time. */
+html.layout-v2:not(.steps-rail) .v2-step:not(.is-current) h2{color:#aab2c6}
 .v2-body{margin:14px 0 0;font:400 17px/28px var(--v2-text);color:var(--v2-ink2);max-width:62ch;text-wrap:pretty}
 .v2-body b{font-weight:600;color:var(--v2-ink)}
 .v2-ctl-slot{margin-top:22px}
@@ -190,7 +193,8 @@ html.steps-rail .v2-pager{display:flex;align-items:center;gap:16px;padding-top:1
  .v2-now .dots i.on{background:var(--v2-accent)}
  .v2-chbtn{display:grid;place-items:center;width:40px;height:40px;margin-right:-8px;border:0;border-radius:10px;background:none;color:var(--v2-ink2);cursor:pointer}
  .v2-chbtn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round}
- html.layout-v2 .v2-chapters:not([hidden]){display:block;position:fixed;top:var(--v2-mast);left:0;right:0;z-index:39;padding:12px 16px 18px;background:rgba(15,17,27,.97);border-bottom:1px solid var(--v2-line)}
+ html.layout-v2 .v2-chapters:not([hidden]){display:block;position:fixed;top:var(--v2-mast);left:0;right:0;z-index:39;padding:12px 16px 18px;background:#0f111b;border-bottom:1px solid var(--v2-line)}
+ .v2-chapters a.v2-home{margin-top:8px;padding-top:8px;border-top:1px solid var(--v2-line);color:var(--v2-soft,#cdd3e1)}
  .v2-chapters ol{list-style:none;margin:8px 0 0;padding:0}
  .v2-chapters a{display:flex;align-items:center;gap:12px;min-height:44px;font:500 16px/1.2 var(--v2-text);color:var(--v2-ink);text-decoration:none}
  html.layout-v2 #explorer.figure-pair{margin-top:22px;grid-template-columns:minmax(0,1fr);grid-template-areas:'paper-head' 'paper' 'stage' 'dock' 'steps';grid-template-rows:auto}

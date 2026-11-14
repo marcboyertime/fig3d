@@ -1,0 +1,27 @@
+{
+ "source": "assets/diffusion-film/diffusion-960.mp4",
+ "fps": 24,
+ "frames": 384,
+ "half": 192,
+ "speed": 4,
+ "width": 1280,
+ "height": 1000,
+ "background": "#0e1018",
+ "radii_nm": [
+  50,
+  25
+ ],
+ "labels": [
+  {
+   "nm": 50,
+   "x": 0.3406,
+   "y": 0.8484
+  },
+  {
+   "nm": 25,
+   "x": 0.7781,
+   "y": 0.6972
+  }
+ ],
+ "note": "The 25 nm particle shows film frame min(half, speed*n) while filling and half + speed*(n - half) while emptying, held at the end of each."
+}

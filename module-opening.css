@@ -6,8 +6,8 @@
 @media (prefers-reduced-motion:reduce){@view-transition{navigation:none}}
 .fig-opening [data-open]:not(.is-open),
 .fig-opening [data-open-line]:not(.is-open){opacity:0;pointer-events:none}
-.fig-opening [data-open].is-open:not(.is-title){animation:fig-open-rise .9s cubic-bezier(.2,.7,.2,1) backwards}
-.fig-opening [data-open-line].is-open{animation:fig-open-title 1.3s cubic-bezier(.22,.6,.2,1) backwards}
+.fig-opening [data-open].is-open:not(.is-title){animation:fig-open-rise .8s cubic-bezier(.2,.7,.2,1) backwards}
+.fig-opening [data-open-line].is-open{animation:fig-open-title .85s cubic-bezier(.22,.6,.2,1) backwards}
 .fig-opening .is-open.is-quick{animation-duration:.4s}
 .fig-opening [data-open="title"]{will-change:transform}
 @keyframes fig-open-rise{from{opacity:0;translate:0 18px}}

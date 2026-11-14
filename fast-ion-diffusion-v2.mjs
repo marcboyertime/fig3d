@@ -60,8 +60,9 @@ if(layoutV2()){
  const cap={title:document.createElement('p'),text:document.createElement('p'),links:document.createElement('p')};
  cap.title.className='eyebrow';cap.links.className='paper-links';
  const credit=document.createElement('div');credit.className='v2-credit';$('.notes').prepend(credit);
- // The peak presets sit at the printed curves' highest points
- for(const b of $$('[data-peak]')){const pts=b.dataset.peak==='3b'?P3B:P3E,top=pts.reduce((a,p)=>p.energy_eV>a.energy_eV?p:a);b.dataset.set=String(Math.round(top.s*1000));b.style.left=`calc(9px + (100% - 18px) * ${top.s})`;}
+ // The peak presets sit at the printed curves' highest points (they are still in the template here: 14 November 2026, they used to be
+ // looked for in the page, where they do not yet exist, so both stayed at mid-path)
+ for(const b of $('#v2-tpl').content.querySelectorAll('[data-peak]')){const pts=b.dataset.peak==='3b'?P3B:P3E,top=pts.reduce((a,p)=>p.energy_eV>a.energy_eV?p:a);b.dataset.set=String(Math.round(top.s*1000));b.style.left=`calc(9px + (100% - 18px) * ${top.s})`;}
  const fmtE=pts=>v=>curveAt(pts,v/1000).toFixed(2)+' eV';
 
  const v2=createLayoutV2({

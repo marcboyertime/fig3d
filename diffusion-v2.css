@@ -39,6 +39,13 @@ html.layout-v2 .v2-dview .panel-note:before{display:none}
 /* The stage: the film, square and centred in the taller stage */
 html.layout-v2 #explorer .film-stage{aspect-ratio:auto;width:100%;max-width:none;height:var(--v2-stage);border-radius:16px;overflow:hidden;background:#0d0f17}
 html.layout-v2 #explorer .film-stage video{background:transparent}
+/* The size comparison's picture covers the stage while its step is read: the card film in its own 1280:1000 frame, the two
+   radii named under their particles */
+.v2-duo{position:absolute;inset:0;z-index:4;display:grid;place-items:center;background:#0d0f18;opacity:0;visibility:hidden;transition:opacity .45s ease,visibility 0s .45s;pointer-events:none}
+.v2-duo.on{opacity:1;visibility:visible;transition:opacity .45s ease}
+.v2-duo-frame{position:relative;width:min(100%,calc(var(--v2-stage,640px) * 1.28));aspect-ratio:1280/1000;max-height:100%}
+html.layout-v2 #explorer .film-stage .v2-duo video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#0d0f18;opacity:1;-webkit-mask-image:none;mask-image:none}
+.v2-duo span{position:absolute;transform:translate(-50%,-50%);font:500 14px/1 var(--v2-text,inherit);letter-spacing:.03em;color:#a7afc4;white-space:nowrap}
 /* The size comparison's result in its step; "More on this step" holds the film's clock and controls, or the profile */
 html.layout-v2 .v2-rx{margin:14px 0 4px}
 html.layout-v2 .v2-rx .result-line{margin:0;padding:12px 0;border-color:var(--v2-line)}

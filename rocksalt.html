@@ -21,7 +21,7 @@
 <link rel="icon" href="favicon.ico" sizes="32x32"><link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="apple-touch-icon.png">
 <!-- /share -->
 </head><body>
-<link rel="stylesheet" href="module-opening.css"><link rel="stylesheet" href="annotations.css"><script src="module-opening.js"></script><nav class="fig-bar" aria-label="Fig.3D" data-open="1"><a class="fig-brand" href="index.html" aria-label="Fig.3D home">Fig.<span>3D</span></a><span class="fig-tag">COMPANION PREVIEW</span><a class="fig-back" href="index.html#next-title">Back to the collection</a></nav>
+<link rel="stylesheet" href="module-opening.css"><link rel="stylesheet" href="annotations.css"><script src="module-opening.js"></script><nav class="fig-bar" aria-label="Fig.3D" data-open="1"><a class="fig-brand" href="index.html" aria-label="Fig.3D home">Fig.<span>3D</span></a><span class="fig-tag">PAPER COMPANION</span><a class="fig-back" href="index.html#next-title">Back to the collection</a></nav>
 <title>Rocksalt Li Pathways — Fig.3D</title>
 <link rel="preload" href="assets/fonts/Sora-Variable.ttf" as="font" type="font/ttf" crossorigin>
 <style>
@@ -458,8 +458,8 @@ html.layout-v2 #chartProg:empty::before{content:'\a0'}
     <p class="fig-question" data-open-line>How does lithium get through a cathode whose metals are arranged at random?</p></div>
     <section class="fig-intro" aria-label="About this paper" data-open="2" data-phone-after="#explorer">
       <div data-open="2"><h2>Why this paper</h2><p>Most lithium-ion cathodes are ordered oxides built on nickel and cobalt, metals whose supply is concentrated in a few countries. Disordered rocksalts (DRX) can be made from Earth-abundant metals such as manganese. Hau et al., <i>Adv. Mater.</i> 2025, review what makes them work.</p></div>
-      <div data-open="3"><h2>The puzzle</h2><p>Charging and discharging means lithium hopping from site to site through the solid. Ordered cathodes have built-in lanes. In DRX the metals sit at random, so a hop is easy only where few metal atoms crowd its doorway, and lithium crosses the crystal only if enough easy hops link up. Extra lithium makes that more likely.</p></div>
-      <div data-open="4"><h2>Reading Figure 1</h2><p>Three columns, three ways to arrange the same atoms: layered, spinel and DRX. The top row shows each crystal, the middle row a single lithium hop and the metals beside it, the bottom row the network those hops form. <b><i class="swatch" style="color:#66c752"></i>Green</b> is lithium, <b><i class="swatch" style="color:#aa45b6"></i>purple</b> a transition metal such as manganese, and a dashed circle an empty site.</p></div>
+      <div data-open="3"><h2>The argument in brief</h2><p>Charging and discharging means lithium hopping from site to site through the solid. Ordered cathodes have built-in lanes. In DRX the metals sit at random, so a hop is easy only where few metal atoms crowd its doorway, and lithium crosses the crystal only if enough easy hops link up. Extra lithium makes that more likely.</p></div>
+      <div data-open="4"><h2>How Figure 1 is laid out</h2><p>Three columns, three ways to arrange the same atoms: layered, spinel and DRX. The top row shows each crystal, the middle row a single lithium hop and the metals beside it, the bottom row the network those hops form. <b><i class="swatch" style="color:#66c752"></i>Green</b> is lithium, <b><i class="swatch" style="color:#aa45b6"></i>purple</b> a transition metal such as manganese, and a dashed circle an empty site.</p></div>
     </section>
   </header>
 
@@ -828,7 +828,7 @@ html.layout-v2 #chartProg:empty::before{content:'\a0'}
     </div>
   </section>
 <!-- nearby: written by tools/build-nearby.mjs from catalog.json -->
-<nav class="nearby" data-page="rocksalt" aria-labelledby="nearby-title"><h2 id="nearby-title">Nearby</h2><ul><li><a href="fast-ion-diffusion.html"><span class="nearby-kicker">Paper companion · Solid electrolytes</span><span class="nearby-title">Lithium that moves together</span><span class="nearby-why">Ions that move together: in a garnet, five lithium hop as one event over a lower barrier.</span></a></li><li><a href="nanoparticle.html"><span class="nearby-kicker">Nanomaterials · Surfaces</span><span class="nearby-title">Inside a nanoparticle</span><span class="nearby-why">The fcc lattice from the outside: gold's packing, seen as the faces of a catalyst.</span></a></li></ul></nav>
+<nav class="nearby" data-page="rocksalt" aria-labelledby="nearby-title"><h2 id="nearby-title">Nearby</h2><ul><li><a href="fast-ion-diffusion.html"><span class="nearby-kicker">Paper companion · Solid electrolytes</span><span class="nearby-title">Lithium that moves together</span><span class="nearby-why">Ions that move together: in a garnet, five lithium hop as one event over a lower barrier.</span></a></li><li><a href="nanoparticle.html"><span class="nearby-kicker">Paper companion · Nanoparticle surfaces</span><span class="nearby-title">Inside a nanoparticle</span><span class="nearby-why">The fcc lattice from the outside: gold's packing, seen as the faces of a catalyst.</span></a></li></ul></nav>
 <!-- /nearby -->
 
 </div>
@@ -1817,7 +1817,7 @@ function drawChart(){
 // ---- figure:start (lifted into rocksalt-verification.mjs)
 // Each step outlines the panel of Figure 1 that matches what the model shows (boxes in the figure's 1500 × 850 pixels). When
 // the model differs from the panel, nothing is outlined and the note under the figure says how.
-const FIG_BOX={top:[6,4,1494,312],key:[1150,322,1498,550],hop1:[86,322,344,552],hop0:[930,322,1112,552],cubicMid:[580,322,1120,552],
+const FIG_BOX={top:[6,4,1494,312],key:[1150,322,1498,550],hop1:[86,322,344,552],hop0:[930,322,1112,522],cubicMid:[580,322,1120,552],
   layeredTop:[6,4,446,312],layeredBot:[6,566,446,846],spinelTop:[500,4,978,312],spinelBot:[500,566,978,846],drxTop:[1034,4,1496,312],drxBot:[1034,566,1496,846]};
 function figurePanel(){
   const S=STEPS[step];

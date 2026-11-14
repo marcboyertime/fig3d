@@ -2,7 +2,7 @@
 // with the quiet pass (design/layout-overhaul/spec.md, mockups/battery-desktop.html; DESIGN_AND_PRODUCT_HANDOFF.md,
 // 18 October 2026). The layout is shared (kit/layout-v2.mjs, layout-v2.css); this is the page's adapter. A foundation has
 // no paper figure: the lithium-inventory chart, linked to the cell, takes the figure's place, with the inventory sentence
-// under it; the two half-reactions sit in their own step. Six steps in the spec's three chapters are in
+// under it; the two half-reactions sit in their own step. Seven steps in the spec's three chapters are in
 // <template id="v2-tpl">, cut from the page's words and model notes. Each step puts the cell in its state through the
 // page's own controls (view and mode), so battery.js keeps one code path; the address keeps the page's shared view, which
 // lands on the step.
@@ -10,10 +10,10 @@ import {layoutV2,createLayoutV2} from './kit/layout-v2.mjs';
 
 const $=s=>document.querySelector(s),click=s=>$(s)?.click();
 const SEC=[
- {id:'paths',ch:0,short:'Two paths'},{id:'roles',ch:0,short:'Charging'},
+ {id:'energy',ch:0,short:'Where the energy is'},{id:'paths',ch:0,short:'Two paths'},{id:'roles',ch:0,short:'Charging'},   // 'energy' answers the page's question first (14 November 2026)
  {id:'inventory',ch:1,short:'Inventory'},{id:'reactions',ch:1,short:'Reactions'},
  {id:'sheets',ch:2,short:'Between the sheets'},{id:'intercalation',ch:2,short:'Intercalation'}];
-const WANT={paths:{inside:false,mode:'discharge'},roles:{inside:false,mode:'charge'},inventory:{inside:false,mode:'discharge'},reactions:{inside:false},
+const WANT={energy:{inside:false,mode:'discharge'},paths:{inside:false,mode:'discharge'},roles:{inside:false,mode:'charge'},inventory:{inside:false,mode:'discharge'},reactions:{inside:false},
  sheets:{inside:true,mode:'discharge'},intercalation:{inside:true,mode:'charge'}};
 
 if(layoutV2()){
@@ -23,7 +23,7 @@ if(layoutV2()){
 
  // ———— The workspace: the inventory chart beside the cell, built at once so the page never shows its earlier grid ————
  ex.classList.add('figure-pair');
- const head=document.createElement('div');head.className='pair-head paper-head';head.innerHTML='<p class="pair-title">The lithium inventory · linked to the cell</p>';
+ const head=document.createElement('div');head.className='pair-head paper-head';head.innerHTML='<p class="pair-title">Where the lithium is · linked to the cell</p>';
  const mhead=document.createElement('div');mhead.className='pair-head model-head';
  const col=document.createElement('figure');col.className='paper-column v2-paper v2-chart';
  const chart=$('.state-section .graph');chart.classList.add('v2-chartbox');

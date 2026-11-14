@@ -1,17 +1,16 @@
-import {concentration, particleState} from './model.mjs';
-// Two radii after the same elapsed time, drawn as stepped concentration bands
-// bounded by calculated iso-concentration contours (no smooth gradient).
-const levels=[.2,.4,.6,.8],low=[23,36,69],high=[125,156,255]
-const shade=c=>`rgb(${low.map((v,k)=>Math.round(v+(high[k]-v)*c))})`
-// c(x) increases monotonically from centre to surface, so bisection finds each contour radius.
-const contour=(level,tau)=>{if(concentration(0,tau)>=level)return 0;let a=0,b=1;for(let n=0;n<40;n++){const m=(a+b)/2;concentration(m,tau)<level?a=m:b=m}return (a+b)/2}
-const particle=(radiusNm,cx,cy,unit)=>{const {tau}=particleState(radiusNm),R=radiusNm*unit
- // Outermost band holds c in [0.8,1]; each inner disc is the region below the next contour, shaded at its band midpoint.
- const discs=[[1,.9],...[.8,.6,.4,.2].map(l=>[contour(l,tau),l-.1])].filter(([x])=>x>0)
- const fills=discs.map(([x,c])=>`<circle cx="${cx}" cy="${cy}" r="${(x*R).toFixed(2)}" fill="${shade(c)}"/>`).join('')
- const rings=discs.slice(1).map(([x])=>`<circle cx="${cx}" cy="${cy}" r="${(x*R).toFixed(2)}" fill="none" stroke="#e5ecff" stroke-opacity=".5"/>`).join('')
- return `${fills}${rings}<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="#ced3e1" stroke-opacity=".7"/><text class="diffusion-radius" x="${cx}" y="${cy+R+34}" text-anchor="middle">${radiusNm} nm</text>`}
-document.querySelector('#diffusion-field').innerHTML=particle(50,230,225,3)+particle(25,500,225,3)
+// Cards that are films (class card-film): the diffusion card (assets/diffusion-card, two radii from the diffusion page's
+// own render, made by production/diffusion-card/make-card-film.py), and the fast ion card (five ions hopping together)
+// and the nanoparticle card (the gold particle rocking), both filmed from the explorers' own scenes by tools/card-film.mjs. A film plays only while it is on screen, and not at all
+// under reduced motion, where its poster stands for it.
+{
+ const still=matchMedia('(prefers-reduced-motion: reduce)'),films=[...document.querySelectorAll('video.card-film')],seen=new Set();
+ const run=film=>{if(seen.has(film)&&!still.matches)film.play().catch(()=>{});else film.pause()};
+ if('IntersectionObserver' in window){
+  const watch=new IntersectionObserver(entries=>{for(const e of entries){e.isIntersecting?seen.add(e.target):seen.delete(e.target);run(e.target)}},{rootMargin:'80px'});
+  films.forEach(film=>watch.observe(film));
+  still.addEventListener('change',()=>films.forEach(run));
+ }
+}
 
 // Share of random DRX crystals whose 0-TM Li network crosses along one axis, from
 // evidence/rocksalt-percolation/sweep-output.txt (the companion's own lattice core, 200 seeds; 60 at 16 cells).
@@ -23,13 +22,34 @@ document.querySelector('#percolation-curves').innerHTML=Object.entries(crossing)
 document.querySelector('#percolation-mark').setAttribute('d',`M${px(.09)} 370V105`)
 document.querySelector('#percolation-mark-label').setAttribute('x',px(.09))
 
-// A normalized Nyquist plot of Z = Rs + Rp/(1 + i ω Rp C).
-// Sampling log frequency is only a plotting choice, not measured cell data.
-const points=Array.from({length:181},(_,i)=>{
-  const w=10**(3-i/30);
-  return `${137+370/(1+w*w)},${370-370*w/(1+w*w)}`;
-});
-document.querySelector('#nyquist-teaser').setAttribute('d',`M${points.join('L')}`);
+// A normalized Nyquist plot of Z = Rs + Rp/(1 + i ω Rp C), swept from high frequency to low.
+// A signal goes in (the voltage) and a signal comes back (the current), the same frequency but shifted; that shift and
+// the size of the response are one point of the curve, drawn as the line from the origin to the dot. As the frequency
+// falls the two waves stretch, the shift changes, and the dot traces the arc. The waves are drawn at equal height: only
+// their shift is the model's. Sampling log frequency is only a plotting choice, not measured cell data.
+{
+ const $=id=>document.querySelector(id),arc=$('#nyquist-teaser');
+ if(arc){
+ const dot=$('#nyquist-dot'),phasor=$('#nyquist-phasor'),vIn=$('#wave-in'),iOut=$('#wave-out'),card=arc.closest('figure');
+ const Z=w=>({x:137+370/(1+w*w),y:370-370*w/(1+w*w)}),pts=Array.from({length:181},(_,i)=>Z(10**(3-i/30)));
+ const wave=(yc,cycles,shift)=>'M'+Array.from({length:70},(_,k)=>`${(205+230*k/69).toFixed(1)},${(yc-14*Math.sin(2*Math.PI*cycles*k/69+shift)).toFixed(1)}`).join('L');
+ function draw(p){
+  const n=Math.max(1,Math.round(p*180)),z=pts[n],lead=Math.atan2(370-z.y,z.x-105),cycles=4-2.7*p;
+  arc.setAttribute('d','M'+pts.slice(0,n+1).map(q=>`${q.x.toFixed(1)},${q.y.toFixed(1)}`).join('L'));
+  dot.setAttribute('cx',z.x.toFixed(1));dot.setAttribute('cy',z.y.toFixed(1));
+  phasor.setAttribute('d',`M105 370L${z.x.toFixed(1)} ${z.y.toFixed(1)}`);
+  vIn.setAttribute('d',wave(289,cycles,0));iOut.setAttribute('d',wave(335,cycles,lead));
+ }
+ const still=matchMedia('(prefers-reduced-motion: reduce)'),SWEEP=7200,HOLD=2300;
+ let seen=false,frame=0,start=0;
+ const tick=t=>{frame=0;if(!seen||still.matches){draw(still.matches?.5:1);return}if(!start)start=t;const e=(t-start)%(SWEEP+HOLD);draw(Math.min(1,e/SWEEP));frame=requestAnimationFrame(tick)};
+ const run=()=>{if(seen&&!frame)frame=requestAnimationFrame(tick)};
+ draw(still.matches?.5:1);
+ if('IntersectionObserver' in window)new IntersectionObserver(([entry])=>{seen=entry.isIntersecting;if(seen){start=0;run()}else if(frame){cancelAnimationFrame(frame);frame=0}},{threshold:.2}).observe(card);
+ still.addEventListener('change',run);
+ }
+}
+addEventListener('load',()=>requestAnimationFrame(()=>document.documentElement.classList.add('settled')));
 const concepts={
  battery:{title:'How a battery works',intro:'Start with a lithium-ion cell. Follow the electrons outside it and the ions inside it, then connect their paths through the electrode reactions.',list:['Meet the electrodes, electrolyte, separator and external circuit.','See how discharge couples both charge pathways.','Connect the chemical changes to energy delivered to a load.']},
  impedance:{title:'A signal becomes a spectrum',intro:'Begin with a simple electrical model. See how a changing voltage and responding current become an impedance plot.',list:['Link the signal to its amplitude and phase response.','Connect Nyquist and Bode views of the same model.','See why a fitted circuit does not by itself prove a physical mechanism.']}

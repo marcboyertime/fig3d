@@ -16,7 +16,9 @@
  // A deep link to a section, or a reader returning later, goes straight to the page.
  // ?reduced (or the older ?motion=reduce) and ?fallback are the pages' own review modes; they skip it too.
  const run=params.has('opening')||(!seen&&!['no-opening','reduced','fallback'].some(k=>params.has(k))&&params.get('motion')!=='reduce'&&!reduced&&!location.hash);
- const T={line:1300,lineGap:650,hold:900,glide:1150,groupLead:550,groupGap:420,group:900};
+ // 14 November 2026: the title's own time is about half what it was (the page used to hold a bare title for five seconds
+ // before anything else arrived, and a reader has just watched the homepage's story); the page still builds in reading order.
+ const T={line:850,lineGap:380,hold:420,glide:800,groupLead:320,groupGap:260,group:800};
  let resolveDone;
  const api=window.Fig3DOpening={running:run,holding:run,timing:T,done:new Promise(r=>resolveDone=r),finish(){}};
  const release=()=>{if(!api.holding)return;api.holding=false;dispatchEvent(new Event('fig3d:stage'));};

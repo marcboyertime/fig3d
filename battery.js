@@ -68,6 +68,8 @@ function renderState(){
   const xi=state.extent.toFixed(2),ions=`<span class="term">+ ${xi} Li<sup>+</sup></span> <span class="term">+ ${xi} e<sup>−</sup></span>`,arrow='<span class="rx-arrow">→</span>',c='C<sub>6</sub>',oxide='CoO<sub>2</sub>';
   // Each term, and the arrow with the term after it, stays on one line when the equation wraps on a phone.
   const yields=t=>`<span class="term">${arrow}${t}</span>`;
+  // At the start of a run nothing has moved yet: the composition stands alone, instead of an equation with "+ 0.00 Li+"
+  if(xi==='0.00'){const rest=' <span class="term rx-rest">· no lithium has moved yet</span>';$('negative-reaction').innerHTML=formula(state.negative,c)+rest;$('positive-reaction').innerHTML=formula(state.positive,oxide)+rest;return;}
   $('negative-reaction').innerHTML=mode==='discharge'?`${formula(.60,c)} ${yields(formula(state.negative,c))} ${ions}`:`${formula(.30,c)} ${ions} ${yields(formula(state.negative,c))}`;
   $('positive-reaction').innerHTML=mode==='discharge'?`${formula(.60,oxide)} ${ions} ${yields(formula(state.positive,oxide))}`:`${formula(.90,oxide)} ${yields(formula(state.positive,oxide))} ${ions}`;
 }

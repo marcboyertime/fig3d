@@ -16,6 +16,7 @@ const CY = 190, rim = (dx, dy) => svgPoint(svg, 280 + visualRadius * dx, CY + vi
 function disk() { const c = rim(0, 0), e = rim(1, 0); return c && e ? {x: c.x, y: c.y, r: e.x - c.x + 4} : null; }
 // Laptop stages (468 px at 1024 wide) keep both notes and full-size words; only phone-sized stages go compact.
 const notes = new Annotations(stage, {className: 'particle-notes', compactWidth: 420, avoid: () => [disk()]});
+window.Fig3DPreview = {refresh() { notes.resize(); notes.frame(); }};   // the layout calls this when the figure moves (diffusion-v2.mjs)
 // ?reduced and ?fallback are the pages' review modes for reduced motion, as in film.js and the shared labels.
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)'), reviewReduced = ['reduced', 'fallback'].some(k => new URLSearchParams(location.search).has(k));
 const coreWords = core => core > .9 ? 'Nearly full already' : core > .4 ? 'Filling, but behind the surface' : 'Barely reached yet';

@@ -72,3 +72,5 @@ main>.fig-intro{margin:0 0 34px;--fig-intro-line:var(--line)}
 /* The chart scales to ~0.58x on phones: the direction arrow is drawn 1.8x larger there so the cue stays readable (about 25 × 9 px). */
 @media(max-width:520px){#chart-direction path{transform:scale(-1.8,1.8)}#chart-direction.charge path{transform:scale(1.8)}}
 .notes-grid sub,.inventory-values sub{font-size:.72em;line-height:0}
+
+.rx-rest{color:var(--muted)}

@@ -9,11 +9,14 @@ import {layoutV2,createLayoutV2} from './kit/layout-v2.mjs';
 
 const $=s=>document.querySelector(s);
 const SEC=[
- {id:'fill',ch:0,short:'Filling',beat:[0,96]},{id:'center',ch:0,short:'The center',beat:[96,192]},
- {id:'empty',ch:0,short:'Emptying',beat:[192,288]},{id:'last',ch:0,short:'The last to empty',beat:[288,384]},
+ // Each beat ends on the frame that shows its step's claim (14 November 2026; the beats were four equal quarters, which
+ // rested "The surface fills first" on a nearly full sphere and "the outer shell drains first" on a nearly empty one):
+ // frame 29 is 61% full, the shell bright and the core dark; frame 221 is 39% full, the shell drained and the core still full.
+ {id:'fill',ch:0,short:'Filling',beat:[0,30]},{id:'center',ch:0,short:'The center',beat:[30,192]},
+ {id:'empty',ch:0,short:'Emptying',beat:[192,222]},{id:'last',ch:0,short:'The last to empty',beat:[222,384]},
  {id:'size',ch:1,short:'Size'}];
-const NOTE={film:'Concentration from center to surface, for the frame on screen',size:'Relative concentration c/cₛ across the particle, 2 s in, for this radius'};
-const TITLE={film:'The film’s field · center to surface',size:'Fig. 02 · a radial cross section'};
+const NOTE={film:'How full the particle is, from its center to its surface, for the frame on screen',size:'How full a particle of this radius is after the same 2 s, from center to surface'};
+const TITLE={film:'How full, from center to surface',size:'After 2 s · a slice through the particle'};
 
 if(layoutV2()){
  const ex=$('.film-grid'),stage=$('.film-stage'),video=$('#film-video');
@@ -47,9 +50,21 @@ if(layoutV2()){
   if(instant||reduced||!prev){for(const f of Object.values(figs)){f.classList.toggle('on',f===next);f.hidden=f!==next;}box.style.height='';return;}
   box.style.height=box.offsetHeight+'px';next.classList.add('on');prev.classList.remove('on');
   requestAnimationFrame(()=>{box.style.height=next.offsetHeight+'px';});
-  setTimeout(()=>{if(shownFig===k){prev.hidden=true;box.style.height='';}},460);
+  setTimeout(()=>{if(shownFig===k){prev.hidden=true;box.style.height='';}relabel();},460);relabel();
  }
+ // Fig. 02's callouts follow the figure as it folds with the scroll and after it changes view
+ let rz=0;function relabel(){cancelAnimationFrame(rz);rz=requestAnimationFrame(()=>window.Fig3DPreview?.refresh());}
+ addEventListener('scroll',()=>{if(shownFig==='size')relabel();},{passive:true});
  showFig('film',true);
+
+ // The size comparison has its own picture (14 November 2026): two radii side by side, made from this page's film, the
+ // 25 nm particle running four times as fast because diffusion time scales with the radius squared (the homepage card's
+ // film, production/diffusion-card). It covers the stage while that step is read; before, the film went on looping an
+ // unrelated state beside the step, and the comparison itself was a thumbnail in the figure column.
+ const duo=document.createElement('div');duo.className='v2-duo';
+ duo.innerHTML='<div class="v2-duo-frame"><video muted loop playsinline preload="none" poster="assets/diffusion-card/poster.webp" aria-label="Two cut-open spheres, 50 and 25 nanometres in radius, filling with lithium over the same time. The smaller is full in a quarter of the time."><source src="assets/diffusion-card/card.mp4" type="video/mp4"></video><span style="left:34.06%;top:84.84%">50 nm</span><span style="left:77.81%;top:69.72%">25 nm</span></div>';
+ stage.append(duo);
+ function showDuo(on){const film=duo.querySelector('video');duo.classList.toggle('on',on);if(on&&!reduced){film.currentTime=0;film.play().catch(()=>{});}else film.pause();}
 
  const v2=createLayoutV2({
   template:$('#v2-tpl'),sections:SEC,chapters:['Watch it happen','Compare sizes'],reduced,
@@ -59,6 +74,7 @@ if(layoutV2()){
   // A beat of the film for each of the first four steps; the size comparison lets the film loop beside the cross section
   goModel(k){
    const s=SEC[k];showFig(s.beat?'film':'size');
+   showDuo(!s.beat);
    if(s.beat)window.Fig3DFilm?.beat(...s.beat);else window.Fig3DFilm?.loop();
   },
   onModel(k,more){if(pane.parentNode!==more)more.append(pane);},

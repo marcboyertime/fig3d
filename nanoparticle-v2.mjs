@@ -26,11 +26,12 @@ const SEC=[
  {id:'square',ch:0,short:'Square terrace'},{id:'triangle',ch:0,short:'Triangular terrace'},
  {id:'face',ch:1,short:'Face atom'},{id:'edge',ch:1,short:'Edge atom'},{id:'corner',ch:1,short:'Corner atom'},{id:'inside',ch:1,short:'Interior atom'},
  {id:'size',ch:2,short:'Size'},
- {id:'sites',ch:3,short:'Sites on {100}'},{id:'hollows',ch:3,short:'Hollows on {111}'}];
+ {id:'sites',ch:3,short:'Sites on {100}'},{id:'hollows',ch:3,short:'Hollows on {111}'},
+ {id:'found',ch:3,short:'What the paper found'}];   // the walk ends on the paper's answer to the page's question (14 November 2026)
 const F100='100:1,0,0',F111='111:1,1,1';
 const WANT={square:{view:'surfaces',face:F100},triangle:{view:'surfaces',face:F111},
  face:{view:'neighbors',face:F100,atom:'face'},edge:{view:'neighbors',atom:'edge'},corner:{view:'neighbors',atom:'corner'},inside:{view:'neighbors',atom:'interior'},
- size:{view:'size'},sites:{view:'binding',face:F100},hollows:{view:'binding',face:F111,hollow:true}};
+ size:{view:'size'},sites:{view:'binding',face:F100},hollows:{view:'binding',face:F111,hollow:true},found:{view:'neighbors',atom:'corner'}};
 const CN={8:'face',9:'face',7:'edge',5:'corner',12:'inside'};
 
 if(layoutV2()){
