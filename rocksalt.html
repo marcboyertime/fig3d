@@ -1871,7 +1871,8 @@ function figurePanel(){
 }
 // ---- figure:end
 paper=createPaperView({view:$('#paper-view'),viewport:$('#paper-viewport'),image:$('#paper-image'),stage:viewer,mark:$('#panel-mark'),note:$('#panel-note'),
-  zoomOut:$('#figure-out'),fit:$('#figure-fit'),zoomIn:$('#figure-in'),figure:{width:1500,height:850}});
+  zoomOut:$('#figure-out'),fit:$('#figure-fit'),zoomIn:$('#figure-in'),figure:{width:1500,height:850},
+  autoFocus:()=>{try{return document.documentElement.classList.contains('layout-v2')&&!opening.on&&!window.Fig3DOpening?.running}catch{return false}}});   // layout v2 brings the lit panel up; never while the opening lifts a piece of the figure at Fit
 function markFigure(){if(!paper)return;const[box,text,matched=true]=figurePanel();paper.outline(box?FIG_BOX[box]:null,text,matched)}
 
 // =====================================================================

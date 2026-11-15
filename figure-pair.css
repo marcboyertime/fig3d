@@ -38,6 +38,13 @@
 .figure-pair .paper-viewport{position:relative;overflow:hidden;border-radius:3px;max-width:100%;transition:height 360ms cubic-bezier(.22,.7,.2,1),width 360ms cubic-bezier(.22,.7,.2,1)}
 .figure-pair .paper-viewport.zoomed{overflow:auto;overscroll-behavior:contain;cursor:grab;scrollbar-color:#64789e #141b29}
 .figure-pair .paper-viewport.panning{cursor:grabbing}
+/* Brought up on its lit panel by the page (paper-view.mjs focus): no scrollbars and no capture of the wheel; the reader's own
+   zoom (the + button) makes it a scrolling frame again */
+.figure-pair .paper-viewport.zoomed.focused{overflow:hidden;cursor:default;overscroll-behavior:auto}
+/* Phones: the lit panel, small, in the stage's corner while the figure is off screen (paper-view.mjs) */
+.panel-inset{display:none}
+@media(max-width:860px){.panel-inset{display:block;position:absolute;top:10px;left:10px;z-index:6;padding:0;border:1.5px solid var(--pair-mark,#87a7ff);border-radius:6px;background-color:#fff;background-repeat:no-repeat;box-shadow:0 6px 20px #0008;opacity:0;pointer-events:none;transition:opacity .3s ease}.panel-inset.on{opacity:1;pointer-events:auto}}
+@media(prefers-reduced-motion:reduce){.panel-inset{transition:none}}
 .figure-pair .paper-sheet{position:relative;display:block;width:max-content;overflow:hidden;border-radius:8px}
 .figure-pair .paper-sheet img{display:block;height:auto;background:#fff;user-select:none;-webkit-user-drag:none}
 
