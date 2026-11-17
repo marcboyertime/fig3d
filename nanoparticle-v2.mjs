@@ -7,6 +7,7 @@
 // through the page's own controls, so nanoparticle.js keeps one code path; the address keeps the page's shared view,
 // which lands on the step.
 import {layoutV2,createLayoutV2} from './kit/layout-v2.mjs';
+import {createPanelFocus} from './kit/panel-focus.mjs';
 import {crossfadeFigure,preload} from './kit/figure-crossfade.mjs';
 
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)],click=s=>$(s)?.click();
@@ -114,13 +115,16 @@ if(layoutV2()){
   cap.title.textContent='Kang et al. 2024 · Figure 1';cap.text.textContent=FIGURE.caption;
   cap.links.innerHTML='<a href="references/nanoparticle/kang-2024-figure-1.png" target="_blank" rel="noopener">Complete Figure 1 ↗</a> · <a href="https://doi.org/10.1038/s41467-024-47994-y" target="_blank" rel="noopener">Nature Communications, 2024 ↗</a> · CC BY 4.0';});
  head.addEventListener('click',e=>{
-  const b=e.target.closest('button');if(!b?.dataset.z)return;const c=[(vp.scrollLeft+vp.clientWidth/2)/vp.scrollWidth,(vp.scrollTop+vp.clientHeight/2)/vp.scrollHeight];
+  const b=e.target.closest('button');if(!b?.dataset.z)return;if(b.dataset.z==='fit')pf.fit();else pf.manual();const c=[(vp.scrollLeft+vp.clientWidth/2)/vp.scrollWidth,(vp.scrollTop+vp.clientHeight/2)/vp.scrollHeight];
   view.zoom=b.dataset.z==='fit'?1:Math.max(1,Math.min(4,view.zoom*(b.dataset.z==='in'?1.5:1/1.5)));size();vp.scrollTo(c[0]*vp.scrollWidth-vp.clientWidth/2,c[1]*vp.scrollHeight-vp.clientHeight/2);
  });
  {let pan=null;vp.addEventListener('pointerdown',e=>{if(view.zoom>1&&e.pointerType!=='touch'){pan={x:e.clientX,y:e.clientY,l:vp.scrollLeft,t:vp.scrollTop};vp.setPointerCapture(e.pointerId);vp.classList.add('panning');}});
   vp.addEventListener('pointermove',e=>{if(pan){vp.scrollLeft=pan.l-(e.clientX-pan.x);vp.scrollTop=pan.t-(e.clientY-pan.y);}});
   const end=()=>{if(pan){pan=null;vp.classList.remove('panning');}};vp.addEventListener('pointerup',end);vp.addEventListener('pointercancel',end);}
  addEventListener('resize',size);phone.addEventListener('change',size);
+ // The lit panel is brought up in the figure's frame on a desktop, and kept in the stage's corner on a phone (kit/panel-focus.mjs)
+ const pf=createPanelFocus({view:col.querySelector('.v2-pview'),viewport:vp,image:img,stage,figure:()=>img.dataset.key?{width:FIGURE.size[0],height:FIGURE.size[1]}:null,
+  zoom:()=>view.zoom,setZoom:z=>{view.zoom=z;size();},autoFocus:()=>!opening()&&d.flying!=='true',corner:'right'});
 
  // ———— Every frame: the outline and its note, the wait line, and the opening's words in the first step ————
  const pct=(v,n)=>v/n*100+'%';
@@ -129,7 +133,7 @@ if(layoutV2()){
  function tick(){
   const op=opening(),P=PANELS[op?'opening':panelOf()],ok=img.dataset.key==='1'&&!!P;
   if(ok&&P.box){const b=P.box,[fw,fh]=FIGURE.size;Object.assign(mark.style,{left:pct(b[0],fw),top:pct(b[1],fh),width:pct(b[2]-b[0],fw),height:pct(b[3]-b[1],fh)});}
-  mark.classList.toggle('on',ok&&!!P.box);
+  mark.classList.toggle('on',ok&&!!P.box);pf.update('1',ok&&P.box?P.box:null);
   const t=ok?P.note:'';if(t!==lastNote){note.textContent=t;lastNote=t;note.classList.toggle('is-unmatched',!!P&&!P.box&&!op);}
   // While the tour plays, the first step carries its words (they were the caption beside the stage before); a step above
   // the one being read that changes height leaves the reader in place

@@ -9,6 +9,7 @@
 import {layoutV2,createLayoutV2} from './kit/layout-v2.mjs';
 import {FIGURES,curveAt} from './fast-ion-diffusion-model.mjs?v=5';
 import {crossfadeFigure,preload} from './kit/figure-crossfade.mjs';
+import {createPanelFocus} from './kit/panel-focus.mjs';
 
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)],click=s=>$(s)?.click(),now=()=>window.figState?.()||{};
 const BASE='assets/fast-ion-diffusion/';
@@ -116,13 +117,17 @@ if(layoutV2()){
  head.addEventListener('click',e=>{
   const b=e.target.closest('button');if(!b)return;
   if(b.dataset.fig){picked=b.dataset.fig;pickedFor=v2.model;showFigure(picked);}
-  if(b.dataset.z){const k=img.dataset.key,v=views[k];if(!v)return;const c=[(vp.scrollLeft+vp.clientWidth/2)/vp.scrollWidth,(vp.scrollTop+vp.clientHeight/2)/vp.scrollHeight];
+  if(b.dataset.z){const k=img.dataset.key,v=views[k];if(!v)return;if(b.dataset.z==='fit')pf.fit();else pf.manual();const c=[(vp.scrollLeft+vp.clientWidth/2)/vp.scrollWidth,(vp.scrollTop+vp.clientHeight/2)/vp.scrollHeight];
    v.zoom=b.dataset.z==='fit'?1:Math.max(1,Math.min(4,v.zoom*(b.dataset.z==='in'?1.5:1/1.5)));size();vp.scrollTo(c[0]*vp.scrollWidth-vp.clientWidth/2,c[1]*vp.scrollHeight-vp.clientHeight/2);}
  });
  {let pan=null;vp.addEventListener('pointerdown',e=>{if(views[img.dataset.key]?.zoom>1&&e.pointerType!=='touch'){pan={x:e.clientX,y:e.clientY,l:vp.scrollLeft,t:vp.scrollTop};vp.setPointerCapture(e.pointerId);vp.classList.add('panning');}});
   vp.addEventListener('pointermove',e=>{if(pan){vp.scrollLeft=pan.l-(e.clientX-pan.x);vp.scrollTop=pan.t-(e.clientY-pan.y);}});
   const end=()=>{if(pan){pan=null;vp.classList.remove('panning');}};vp.addEventListener('pointerup',end);vp.addEventListener('pointercancel',end);}
  addEventListener('resize',size);phone.addEventListener('change',size);
+ // The lit panel is brought up in the figure's frame on a desktop, and kept in the stage's corner on a phone (kit/panel-focus.mjs)
+ const pf=createPanelFocus({view:col.querySelector('.v2-pview'),viewport:vp,image:img,stage,figure:()=>FIGURES[img.dataset.key],
+  zoom:()=>views[img.dataset.key]?.zoom??1,setZoom:z=>{const v=views[img.dataset.key];if(v){v.zoom=z;size();}},
+  autoFocus:()=>!stage.classList.contains('opening')&&!stage.classList.contains('is-emerging')});
 
  // ———— Every frame: the figure, its outline and note, the ring on the printed curve, and the opening's words ————
  const pct=(v,n)=>v/n*100+'%';
@@ -134,7 +139,7 @@ if(layoutV2()){
   const step=SEC[Math.max(0,v2.model)].id,id=opening?'3b':PANEL[step],P=MARKS.panels[id],f=FIGURES[img.dataset.key||k];
   const on=!!P&&img.dataset.key===P.figure&&img.dataset.want===P.figure;
   if(on){const b=P.box;Object.assign(mark.style,{left:pct(b[0],f.width),top:pct(b[1],f.height),width:pct(b[2]-b[0],f.width),height:pct(b[3]-b[1],f.height)});}
-  mark.classList.toggle('on',on);
+  mark.classList.toggle('on',on);pf.update(img.dataset.key,on?P.box:null);
   const t=on?NOTE[id]:'';if(t!==lastNote){note.textContent=t;lastNote=t;}
   // The ring rides the printed points of the curve the model is on, at the model's own progress (the eased, drawn one)
   const curve=!opening&&on&&(id==='3b'||id==='3e')?MARKS.curve_marks[id]:null;
